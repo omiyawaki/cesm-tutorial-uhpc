@@ -33,6 +33,8 @@ CESM's own commands (`./case.submit`, `./case.build`) are the same. CESM transla
 | Input data (`DIN_LOC_ROOT`) | `/glade/p/cesmdata/cseg/inputdata` | shared copy under `/usr/local/research/miyawaki` (about 23 GB). Run `./xmlquery DIN_LOC_ROOT` in a case to see it. **TODO:** exact path |
 | Home directory | `/glade/u/home/$USER` | your UHPC home directory (`~`). Keep CESM files out of it |
 
+Until the UHPC machine configuration uses per-user paths (**TODO**), pass `--output-root /usr/local/research/miyawaki/users/$USER/scratch` to `create_newcase` and set `./xmlchange DOUT_S_ROOT=/usr/local/research/miyawaki/users/$USER/archive/$CASE` (with your case name in place of `$CASE`). Otherwise the build, run and archive directories go to the machine default, which currently points at Osamu's scratch space.
+
 In this edition, commands that used `/glade/...` paths were changed to the UHPC paths above. Where a page uses `$DIN_LOC_ROOT`, replace it with the input data path, or set it once with `export DIN_LOC_ROOT=<path>`.
 
 The per-user folders (`/usr/local/research/miyawaki/users/$USER`) are a **plan**. **TODO:** create them, set permissions, and agree storage budgets inside the group's 1 TB quota (also unverified).
