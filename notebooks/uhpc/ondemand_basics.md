@@ -14,13 +14,41 @@ You did the first login (and changed your temporary password) once, in the Mac T
 
 | App | Where in OnDemand | Use it for |
 |---|---|---|
-| **Files** | top menu, **Files** → **Home Directory** | browsing folders, opening and editing text files, viewing pictures, uploading and downloading files to and from your Mac |
-| **Shell** | top menu, **Clusters** → **hpcc Shell Access** (**TODO:** confirm the menu name) | typing commands, for example CESM's `./create_newcase` and `./case.submit` |
-| **Jupyter** | top menu, **Interactive Apps** → **Jupyter** (**TODO:** confirm the menu name) | Python notebooks for plotting model output. They run on a compute node for 1 to 4 hours |
+| **Files** | top menu, **Files** → **Files App** (or **Home Directory**) | browsing folders, opening and editing text files, viewing pictures, uploading and downloading files to and from your Mac |
+| **Shell** | top menu, **Clusters** → the shell entry (**TODO:** confirm its exact name, probably **HPC Cluster Shell Access**) | typing commands, for example CESM's `./create_newcase` and `./case.submit` |
+| **Jupyter** | top menu, **Interactive Apps** → **Servers** → **Jupyter Notebook** | Python notebooks for plotting model output. They run on a compute node for 1 to 4 hours (see {ref}`uhpc-jupyter` below) |
+| **Active Jobs** | top menu, **Jobs** → **Active Jobs** | a web view of your waiting and running batch jobs, the same as `squeue -u $USER` |
 
 The Shell app opens a command line on the same login computer you reached with `ssh`, with the same home folder and the same `/usr/local/research` files.
 
 In the Files app you can type a path such as `/usr/local/research/miyawaki/users/<your-username>` into the path box at the top to jump to it.
+
+(uhpc-jupyter)=
+## Jupyter
+
+Use Jupyter for looking at model output and making plots, like Google Colab but on the cluster.
+
+1. Go to **Interactive Apps** → **Servers** → **Jupyter Notebook**.
+2. Fill in the form:
+   - **Hours**: how long the session lasts, 1 to 4 (default 4). It stops at the end, so save your notebook before then.
+   - **CPU cores**: 1 to 8. Use 2 for plotting.
+   - **Conda environment**: leave it as `datascience`.
+   - **Partition**: leave it as `hpcc`.
+   - **GPUs**: 0.
+3. Click **Launch**. The session waits in the queue, then shows **Running**. Click **Connect to Jupyter**.
+4. In JupyterLab, use the file browser on the left to go to your folder, then click **Python 3 (ipykernel)** under **Notebook** to make a new notebook.
+5. In the first cell, type `import xarray, netCDF4, matplotlib.pyplot as plt` and press **Shift-Enter**. No error message means it worked.
+
+The `datascience` environment has xarray, netCDF4 and matplotlib, but **not cartopy** (map projections and coastlines). Plain maps with `plt.pcolormesh(lon, lat, field)` work without it. If you want cartopy, make your own environment once. Do this in the **Shell** app, inside tmux:
+
+```bash
+module load python/miniforge
+mamba create -n geo -c conda-forge python=3.12 jupyterlab ipykernel cartopy xarray netcdf4 matplotlib
+```
+
+It asks `Proceed ([y]/n)?`. Type `y` and press Enter. Installing takes several minutes and uses about 2-3 GB of your 20 GB home folder (it goes in `~/.conda/envs/geo`). After that, type `geo` instead of `datascience` in the **Conda environment** box of the Jupyter form. `jupyterlab` has to be in the list above, or the Jupyter session will not start.
+
+Jupyter runs on a compute node. Never start Jupyter or other heavy calculations from the Shell, which runs on the shared login computer.
 
 ## Always work inside tmux
 
