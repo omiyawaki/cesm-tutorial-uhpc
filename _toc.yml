@@ -5,6 +5,10 @@ format: jb-book
 root: README
 
 chapters:
+- file: notebooks/uhpc/quickstart
+  sections:
+  - file: notebooks/uhpc/differences
+
 - file: notebooks/intro/intro_overview
   sections:
   - file: notebooks/intro/components
