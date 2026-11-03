@@ -15,10 +15,21 @@ Steps (one sub-command each):
             -1.8 C floor, fill land, conservative regrid to the template
             grid, "diddle" for linear time interpolation, write NetCDF
   anomaly   add a flat or Gaussian-tapered SST anomaly in a box (open water
-            only), keep the file consistent
+            only), keep the file consistent. The default is the tutorial's
+            teaching example: an idealized El Nino-type warm patch peaking at
+            +1.5 K on the equator at 145W, tapered to ~0 at 10S-10N, 170E-100W
+            (it covers the Nino 3.4 region, 5S-5N, 170W-120W)
   check     compare a file with the template (grid, time axis, names, units)
   plot      quick map of SST, ice and (optionally) the difference from
             another file
+
+Example (the tutorial's worked example):
+
+  python make_sst_bc.py download --first-year 1995 --last-year 2005
+  python make_sst_bc.py build
+  python make_sst_bc.py anomaly --out sst_example_enso.nc
+  python make_sst_bc.py check sst_example_enso.nc
+  python make_sst_bc.py plot sst_example_enso.nc --month 12 --compare sst_era5_f19_clim.nc
 
 Needs: numpy, netCDF4, xarray (build), matplotlib (plot), cdsapi (download).
 Part of the Union HPC edition of the CESM tutorial (MIT License).
@@ -329,13 +340,14 @@ def main(argv=None):
 
     n = sub.add_parser("anomaly", help="add an SST anomaly in a lat-lon box")
     n.add_argument("--input", default="sst_era5_f19_clim.nc")
-    n.add_argument("--out", required=True)
+    # Defaults = teaching example: idealized El Nino-type warm patch (see module docstring)
+    n.add_argument("--out", default="sst_example_enso.nc")
     n.add_argument("--shape", choices=["gaussian", "flat"], default="gaussian")
-    n.add_argument("--amp", type=float, required=True, help="anomaly in K (peak value for gaussian)")
-    n.add_argument("--lat-min", type=float, required=True)
-    n.add_argument("--lat-max", type=float, required=True)
-    n.add_argument("--lon-min", type=float, required=True, help="degrees east, 0-360")
-    n.add_argument("--lon-max", type=float, required=True, help="degrees east, 0-360")
+    n.add_argument("--amp", type=float, default=1.5, help="anomaly in K (peak value for gaussian); default 1.5")
+    n.add_argument("--lat-min", type=float, default=-10.0, help="default -10")
+    n.add_argument("--lat-max", type=float, default=10.0, help="default 10")
+    n.add_argument("--lon-min", type=float, default=170.0, help="degrees east, 0-360; default 170 (170E)")
+    n.add_argument("--lon-max", type=float, default=260.0, help="degrees east, 0-360; default 260 (100W)")
     n.set_defaults(func=cmd_anomaly)
 
     c = sub.add_parser("check", help="compare a file with the template")

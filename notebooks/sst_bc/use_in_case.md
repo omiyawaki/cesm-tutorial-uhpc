@@ -16,7 +16,7 @@ You should see the stock HadOIBl file, the `domain.camocn.1.9x2.5_gx1v6_090403.n
 ## 2. Point the case at your file
 
 ```bash
-./xmlchange SSTICE_DATA_FILENAME=$MYROOT/sst/sst_example_indian_ocean.nc
+./xmlchange SSTICE_DATA_FILENAME=$MYROOT/sst/sst_example_enso.nc
 ```
 
 Use the **full path**: `$MYROOT/...` is expanded into a full path when you press Enter. Leave `SSTICE_GRID_FILENAME` and the `SSTICE_YEAR_*` settings unchanged. Your file is on the same grid and is a 12-month climatology, like the stock file.
@@ -29,7 +29,7 @@ grep -A2 "<fileNames>" CaseDocs/docn.streams.txt.prescribed
 grep stream_fldfilename CaseDocs/ice_in
 ```
 
-`preview_namelists` rewrites the files in `CaseDocs/`. The first `grep` should show `sst_example_indian_ocean.nc` under the SST `<fileNames>` (the line before it is the grid file). The second should show the full path to your file for the sea ice. If you still see the stock file name, `xmlchange` did not work: run the `xmlquery` line again and look for typing mistakes.
+`preview_namelists` rewrites the files in `CaseDocs/`. The first `grep` should show `sst_example_enso.nc` under the SST `<fileNames>` (the line before it is the grid file). The second should show the full path to your file for the sea ice. If you still see the stock file name, `xmlchange` did not work: run the `xmlquery` line again and look for typing mistakes.
 
 Your file must stay where it is, unchanged, for as long as the case runs. If you change the file, the run uses the changed version from that point on. Make a new file with a new name instead.
 
