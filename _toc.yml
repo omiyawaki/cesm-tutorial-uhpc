@@ -72,6 +72,14 @@ chapters:
     sections:
     - file: notebooks/namelist/exercises/exercise_cam_output
 
+- file: notebooks/sst_bc/sst_bc
+  sections:
+  - file: notebooks/sst_bc/how_cesm_reads_sst
+  - file: notebooks/sst_bc/python_setup
+  - file: notebooks/sst_bc/era5_to_cesm
+  - file: notebooks/sst_bc/add_anomaly
+  - file: notebooks/sst_bc/use_in_case
+
 - file: notebooks/troubleshooting/troubleshooting
   sections:
   - file: notebooks/troubleshooting/log_files
