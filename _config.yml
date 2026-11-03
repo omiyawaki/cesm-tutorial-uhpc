@@ -23,6 +23,8 @@ exclude_patterns:
   - tools/*
   - _build
   - '**.ipynb_checkpoints'
+  - archive/*
+  - archive/**
 
 
 # Define the name of the latex output file for PDF builds
