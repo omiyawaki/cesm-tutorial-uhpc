@@ -10,6 +10,7 @@ root: README
 chapters:
 - file: notebooks/uhpc/quickstart
   sections:
+  - file: notebooks/uhpc/ondemand_basics
   - file: notebooks/uhpc/differences
 
 - file: notebooks/intro/intro_overview

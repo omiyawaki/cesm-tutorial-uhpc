@@ -1,118 +1,165 @@
 # UHPC quickstart: your first CESM2 run on Union HPC
 
-This page gets you from a new Union HPC (UHPC) account to a short CESM2 run whose output you can look at. The rest of this tutorial explains each step in detail. It was written by NCAR for its own machines and has been adapted here for UHPC.
+This page takes you from a new Union HPC (UHPC) account to a short CESM2 run whose output you can look at. Follow it from top to bottom. The rest of this tutorial explains each step in more detail. It was written by NCAR for its own computers and has been adapted here for UHPC.
 
 ```{admonition} Read this first
 :class: warning
-- UHPC runs **CESM2.1.5** (`release-cesm2.1.5`: cime5.6.49, CAM `cam_cesm2_1_rel_60`, CLM5.0.37). The NCAR tutorial was written for `release-cesm2.1.4`, which is a very small step away.
-- The per-user folder layout below (`/usr/local/research/miyawaki/users/$USER`) and the read-only shared CESM code and input data are **planned, not yet set up**. Lines marked **TODO** are not yet confirmed on UHPC.
+- UHPC runs **CESM2.1.5**. The NCAR tutorial was written for CESM2.1.4, a very small step away.
+- The per-user folders below (`/usr/local/research/miyawaki/users/<your-username>`) are **planned, not yet created**. Lines marked **TODO** are not yet confirmed on UHPC.
 - Do not submit jobs until Osamu says your account is ready.
 ```
 
-## 1. Log in
+## 0. One-time first login (already done)
+
+You already logged in once from the Mac Terminal app with `ssh <your-username>@hpcc.union.edu` and set a new password. From now on you use the website instead.
+
+## 1. Open OnDemand and start a shell
+
+1. Connect to campus Wi-Fi or the Union VPN.
+2. Go to <https://ondemand.hpc.union.edu> and log in (**TODO:** confirm it takes the same username and password).
+3. Open the **Shell** app and start tmux, so your work survives the tab closing:
 
 ```bash
-ssh <your-username>@<TODO-UHPC-login-host>
+tmux new -s cesm
 ```
 
-- **TODO:** login host name.
-- **TODO:** whether you must be on the campus network or VPN to connect.
-- **TODO:** first-login steps (changing the temporary password you received by email).
-- Your account is created by the Union HPC administrators (hpcadmin@union.edu). You also need to be in the `res-miyawaki` group before you can read the shared CESM files. **TODO:** confirm how you can check this (for example with `groups`).
+If you have not used a command line before, read [Open OnDemand and shell basics](ondemand_basics.md) now. It explains tmux, `cd`, `ls`, `nano`, Tab completion and Ctrl-C, which this page uses. Next time, reconnect with `tmux attach -t cesm`.
 
 ## 2. Set up your environment
 
-CESM2 on UHPC uses gcc/gfortran 11.5.0 and OpenMPI 5.0.10. NetCDF, HDF5 and PnetCDF were built by hand under `/usr/local/research/miyawaki/opt/cesm-deps` and are loaded by an `ENV.sh` script. There are no NCAR (Cheyenne/Derecho) modules on UHPC.
+Type these lines (or paste them with Cmd-V):
 
 ```bash
-source <TODO-path-to-ENV.sh>        # loads compilers, MPI, NetCDF/HDF5/PnetCDF
-
-# Locations used throughout this tutorial
-export CESMROOT=/usr/local/research/miyawaki/cesm/cesm2      # shared CESM2 code (planned read-only for students)
-export MYROOT=/usr/local/research/miyawaki/users/$USER       # your own folder (planned, TODO: not yet created)
+source /usr/local/research/miyawaki/opt/cesm-deps/ENV.sh
+export CESMROOT=/usr/local/research/miyawaki/cesm/cesm2
+export MYROOT=/usr/local/research/miyawaki/users/$USER
 mkdir -p $MYROOT/cases $MYROOT/scratch $MYROOT/archive
+ls $MYROOT
 ```
 
-- **TODO:** exact path of `ENV.sh`, and whether it also loads the compiler and MPI or you need a `module load` first.
-- Outside network access goes through a proxy at `192.168.1.10:8888`. **TODO:** confirm whether `ENV.sh` sets it. If not, and you need to download something:
+- `source .../ENV.sh` loads the compiler, MPI and NetCDF libraries that CESM needs (it runs `module load openmpi/5.0.10` for you).
+- `CESMROOT` is the shared CESM2 code. Everyone uses the same copy, so you do not download CESM.
+- `MYROOT` is your own folder for cases, runs and output. `ls $MYROOT` should list `archive  cases  scratch`.
+
+These settings are forgotten when the shell closes. Add the four lines (all except `mkdir` and `ls`) to the end of `~/.bashrc` so they are set every time:
 
 ```bash
-export http_proxy=http://192.168.1.10:8888
-export https_proxy=http://192.168.1.10:8888
+nano ~/.bashrc
 ```
 
-You can add these lines to your `~/.bashrc` so you do not have to type them each time you log in.
+Paste the lines at the bottom, save with **Ctrl-O** then **Enter**, and quit with **Ctrl-X**. Then run `source ~/.bashrc` once.
 
 ## 3. Create a small case
 
-The test case is an atmosphere-only run (`F2000climo`) at about 2-degree resolution (`f19_f19_mg17`). This is the setup that has already been run on UHPC.
+The test case is atmosphere-only (`F2000climo`: year-2000 conditions with prescribed sea surface temperatures) at about 2-degree resolution (`f19_f19_mg17`). This setup has already run on UHPC.
 
 ```bash
 cd $CESMROOT/cime/scripts
 ./create_newcase --case $MYROOT/cases/f2000.test \
                  --compset F2000climo --res f19_f19_mg17 \
-                 --output-root $MYROOT/scratch
+                 --output-root $MYROOT/scratch --run-unsupported
 ```
 
-- **TODO:** whether UHPC needs `--machine <name>` here or is detected automatically.
-- If `create_newcase` says this compset and grid combination is not scientifically supported, add `--run-unsupported`. **TODO:** confirm.
-- There is no `--project` on UHPC.
+`./create_newcase` runs the program `create_newcase` in this folder. The `\` at the end of a line continues the command on the next line. You should see many lines of messages, including `Creating Case directory` followed by your case path. If you see `ERROR`, read that line first.
 
-## 4. Set up and build
+- `--output-root` puts the build and run folders in your space. Without it, they would go to a default location you cannot write to.
+- `--run-unsupported` is needed because NCAR has not officially tested this compset and grid combination. It is the same command used for the earlier UHPC runs.
+- UHPC's machine (`union_hpcc`) is detected automatically.
+
+## 4. Configure, set up and build
 
 ```bash
 cd $MYROOT/cases/f2000.test
-./xmlchange NTASKS=8                        # 8 MPI tasks on one node, as in earlier UHPC runs
-./xmlchange STOP_OPTION=ndays,STOP_N=5      # 5 model days
-./xmlchange JOB_QUEUE=hpcc                  # Slurm partition for CPU jobs
-./xmlchange JOB_WALLCLOCK_TIME=01:00:00
+./xmlchange NTASKS=8
+./xmlchange STOP_OPTION=ndays,STOP_N=5
+./xmlchange JOB_QUEUE=hpcc,JOB_WALLCLOCK_TIME=02:00:00
 ./xmlchange DOUT_S_ROOT=$MYROOT/archive/f2000.test
+./xmlchange HIST_OPTION=never,REST_OPTION=ndays,REST_N=5
+./xmlchange CLM_FORCE_COLDSTART=on
+```
+
+Each `./xmlchange` line changes one or more case settings and prints nothing if it worked. Check any setting with `./xmlquery`, for example `./xmlquery STOP_N`.
+
+- `NTASKS=8`: use 8 processors on one node, as in earlier UHPC runs.
+- `STOP_N=5`: run 5 model days.
+- `DOUT_S_ROOT`: where finished output is copied. You must set this, because the default points to a folder you cannot write to.
+- `HIST_OPTION=never`: stops the coupler from writing extra files during short tests.
+- `CLM_FORCE_COLDSTART=on`: start the land model from a simple state. Earlier UHPC test runs needed this. **TODO:** check whether it is still needed.
+
+Next, add the sea-ice settings used in the earlier UHPC runs:
+
+```bash
+nano user_nl_cice
+```
+
+Go to the bottom of the file and add these four lines:
+
+```
+ktherm = 1
+tr_pond_lvl = .false.
+shortwave = "default"
+highfreq = .false.
+```
+
+Save with **Ctrl-O**, **Enter**, then quit with **Ctrl-X**. Then:
+
+```bash
 ./case.setup
 ./case.build
 ```
 
-- On NCAR machines the build is wrapped in `qcmd --`. On UHPC you run `./case.build` directly. **TODO:** confirm whether builds should run on the login node or inside a Slurm allocation (`srun`).
-- Input data (`DIN_LOC_ROOT`, about 23 GB) is shared. Check its location with `./xmlquery DIN_LOC_ROOT`. If the build reports missing input files, ask Osamu rather than downloading them yourself, since the shared input data is planned to be read-only for students. **TODO:** who downloads missing input data and how.
+`./case.setup` takes under a minute and ends with `If an old case build already exists, might want to run 'case.build --clean' before building`. That message is normal. `./case.build` compiles the model and takes a while (**TODO:** how long on UHPC). It ends with `MODEL BUILD HAS FINISHED SUCCESSFULLY`. Stay inside tmux while it runs, so closing the tab does not stop it.
+
+- The build runs on the login computer. **TODO:** confirm with the UHPC administrators that this is acceptable, or switch to a batch build job.
+- Do not build inside Jupyter: Jupyter sessions end after at most 4 hours.
+- The shared input data (`DIN_LOC_ROOT=/usr/local/research/miyawaki/cesm/inputdata`) has only the files for this 2-degree setup. If the build or submit reports missing input files, ask Osamu. Do not download them yourself.
 
 ## 5. Submit with Slurm
 
-First check what will be submitted:
+First look at what will be submitted:
 
 ```bash
 ./preview_run
 ```
 
-CPU jobs on UHPC **must avoid the GPU nodes hpcc03 and hpcc04**. If the `sbatch` command shown by `preview_run` does not already include `--exclude=hpcc03,hpcc04`, add it when you submit:
+Then submit. CPU jobs must stay off the GPU nodes (hpcc03 and hpcc04), and the UHPC settings do not do this for you yet, so always add the exclude:
 
 ```bash
 ./case.submit -a "--exclude=hpcc03,hpcc04"
 ```
 
-- **TODO:** confirm whether the UHPC machine configuration already adds the exclude.
-- **TODO:** which Slurm account to use (`general` or `res-miyawaki`) and how it is set, since UHPC has no CESM `PROJECT` setting.
-- A 5-day run costs about 0.5 node-hours. The maximum job length is 3 days, and the default memory is about 2 GB per CPU.
+You should see messages that include a job id number for `case.run` (the model) and one for `case.st_archive` (copying the output afterwards). Note the numbers.
+
+- **TODO:** once you are added to the research group's Slurm account, you will add `--account=res-miyawaki` inside the quotes. Osamu will tell you when.
+- A 5-day run takes about half an hour on 8 processors. The maximum job length is 3 days.
 
 ## 6. Check on the job
 
 ```bash
-squeue -u $USER          # your queued and running jobs (replaces qstat)
-cat CaseStatus           # CESM's own record of what happened
-sacct -j <jobid>         # accounting information for a finished job
-scancel <jobid>          # cancel a job (replaces qdel)
+squeue -u $USER          # your waiting (PD) and running (R) jobs
+cat CaseStatus           # CESM's own record of each step
+sacct -j <jobid>         # how a finished job ended
+scancel <jobid>          # cancel a job
 ```
+
+When `squeue` shows nothing, the jobs are done. The last lines of `cat CaseStatus` should include `case.run success` and `st_archive success`. If they say `error`, see [Troubleshooting](../troubleshooting/troubleshooting.ipynb).
 
 ## 7. Find the output
 
 ```bash
-ls $MYROOT/scratch/f2000.test/run              # run directory: logs while running
-ls $MYROOT/archive/f2000.test/atm/hist         # history files after short-term archiving
-ls $MYROOT/archive/f2000.test/logs             # compressed log files
-ls $MYROOT/cases/f2000.test/timing             # model throughput and cost
+ls $MYROOT/scratch/f2000.test/run              # run folder: logs while running
+ls $MYROOT/archive/f2000.test/logs             # compressed log files after the run
+ls $MYROOT/archive/f2000.test/atm/hist         # atmosphere history files
+ls $MYROOT/cases/f2000.test/timing             # speed and cost of the run
 ```
 
-Keep output inside your own folder. Do not write CESM output to a compute node's local `/scratch` disk.
+With `HIST_OPTION=never` and only 5 days, `atm/hist` may contain just one small file, or none. That is fine for a first test. You will turn on monthly output in later chapters. You can also browse these folders in the OnDemand **Files** app.
+
+Keep output in your own folder (`$MYROOT`). Your home folder is limited to 20 GB, and `/scratch` is wiped on each compute node.
 
 ## Where next
 
-- [Differences from the NCAR tutorial](differences.md) lists what changes on UHPC throughout the rest of this tutorial.
-- The [CESM Basics](../basics/basics_overview.ipynb) chapter explains each of the steps above.
+- [Open OnDemand and shell basics](ondemand_basics.md): the shell commands and tools used throughout.
+- [Differences from the NCAR tutorial](differences.md): what changes on UHPC throughout the rest of this tutorial.
+- The [CESM Basics](../basics/basics_overview.ipynb) chapter explains each step above.
+- [Making your own SST boundary conditions](../sst_bc/sst_bc.md): how to make your own SST files.
