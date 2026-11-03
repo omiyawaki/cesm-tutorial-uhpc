@@ -12,3 +12,6 @@ _build
 
 #Ignore dask worker files
 dask-worker.*
+
+#Ignore Python bytecode
+__pycache__/
