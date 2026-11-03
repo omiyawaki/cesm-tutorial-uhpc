@@ -116,7 +116,7 @@ A few ideas you will meet in the CESM pages:
 | `/usr/local/research/miyawaki/users/<your-username>` (`$MYROOT`) | shared group space (planned soft limit about 300 GB per student, **TODO:** not decided yet) | your CESM cases, runs, output and SST files. **TODO:** these folders are planned but not created yet |
 | `/scratch` | only on each compute node, cleaned after 30 days | do not use for CESM |
 
-CESM output is large: a 3-month run can fill tens of GB. Run `du -sh $MYROOT/*` now and then to see how much space each folder uses, and delete run folders you no longer need (see the end of the [quickstart](quickstart.md)).
+A 3-month CESM run's archive is about 4 GB, plus its run folder (**TODO:** size not yet measured). Run `du -sh $MYROOT/*` now and then to see how much space each folder uses, and delete run folders you no longer need (see the end of the [quickstart](quickstart.md)).
 
 ## Copying files to and from your Mac
 

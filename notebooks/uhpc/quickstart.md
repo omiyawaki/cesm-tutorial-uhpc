@@ -158,7 +158,7 @@ With `HIST_OPTION=never` and only 5 days, `atm/hist` may contain just one small 
 
 Keep output in your own folder (`$MYROOT`). Your home folder is limited to 20 GB, and `/scratch` is wiped on each compute node.
 
-A 3-month (92-day) `F2000climo` run with monthly output can fill **tens of GB**, so the planned 300 GB per student fills quickly. Check your usage with `du -sh $MYROOT/*`. Once a run has finished and its archive is in place, delete its run folder with `rm -r $MYROOT/scratch/<casename>` (the build folder in it is only needed if you will run that case again). `rm` deletes for good, with no trash can, so check the path twice. Ask Osamu before deleting or compressing anything in `archive`.
+The finished archive of a 3-month (92-day) `F2000climo` run with monthly output (history files plus restarts) is about 4 GB. The run folder in `scratch` adds more (**TODO:** not yet measured). The planned 300 GB per student therefore fits dozens of runs, but it is still good practice to tidy up. Now and then, check your usage with `du -sh $MYROOT/*`. Once a run has finished and its archive is in place, delete its run folder with `rm -r $MYROOT/scratch/<casename>` (the build folder in it is only needed if you will run that case again). `rm` deletes for good, with no trash can, so check the path twice. Ask Osamu before deleting or compressing anything in `archive`.
 
 ## Where next
 
