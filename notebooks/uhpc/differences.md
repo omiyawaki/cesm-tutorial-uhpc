@@ -18,11 +18,11 @@ NCAR users log in to Cheyenne with `ssh` and a two-factor token. On UHPC you use
 
 CESM's own commands (`./case.submit`, `./case.build`) are the same. CESM translates `./case.submit` into `sbatch` for you.
 
-- **Building:** on NCAR machines you build with `qcmd -- ./case.build`. On UHPC you run `./case.build` in the OnDemand Shell inside tmux. Do not build in Jupyter, which has a 4-hour limit. **TODO:** confirm a login-node build is acceptable, or write a batch build job.
+- **Building:** on NCAR machines you build with `qcmd -- ./case.build`. On UHPC you run `./case.build` on the login node, in the OnDemand Shell inside tmux. The cluster allows builds there with up to 4 parallel jobs, so set `./xmlchange GMAKE_J=4` first (the UHPC default is 8). Other heavy computing and Jupyter are not allowed on the login node. Do not build in Jupyter, which has a 4-hour limit.
 - **Partitions:** `hpcc` (nodes hpcc01-04) and `gpu` (hpcc03 and hpcc04). CESM runs on CPUs, so set `JOB_QUEUE=hpcc`.
 - **GPU nodes:** CPU jobs must use `--exclude=hpcc03,hpcc04`, for example `./case.submit -a "--exclude=hpcc03,hpcc04"`. The UHPC machine configuration does **not** add this (checked), so always pass it.
 - **Limits:** maximum job length 3 days (Cheyenne's regular queue was 12 hours), about 2 GB of memory per CPU by default, QOS `normal`.
-- **Accounts:** Slurm accounts are `general` and `res-miyawaki`. There is no CESM `PROJECT` setting on UHPC, so ignore `--project`, `PROJECT=` and the tutorial project numbers (`UESM0011`, `UESM0012`, `P93300642`). New student accounts start with only the `general` account. Once you are added to the research group (**TODO**), add `--account=res-miyawaki` inside the `-a "..."` quotes of `./case.submit`. Osamu will tell you when.
+- **Accounts:** Slurm accounts are `general` and `res-miyawaki`. There is no CESM `PROJECT` setting on UHPC, so ignore `--project`, `PROJECT=` and the tutorial project numbers (`UESM0011`, `UESM0012`, `P93300642`). New student accounts start with only the `general` account, which works for CESM on `hpcc`, so you do not need to set anything. Once Osamu adds you to the research group (**TODO:** not done yet; it takes effect about an hour later), add `--account=res-miyawaki` inside the `-a "..."` quotes of `./case.submit`. He will tell you when.
 - **Queue names:** wherever the NCAR text says `JOB_QUEUE=regular`, use `JOB_QUEUE=hpcc`. The daily tutorial reservations do not exist on UHPC.
 
 ## File system paths
@@ -41,7 +41,7 @@ The UHPC machine configuration points output at Osamu's folders, so always pass 
 
 In this edition, commands that used `/glade/...` paths were changed to the UHPC paths above. Where a page uses `$DIN_LOC_ROOT`, replace it with the input data path, or set it once with `export DIN_LOC_ROOT=<path>`.
 
-The per-user folders (`/usr/local/research/miyawaki/users/$USER`) are a **plan**. **TODO:** create them and set permissions. The group's space is limited to 4.9 TB in total, and a soft limit of about 300 GB per student is planned but not yet decided. Your home folder (`~`) has a 20 GB limit, and each compute node's `/scratch` is local to that node and wiped after 30 days, so do not use either for CESM output.
+The per-user folders (`/usr/local/research/miyawaki/users/$USER`) are a **plan**. **TODO:** create them and set permissions. The group's space is limited to 4.9 TB in total, and a soft limit of about 300 GB per student is planned but not yet decided. A 3-month `F2000climo` archive can be tens of GB, so check your usage with `du -sh` and delete run folders you no longer need. Your home folder (`~`) has a 20 GB limit, and each compute node's `/scratch` is local to that node and wiped after 30 days, so do not use either for CESM output.
 
 Some pages use data that exists only on NCAR's GLADE file system, such as tutorial archives under `/glade/p/cesm/tutorial`, the CESM2 Large Ensemble under `/glade/campaign`, chemistry emissions under `/glade/p/acom`, and forcing files in staff home directories. Those pages carry a note at the top. **TODO:** copy or download the files you need, or skip those exercises.
 

@@ -105,12 +105,13 @@ Save with **Ctrl-O**, **Enter**, then quit with **Ctrl-X**. Then:
 
 ```bash
 ./case.setup
+./xmlchange GMAKE_J=4
 ./case.build
 ```
 
 `./case.setup` takes under a minute and ends with `If an old case build already exists, might want to run 'case.build --clean' before building`. That message is normal. `./case.build` compiles the model and takes a while (**TODO:** how long on UHPC). It ends with `MODEL BUILD HAS FINISHED SUCCESSFULLY`. Stay inside tmux while it runs, so closing the tab does not stop it.
 
-- The build runs on the login computer. **TODO:** confirm with the UHPC administrators that this is acceptable, or switch to a batch build job.
+- The build runs on the login computer. The cluster allows this, with up to 4 parallel compile processes, which is what `GMAKE_J=4` sets. Builds are the only heavy work allowed there. Model runs go through `./case.submit`, and Jupyter runs on a compute node.
 - Do not build inside Jupyter: Jupyter sessions end after at most 4 hours.
 - The shared input data (`DIN_LOC_ROOT=/usr/local/research/miyawaki/cesm/inputdata`) has only the files for this 2-degree setup. If the build or submit reports missing input files, ask Osamu. Do not download them yourself.
 
@@ -130,7 +131,7 @@ Then submit. CPU jobs must stay off the GPU nodes (hpcc03 and hpcc04), and the U
 
 You should see messages that include a job id number for `case.run` (the model) and one for `case.st_archive` (copying the output afterwards). Note the numbers.
 
-- **TODO:** once you are added to the research group's Slurm account, you will add `--account=res-miyawaki` inside the quotes. Osamu will tell you when.
+- Your jobs use your default Slurm account, `general`, which works for CESM. Once Osamu adds you to the research group, you will add `--account=res-miyawaki` inside the quotes, for example `-a "--exclude=hpcc03,hpcc04 --account=res-miyawaki"`. Until he tells you it is ready (**TODO:** not done yet; it starts working about an hour after he adds you), leave it out, because jobs with it will be rejected.
 - A 5-day run takes about half an hour on 8 processors. The maximum job length is 3 days.
 
 ## 6. Check on the job
@@ -156,6 +157,8 @@ ls $MYROOT/cases/f2000.test/timing             # speed and cost of the run
 With `HIST_OPTION=never` and only 5 days, `atm/hist` may contain just one small file, or none. That is fine for a first test. You will turn on monthly output in later chapters. You can also browse these folders in the OnDemand **Files** app.
 
 Keep output in your own folder (`$MYROOT`). Your home folder is limited to 20 GB, and `/scratch` is wiped on each compute node.
+
+A 3-month (92-day) `F2000climo` run with monthly output can fill **tens of GB**, so the planned 300 GB per student fills quickly. Check your usage with `du -sh $MYROOT/*`. Once a run has finished and its archive is in place, delete its run folder with `rm -r $MYROOT/scratch/<casename>` (the build folder in it is only needed if you will run that case again). `rm` deletes for good, with no trash can, so check the path twice. Ask Osamu before deleting or compressing anything in `archive`.
 
 ## Where next
 

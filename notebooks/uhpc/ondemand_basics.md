@@ -116,6 +116,8 @@ A few ideas you will meet in the CESM pages:
 | `/usr/local/research/miyawaki/users/<your-username>` (`$MYROOT`) | shared group space (planned soft limit about 300 GB per student, **TODO:** not decided yet) | your CESM cases, runs, output and SST files. **TODO:** these folders are planned but not created yet |
 | `/scratch` | only on each compute node, cleaned after 30 days | do not use for CESM |
 
+CESM output is large: a 3-month run can fill tens of GB. Run `du -sh $MYROOT/*` now and then to see how much space each folder uses, and delete run folders you no longer need (see the end of the [quickstart](quickstart.md)).
+
 ## Copying files to and from your Mac
 
 Use the **Files** app: open a folder, then use the **Upload** button to send a file from your Mac, or select a file and use **Download** to save it to your Mac's Downloads folder. Use this for pictures and small files. Model output files are large, so look at them on UHPC with Jupyter instead of downloading them.
@@ -130,4 +132,4 @@ CESM runs as **batch jobs** on the compute nodes. You submit them with `./case.s
 | `sacct -j <jobid>` | show how a finished job ended (`COMPLETED`, `FAILED`, `TIMEOUT`) |
 | `scancel <jobid>` | cancel a job |
 
-Do not run model runs or long calculations in the Shell itself or in Jupyter. Short commands such as `./case.setup`, `./xmlchange` and the SST script are fine.
+The Shell runs on the shared login computer. Short commands such as `./case.setup`, `./xmlchange` and the SST script are fine there, and so is `./case.build` (see the quickstart). Do not run the model or other heavy calculations there, and do not start Jupyter from it. Use `./case.submit` and the Jupyter app instead.

@@ -15,16 +15,15 @@ pwd
 
 **TODO:** the per-user folders under `/usr/local/research/miyawaki/users` are planned but not created yet.
 
-## 2. Copy the script
+## 2. Get the script
 
-```bash
-cp /usr/local/research/miyawaki/tutorial/tools/make_sst_bc.py .
-ls
-```
+The script is `tools/make_sst_bc.py` in this tutorial's repository. Get the file from Osamu (or download it from the repository) and save it on your Mac. Then put it in your `sst` folder:
 
-`cp <from> <to>` copies a file, and `.` means "this folder". `ls` should now list `make_sst_bc.py`.
+1. In OnDemand, open the **Files App** and type `/usr/local/research/miyawaki/users/<your-username>/sst` in the path box at the top.
+2. Click **Upload** and choose `make_sst_bc.py` from your Mac.
+3. Back in the Shell, run `ls`. It should list `make_sst_bc.py`.
 
-**TODO:** the shared copy of the script at `/usr/local/research/miyawaki/tutorial/tools/` has not been placed yet. The script is `tools/make_sst_bc.py` in this tutorial's repository.
+**TODO:** a shared copy on UHPC, so this becomes a single `cp` command, has not been placed yet.
 
 ## 3. Choose the Python to use
 
