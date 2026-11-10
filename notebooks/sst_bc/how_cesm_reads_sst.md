@@ -14,7 +14,7 @@ The stock file on UHPC is
 /usr/local/research/miyawaki/cesm/inputdata/atm/cam/sst/sst_HadOIBl_bc_1.9x2.5_2000climo_c180511.nc
 ```
 
-It is a 12-month climatology (average of 1995-2005) of the merged Hadley/OI SST and sea-ice data. Its layout, checked on UHPC:
+It is a 12-month climatology (average of 1995-2005) of the merged Hadley/OI SST and sea-ice data. Its layout:
 
 | Item | Value |
 |---|---|
@@ -30,13 +30,17 @@ It is a 12-month climatology (average of 1995-2005) of the merged Hadley/OI SST 
 
 There are values everywhere, even over land. The model ignores land points, because a separate ocean mask decides where the ocean is.
 
-## Why there are two versions of each field ("diddling")
+## Two versions of each field
 
+Each field comes in two versions: `SST_cpl` and `ice_cov`, which the model reads, and `SST_cpl_prediddle` and `ice_cov_prediddle`, the true monthly means. `make_sst_bc.py` writes both for you, and its `check` command confirms they fit together. You do not need to know more to finish this chapter.
+
+```{dropdown} If you want to know why there are two versions ("diddling")
 CESM does not use a month's value for the whole month. It **interpolates linearly in time** between the mid-month values. A straight line between monthly means smooths out the seasonal cycle, so the model's actual monthly average would come out a little too weak at the peaks.
 
 To fix this, the values in `SST_cpl` and `ice_cov` are adjusted ("diddled") so that, after the model interpolates, each month's average comes out equal to the real monthly mean. The real monthly means are kept in the `_prediddle` variables. The model reads only `SST_cpl` and `ice_cov`. The diddled values can fall slightly outside the physical range, for example ice below 0 or SST below the freezing point. That is expected.
 
 `make_sst_bc.py` does this adjustment for you. Its `check` command confirms that, after interpolation, the monthly means in your file match its `_prediddle` values. That check gives the same result on the stock file.
+```
 
 ## The case settings that point to the file
 
@@ -49,7 +53,7 @@ These settings are in `env_run.xml` in your case directory. You can view them wi
 | `SSTICE_YEAR_ALIGN` | model year that lines up with `SSTICE_YEAR_START` | `1` |
 | `SSTICE_YEAR_START`, `SSTICE_YEAR_END` | first and last data year to use | `0` and `0` (a climatology repeats one year) |
 
-With a 12-month climatology you only change `SSTICE_DATA_FILENAME`. The grid file stays the same, because your file uses the same 96 x 144 grid (checked on UHPC: its `xc`/`yc` match the SST file's `lon`/`lat`). The year settings also stay the same. The year settings matter only for multi-year files, such as a real 1979-2015 SST history, which this tutorial does not make.
+With a 12-month climatology you only change `SSTICE_DATA_FILENAME`. The grid file stays the same, because your file uses the same 96 x 144 grid: the grid file's `xc`/`yc` match the SST file's `lon`/`lat`. The year settings also stay the same. The year settings matter only for multi-year files, such as a real 1979-2015 SST history, which this tutorial does not make.
 
 When the case is set up, CESM writes these settings into "stream" files. Here is the data-ocean one, `CaseDocs/docn.streams.txt.prescribed`, from a UHPC case using the stock file (shortened):
 
