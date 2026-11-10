@@ -40,8 +40,6 @@ It prints `Using 132 months (11 years) of ERA5`, the fraction of land points (34
 6. **Adjust for time interpolation.** The monthly means are stored as `SST_cpl_prediddle` and `ice_cov_prediddle`. The adjusted ("diddled") values that CESM reads are stored as `SST_cpl` and `ice_cov` (see [How CESM reads SST and sea ice](how_cesm_reads_sst.md)).
 7. **Write the NetCDF file** with the same variable names, units, time axis (`days since 0000-01-01`, `365_day` calendar) and format as the stock file.
 
-To see this in the script, open it with `nano make_sst_bc.py`, press **Ctrl-W**, type `cmd_build`, and press **Enter**. Do not change the file. Quit with **Ctrl-X**. If `nano` asks whether to save, press **N**.
-
 ## 3. Check the file
 
 ```bash

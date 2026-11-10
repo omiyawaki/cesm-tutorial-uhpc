@@ -69,7 +69,7 @@ ERA5 comes from the Copernicus Climate Data Store (CDS). Do items 1 to 3 in your
 
 1. Go to <https://cds.climate.copernicus.eu> and click **Login - Register** to make a free account. Confirm it from the email the CDS sends you, then log in.
 2. Open the ERA5 dataset's download page, <https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels-monthly-means?tab=download>, while logged in. Scroll to the bottom of the form, to the section **Terms of use**. It lists one licence, the **CC-BY licence**. Click the button there to accept it. If the page says you have already accepted it, go on. Downloads fail with a licence error until you accept it once. You do not need to fill in the rest of the form.
-3. Open <https://cds.climate.copernicus.eu/how-to-api> while logged in. The page starts with sections for **Windows users** and **macOS users**. Skip those sections: you do not install anything on your Mac. Scroll to **Linux users** and its step **1. Setup the CDS Api key**. It shows two lines, starting `url:` and `key:`. If the `key:` line is `<PERSONAL-ACCESS-TOKEN>`, you are not logged in: log in and reload the page. When you are logged in, the `key:` line shows your own **Personal Access Token**, a long string of letters, digits and dashes. Copy those two lines. You will paste them into a file on the cluster in the next step. Ignore the rest of the page (installing the client and the examples), because step 4 above already installed it on the cluster.
+3. Open <https://cds.climate.copernicus.eu/how-to-api> while logged in. The page starts with sections for **Windows users** and **macOS users**. Do not follow those sections: you do not install anything on your Mac. Scroll to **Linux users** and its step **1. Setup the CDS Api key**. It shows two lines, starting `url:` and `key:`. If the `key:` line is `<PERSONAL-ACCESS-TOKEN>`, you are not logged in: log in and reload the page. When you are logged in, the `key:` line shows your own **Personal Access Token**, a long string of letters, digits and dashes. Copy those two lines. You will paste them into a file on the cluster in the next step. Ignore the rest of the page (installing the client and the examples), because step 4 above already installed it on the cluster.
 
 Back in the OnDemand Shell tab (not on your Mac), create the key file on the cluster:
 
@@ -90,4 +90,4 @@ Save with **Ctrl-O**, **Enter**, and quit with **Ctrl-X**. Then make the file pr
 chmod 600 ~/.cdsapirc
 ```
 
-`chmod 600` means only you can read or change the file. Never share your token, and never paste it into an email or a chat, including an email asking for help. If you copied it into a note on your Mac, delete the note now.
+`chmod 600` means only you can read or change the file. Never share your token, and never paste it into an email or a chat, including an email asking for help.

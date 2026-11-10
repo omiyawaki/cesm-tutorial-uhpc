@@ -33,9 +33,9 @@ Every time you open the Shell app, type this line:
 tmux attach -t cesm || tmux new -s cesm
 ```
 
-`tmux attach -t cesm` goes back to your tmux session called `cesm`, with the same folder and earlier output. If no such session exists, it prints `no sessions` or `can't find session`, and `||` then runs the second command, `tmux new -s cesm`, which starts a new session with that name. A new session clears the screen and shows a green bar at the bottom. Work as usual inside it.
+`tmux attach -t cesm` goes back to your tmux session called `cesm`, with the same folder and earlier output. If no such session exists, it prints `no sessions` or `can't find session`, and `||` then runs the second command, `tmux new -s cesm`, which starts a new session with that name. A new session clears the screen and shows a green bar at the bottom. If you already see that bar, you are already inside tmux: do not type the line again.
 
-A new session does not remember the folder you were in. Type `pwd` to see where you are, then `cd` back to the folder you were using.
+A new session does not remember the folder you were in. Type `pwd` to see where you are, then `cd` back to it, for example `cd $MYROOT/cases/f2000.test`.
 
 To leave tmux on purpose and keep it running, press **Ctrl-B**, let go, then press **D**. To end the session completely, type `exit` inside it.
 

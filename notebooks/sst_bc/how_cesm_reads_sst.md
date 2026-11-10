@@ -52,7 +52,7 @@ To fix this, the values in `SST_cpl` and `ice_cov` are adjusted ("diddled") so t
 
 ## The case settings that point to the file
 
-These settings are in `env_run.xml` in your case directory. You can view them with `./xmlquery` (see [the quickstart](../uhpc/quickstart.md)):
+These settings are in `env_run.xml` in your case directory. You can view them from that directory with `./xmlquery` (see [the quickstart](../uhpc/quickstart.md)):
 
 | Setting | Purpose | Value in UHPC `F2000climo` cases |
 |---|---|---|

@@ -66,7 +66,7 @@ NCAR runs its analysis notebooks on the Casper cluster through NCAR's JupyterHub
 
 ## Downloading the code
 
-The NCAR tutorial has each user clone CESM with git. On UHPC everyone uses the shared, already-configured CESM2.1.5 tree, so you do **not** download CESM. If you clone a personal copy, it will not have the UHPC machine settings unless you copy them in.
+The NCAR tutorial has each user clone CESM with git. On UHPC everyone uses the shared, already-configured CESM2.1.5 tree, so you do **not** download CESM.
 
 ## Compute cost and sharing
 

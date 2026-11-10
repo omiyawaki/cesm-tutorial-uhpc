@@ -36,7 +36,7 @@ You are already inside tmux (there is a green bar at the bottom of the window), 
 
 ### `Permission denied` on anything under `/usr/local/research/miyawaki`, or `ENV.sh: Permission denied`
 
-Your account is not yet in the `res-miyawaki` group, or the group was added after you logged in. Type `id`. If `res-miyawaki` is missing from the list, email me with the subject `CESM tutorial: res-miyawaki missing` and paste the output of `id`. After you are added, close every OnDemand tab, sign out, and sign in again. Group changes take up to an hour to reach the cluster.
+Your account is not yet in the `res-miyawaki` group, or the group was added after you logged in. Type `id`. If `res-miyawaki` is missing, close every OnDemand tab, sign out, and sign in again, then type `id` again. If it is still missing, email me with the subject `CESM tutorial: res-miyawaki missing` and paste the output of `id`. After you are added to the group, sign out and sign in again. Group changes take up to an hour to reach the cluster.
 
 ### `cesm-deps/ENV.sh: No such file or directory`
 
