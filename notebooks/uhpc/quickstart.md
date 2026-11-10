@@ -12,7 +12,7 @@ You do not need the Mac Terminal app for anything in this tutorial. Every comman
 
 ## 1. Open OnDemand and start a shell
 
-1. Connect to the Union VPN with the **Cisco Secure Client** app (see [Over break: what to do, in order](over_break.md) for the one-time setup). The cluster's website does not load from off campus without it.
+1. Connect to the Union VPN with the **Cisco Secure Client** app (see [Getting started on Union HPC](start_here.md) for the one-time setup). The cluster's website does not load from off campus without it.
 2. In Safari or Chrome, go to <https://ondemand.hpc.union.edu>. A small sign-in box appears. Type your cluster username and password.
 3. In the top menu, click **Clusters** → **HPC Cluster Shell Access**. A black command-line window opens in a new browser tab.
 4. Type this line to get into tmux, so your work keeps running when the tab closes:
@@ -107,7 +107,7 @@ Each `./xmlchange` line changes one or more case settings and prints nothing if 
 - `STOP_OPTION=ndays,STOP_N=5`: run 5 model days.
 - `JOB_QUEUE=hpcc,JOB_WALLCLOCK_TIME=02:00:00`: use the cluster's CPU partition and allow the job up to 2 hours.
 - `DOUT_S_ROOT`: where finished output is copied. You must set this, because the default points to a folder that is not yours.
-- `HIST_OPTION=never,REST_OPTION=ndays,REST_N=5`: no extra coupler output during the test, and one set of restart files at the end. This test only proves that CESM builds, starts, reads its input files and finishes. It writes no maps or monthly output on purpose. You look at atmosphere output after the break, in the [CAM output](../namelist/output/output_cam.ipynb) section of the namelist chapter, where you turn on daily and monthly output.
+- `HIST_OPTION=never,REST_OPTION=ndays,REST_N=5`: no extra coupler output during the test, and one set of restart files at the end. This test only proves that CESM builds, starts, reads its input files and finishes. It writes no maps or monthly output on purpose. Atmosphere output is covered in the [CAM output](../namelist/output/output_cam.ipynb) section of the namelist chapter, where you turn on daily and monthly output.
 
 Next, add four sea-ice settings that every UHPC case uses. They make the sea-ice model work with the input files on UHPC. You do not need to understand them yet. Open the sea-ice settings file:
 
@@ -191,8 +191,8 @@ Your folder has a soft limit of 300 GB. The run folder of a test case is about 1
 du -sh $MYROOT/*
 ```
 
-`du -sh` prints how much space each folder uses. The runs in this tutorial use well under the limit. Do not delete anything in your folder this term, and never delete anything in `archive`.
+`du -sh` prints how much space each folder uses. The runs in this tutorial use well under the limit. Do not delete anything in your folder unless you are told to, and never delete anything in `archive`.
 
 ## Where next
 
-This was step 2 of [Over break: what to do, in order](over_break.md). Press **Next** to go to step 3, which starts with [Differences from the NCAR tutorial](differences.md).
+This was step 2 of [Getting started on Union HPC](start_here.md). Press **Next** to go to step 3, which starts with [Differences from the NCAR tutorial](differences.md).

@@ -1,8 +1,8 @@
 # When something goes wrong
 
-This page lists the problems that come up most often on UHPC, what each one means, and what to do. Find the message you see, or the step you were on, and follow the fix. If the fix does not work, email Professor Miyawaki, then go on to the next step you can do while you wait for an answer.
+This page lists the problems that come up most often on UHPC, what each one means, and what to do. Find the message you see, or the step you were on, and follow the fix. If the fix does not work, ask for help by email as described just below, then go on to the next step you can do while you wait for an answer.
 
-**To email Professor Miyawaki:** write to <a href="mailto:miyawako@union.edu">miyawako@union.edu</a> from your Union email, with the subject `CESM tutorial: <page>, step <number>`, and paste the command you typed and the first error message it printed into the body as text.
+**To ask for help by email:** write to the research group's contact, Professor Miyawaki (<a href="mailto:miyawako@union.edu">miyawako@union.edu</a>), from your Union email. Use the subject `CESM tutorial: <page>, step <number>`, and paste the command you typed and the first error message it printed into the body as text.
 
 When a command fails, read the **first** error message it printed, not only the last line. To copy a message out of the Shell tab, select it with the mouse and press **Cmd-C**.
 
@@ -36,7 +36,7 @@ You are already inside tmux (there is a green bar at the bottom of the window), 
 
 ### `Permission denied` on anything under `/usr/local/research/miyawaki`, or `ENV.sh: Permission denied`
 
-Your account is not yet in the `res-miyawaki` group, or the group was added after you logged in. Type `id`. If `res-miyawaki` is missing from the list, close every OnDemand tab, sign out, wait an hour, and sign in again. Group changes take up to an hour to reach the cluster. If it is still missing the next day, email Professor Miyawaki with the subject `CESM tutorial: res-miyawaki missing` and paste the output of `id`.
+Your account is not yet in the `res-miyawaki` group, or the group was added after you logged in. Type `id`. If `res-miyawaki` is missing from the list, close every OnDemand tab, sign out, wait an hour, and sign in again. Group changes take up to an hour to reach the cluster. If it is still missing the next day, email the research group's contact (see the top of this page) with the subject `CESM tutorial: res-miyawaki missing` and paste the output of `id`.
 
 ### `cesm-deps/ENV.sh: No such file or directory`
 
@@ -85,7 +85,7 @@ grep -i -m 5 error cesm.log.*
 
 - An error that mentions your SST file name: the SST file in `SSTICE_DATA_FILENAME` was moved, renamed or mistyped. Check it with `./xmlquery SSTICE_DATA_FILENAME` and `ls -l <that path>`.
 - `ABORT` in `ice.log`: check that the four sea-ice lines from step 5 of the quickstart are in the case, with `cat user_nl_cice`. Add any that are missing with `nano user_nl_cice` and submit again.
-- An error about a missing input file: the shared input data does not have a file this case needs. Do not download it yourself. Email Professor Miyawaki the exact message, and leave this case as it is.
+- An error about a missing input file: the shared input data does not have a file this case needs. Do not download it yourself. Email the exact message to the research group's contact (see the top of this page), and leave this case as it is.
 
 ### `sacct` shows `TIMEOUT`
 
@@ -138,4 +138,4 @@ Do not use that file. Rename it so you do not use it by mistake, for example `mv
 
 ## Where next
 
-This is the last page of the over-break path. Everything after it in the menu, under "Next term and reference", is for next term. Go back to [Over break: what to do, in order](over_break.md) whenever you are not sure what to do next.
+This is the last page of the getting-started steps. Everything after it in the menu, under "Further CESM material and reference", goes further. Go back to [Getting started on Union HPC](start_here.md) whenever you are not sure what to do next.
