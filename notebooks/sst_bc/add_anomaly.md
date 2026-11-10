@@ -56,7 +56,7 @@ $PY make_sst_bc.py check sst_example_enso.nc
 $PY make_sst_bc.py plot sst_example_enso.nc --month 12 --compare sst_era5_f19_clim.nc --out example_anomaly_dec.png
 ```
 
-The check should end with `ALL CHECKS PASSED`. To view the picture, open the OnDemand **Files** app, click **Change directory**, type `/usr/local/research/miyawaki/users/<your-username>/sst`, click **OK**, and click `example_anomaly_dec.png`. December is shown because El Niño events usually peak around then, but this anomaly is the same in every month. The bottom map (difference from the control file) should show one red patch stretched east-west along the equator, centred near 215°E (145°W), and white everywhere else. If the patch is in the wrong place, check the signs of your latitudes and that your longitudes are in degrees east.
+The check should end with `ALL CHECKS PASSED`. To view the picture, open the OnDemand **Files** app, click **Change directory**, type `/usr/local/research/miyawaki/users/<your-username>/sst` with your username in place of `<your-username>` (`whoami` in the Shell tab prints it), click **OK**, and click `example_anomaly_dec.png`. December is shown because El Niño events usually peak around then, but this anomaly is the same in every month. The bottom map (difference from the control file) should show one red patch stretched east-west along the equator, centred near 215°E (145°W), and white everywhere else. If the patch is in the wrong place, check the signs of your latitudes and that your longitudes are in degrees east.
 
 ```{figure} ../../images/sst_bc/example_anomaly_dec.png
 :width: 600px

@@ -21,7 +21,7 @@ You already have a cluster account and have logged in once. From now on you use 
 
 The Shell app opens a command line on the cluster's login computer in a new browser tab. This tutorial calls it the **OnDemand Shell tab**. Every command in this tutorial goes there. Do not use `ssh` from the Mac Terminal app.
 
-In the Files app, click **Change directory** near the top, type a path such as `/usr/local/research/miyawaki/users/<your-username>`, and click **OK** to jump to it.
+In the Files app, click **Change directory** near the top, type a path such as `/usr/local/research/miyawaki/users/<your-username>`, and click **OK** to jump to it. Type your username in place of `<your-username>`: this box does not understand `$USER` or `$MYROOT`. Type `whoami` in the OnDemand Shell tab to print your username.
 
 ## Always work inside tmux
 
@@ -52,7 +52,7 @@ Use Jupyter for looking at model output and making plots, like Google Colab but 
    - **Partition**: leave it as `hpcc` (the CPU queue).
    - **GPUs**: 0.
 3. Click **Launch**. The session waits in the queue, then shows **Running**. Click **Connect to Jupyter**.
-4. JupyterLab opens in a new tab with the **Launcher**. Click **Python 3 (ipykernel)** under **Notebook** to make a new notebook in your home folder. The file browser on the left only shows your home folder, so to open model output, type its full path in your code, for example `xarray.open_dataset('/usr/local/research/miyawaki/users/<your-username>/...')`.
+4. JupyterLab opens in a new tab with the **Launcher**. Click **Python 3 (ipykernel)** under **Notebook** to make a new notebook in your home folder. The file browser on the left only shows your home folder, so to open model output, type its full path in your code, for example `xarray.open_dataset('/usr/local/research/miyawaki/users/<your-username>/...')`, with your username in place of `<your-username>`, because Python does not understand `$USER` or `$MYROOT`.
 5. In the first cell, type `import xarray, netCDF4, matplotlib.pyplot as plt` and press **Shift-Enter**. No error message means it worked.
 6. When you finish, save your notebook with **Cmd-S**, then stop the session so it stops using a compute node: switch to the OnDemand dashboard tab (not the JupyterLab tab and not the Shell tab), click **My Interactive Sessions** in the top menu, and click **Delete** on the Jupyter session.
 
