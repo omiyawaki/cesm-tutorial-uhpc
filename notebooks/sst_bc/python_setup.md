@@ -38,19 +38,13 @@ export PY=/usr/local/Dist/anaconda3-latest/envs/datascience/bin/python
 $PY -c "import xarray, netCDF4, matplotlib; print('python OK')"
 ```
 
-`$PY -c "..."` runs one line of Python with this environment. You should see `python OK`. The `export` line only lasts until you close the shell, so add it to the end of your `~/.bashrc` as well:
-
-```bash
-nano ~/.bashrc
-```
-
-Press the **down arrow** until the cursor is at the end of the last line, then press **Enter** to make a new blank line. Paste this line with **Cmd-V**:
+`$PY -c "..."` runs one line of Python with this environment. You should see `python OK`. The `export` line only lasts until you close the shell, so add it to the end of your `~/.bashrc` as well. Open `~/.bashrc` in the file editor as in step 3 of the [quickstart](../uhpc/quickstart.md) (see also {ref}`Editing text files <uhpc-editing>`). Click just after the last character of the last line, press **Enter**, and paste this line with **Cmd-V**:
 
 ```bash
 export PY=/usr/local/Dist/anaconda3-latest/envs/datascience/bin/python
 ```
 
-Then press **Ctrl-O**, **Enter** to save and **Ctrl-X** to quit.
+Click **Save** and close the editor tab.
 
 ## 4. Install the ERA5 download tool
 
@@ -71,20 +65,20 @@ ERA5 comes from the Copernicus Climate Data Store (CDS). Do items 1 to 3 in your
 2. Open the ERA5 dataset's download page, <https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels-monthly-means?tab=download>, while logged in. Scroll to the bottom of the form, to the section **Terms of use**. It lists one licence, the **CC-BY licence**. Click the button there to accept it. If the page says you have already accepted it, go on. Downloads fail with a licence error until you accept it once. You do not need to fill in the rest of the form.
 3. Open <https://cds.climate.copernicus.eu/how-to-api> while logged in. The page starts with sections for **Windows users** and **macOS users**. Do not follow those sections: you do not install anything on your Mac. Scroll to **Linux users** and its step **1. Setup the CDS Api key**. It shows two lines, starting `url:` and `key:`. If the `key:` line is `<PERSONAL-ACCESS-TOKEN>`, you are not logged in: log in and reload the page. When you are logged in, the `key:` line shows your own **Personal Access Token**, a long string of letters, digits and dashes. Copy those two lines. You will paste them into a file on the cluster in the next step. Ignore the rest of the page (installing the client and the examples), because step 4 above already installed it on the cluster.
 
-Back in the OnDemand Shell tab (not on your Mac), create the key file on the cluster:
+Back in the OnDemand Shell tab (not on your Mac), create an empty key file on the cluster:
 
 ```bash
-nano ~/.cdsapirc
+touch ~/.cdsapirc
 ```
 
-Paste only the two lines `url:` and `key:` from the CDS page with **Cmd-V**, and nothing else. They look like this, with your own token after `key:`:
+`touch` makes an empty file. Open `.cdsapirc` in the file editor: in the dashboard tab click **Files** → **Home Directory**, tick **Show Dotfiles**, click **⋮** next to `.cdsapirc`, and click **Edit**. Paste only the two lines `url:` and `key:` from the CDS page with **Cmd-V**, and nothing else. They look like this, with your own token after `key:`:
 
 ```
 url: https://cds.climate.copernicus.eu/api
 key: <paste-your-token-here>
 ```
 
-Save with **Ctrl-O**, **Enter**, and quit with **Ctrl-X**. Then make the file private, since the key is like a password:
+Click **Save** and close the editor tab. Then, in the Shell tab, make the file private, since the key is like a password:
 
 ```bash
 chmod 600 ~/.cdsapirc

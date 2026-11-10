@@ -23,6 +23,19 @@ The Shell app opens a command line on the cluster's login computer in a new brow
 
 In the Files app, click **Change directory** near the top, type a path such as `/usr/local/research/miyawaki/users/<your-username>`, and click **OK** to jump to it. Type your username in place of `<your-username>`: this box does not understand `$USER` or `$MYROOT`. Type `whoami` in the OnDemand Shell tab to print your username.
 
+(uhpc-editing)=
+## Editing text files
+
+Edit text files in OnDemand's file editor, in your web browser. Click where you want to type, and copy and paste with **Cmd-C** and **Cmd-V**, as in any Mac app.
+
+1. In the OnDemand dashboard tab, click **Files** → **Home Directory** in the top menu. For a file in your CESM folder, click **Change directory**, type the folder's full path, for example `/usr/local/research/miyawaki/users/<your-username>/cases/f2000.test`, and click **OK**.
+2. Names that start with a dot, such as `.bashrc`, are hidden at first. To see them, tick **Show Dotfiles** above the file list.
+3. Click the **⋮** button next to the file's name, then click **Edit**. The editor opens in a new browser tab.
+4. To add lines at the end of a file, click just after the last character of the last line and press **Enter** to start a new line. Then type or paste your lines.
+5. Click **Save** at the top left, then close the editor tab.
+
+The saved file is on the cluster at once, so the OnDemand Shell tab sees the change. After you change `~/.bashrc`, type `source ~/.bashrc` in the Shell tab so that it reads the file again.
+
 ## Always work inside tmux
 
 The Shell tab closes after about 5 minutes without typing, and after about 1 hour in any case. Anything running in it would stop. `tmux` keeps your command line running on the cluster even when the tab closes, so you can reconnect to it.
@@ -78,7 +91,6 @@ Type a command and press **Enter**. Most commands print nothing when they succee
 | `less <file>` | read a long text file one page at a time. **Space** goes forward, **B** goes back, **/word** searches, **Q** quits | the file's text |
 | `tail -n 30 <file>` | show the last 30 lines of a file (where errors usually are) | the last lines |
 | `grep <word> <file>` | show the lines that contain a word | matching lines |
-| `nano <file>` | edit a text file. **Ctrl-O** then **Enter** saves, **Ctrl-X** quits | an editor fills the screen |
 
 ## Useful keys
 
@@ -90,7 +102,7 @@ Type a command and press **Enter**. Most commands print nothing when they succee
 ## Paths, variables, modules and permissions
 
 - **Paths.** `/` separates folders. A path starting with `/` is a full path. `~` means your home folder. `.` means "this folder", and `./case.submit` means "run the program `case.submit` in this folder".
-- **Variables.** `export MYROOT=/usr/local/research/miyawaki/users/$USER` saves a path under a short name, and `$MYROOT` then stands for it. `$USER` is already set to your username, so type it as written. Check a variable with `echo $MYROOT`. Variables are forgotten when the shell closes, unless you add the `export` line to `~/.bashrc` (open it with `nano ~/.bashrc`).
+- **Variables.** `export MYROOT=/usr/local/research/miyawaki/users/$USER` saves a path under a short name, and `$MYROOT` then stands for it. `$USER` is already set to your username, so type it as written. Check a variable with `echo $MYROOT`. Variables are forgotten when the shell closes, unless you add the `export` line to `~/.bashrc` (see {ref}`Editing text files <uhpc-editing>`).
 - **`source <file>`** runs the commands in a file in your current shell. CESM uses this to load compilers and libraries: `source /usr/local/research/miyawaki/opt/cesm-deps/ENV.sh`.
 - **Modules.** `module load <name>` makes a software package available, `module list` shows what is loaded, and `module avail` shows what exists. `ENV.sh` loads the modules CESM needs for you.
 - **Permissions.** `ls -l` starts each line with something like `-rw-r-----`: the first three letters after the first character are your permissions, the next three are your group's, and the last three are everyone else's (`r` read, `w` write, `x` run). If you see `Permission denied`, you are trying to read or change something you are not allowed to. Do not try to work around it. See [When something goes wrong](when_things_go_wrong.md).

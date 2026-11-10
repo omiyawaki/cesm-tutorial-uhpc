@@ -49,13 +49,7 @@ ls $MYROOT
 - `mkdir -p` makes the three folders inside it, for cases, run files and finished output.
 - `ls $MYROOT` lists what is in your folder. You should see `archive  cases  scratch`.
 
-The shell forgets these settings when it closes. To have them set every time you log in, add them to the end of the file `~/.bashrc`, which the shell runs at every login. Open it in `nano`, a text editor inside the Shell tab:
-
-```bash
-nano ~/.bashrc
-```
-
-Press the **down arrow** until the cursor is at the end of the last line, then press **Enter** to make a new blank line. Copy this block from this page and paste it with **Cmd-V**:
+The shell forgets these settings when it closes. To have them set every time you log in, add them to the end of the file `~/.bashrc`, which the shell runs at every login. Open it in the OnDemand file editor, as described in {ref}`Editing text files <uhpc-editing>`: in the dashboard tab click **Files** → **Home Directory**, tick **Show Dotfiles**, click **⋮** next to `.bashrc`, and click **Edit**. Click just after the last character of the last line and press **Enter** to start a new line. Copy this block from this page and paste it with **Cmd-V**:
 
 ```bash
 source /usr/local/research/miyawaki/opt/cesm-deps/ENV.sh
@@ -63,7 +57,7 @@ export CESMROOT=/usr/local/research/miyawaki/cesm/cesm2
 export MYROOT=/usr/local/research/miyawaki/users/$USER
 ```
 
-Save the file with **Ctrl-O**, then press **Enter** to keep the name `.bashrc`. Quit `nano` with **Ctrl-X**. Back at the prompt, load the file and check it:
+Click **Save** and close the editor tab. Back in the OnDemand Shell tab, load the file and check it:
 
 ```bash
 source ~/.bashrc
@@ -109,13 +103,15 @@ Each `./xmlchange` line changes one or more case settings and prints nothing if 
 - `DOUT_S_ROOT`: where finished output is copied. You must set this, because the default points to a folder that is not yours.
 - `HIST_OPTION=never,REST_OPTION=ndays,REST_N=5`: no extra coupler output during the test, and one set of restart files at the end. This test only proves that CESM builds, starts, reads its input files and finishes. It writes no maps or monthly output on purpose. Atmosphere output is covered in the [CAM output](../namelist/output/output_cam.ipynb) section of the namelist chapter, where you turn on daily and monthly output.
 
-Next, add four sea-ice settings that every UHPC case uses. They make the sea-ice model work with the input files on UHPC. Open the sea-ice settings file:
+Next, set up the case:
 
 ```bash
-nano user_nl_cice
+./case.setup
 ```
 
-The file may be empty, or it may have a few lines starting with `!`, which are comments. Go to the bottom of the file and type or paste these four lines exactly, including the `=` signs, the dots around `.false.` and the double quotes around `"default"`:
+`./case.setup` ends with `You can now run './preview_run' to get more info on how your case will be run`. It also makes the files `user_nl_cam`, `user_nl_cice` and others, where you write model settings.
+
+Add four sea-ice settings that every UHPC case uses. They make the sea-ice model work with the input files on UHPC. Open `user_nl_cice` in the file editor: in the dashboard tab click **Files** → **Home Directory**, click **Change directory**, type `/usr/local/research/miyawaki/users/<your-username>/cases/f2000.test` with your username in place of `<your-username>`, and click **OK**. Then click **⋮** next to `user_nl_cice` and click **Edit**. The file has a few lines starting with `!`, which are comments. Click at the end of the last line, press **Enter**, and type or paste these four lines exactly, including the `=` signs, the dots around `.false.` and the double quotes around `"default"`:
 
 ```
 ktherm = 1
@@ -124,15 +120,15 @@ shortwave = "default"
 highfreq = .false.
 ```
 
-Save with **Ctrl-O**, **Enter**, then quit with **Ctrl-X**. Then run these three commands, one at a time:
+Click **Save** and close the editor tab. Back in the OnDemand Shell tab, check the file and build the model, one command at a time:
 
 ```bash
-./case.setup
+cat user_nl_cice
 ./xmlchange GMAKE_J=4
 ./case.build
 ```
 
-`./case.setup` ends with `You can now run './preview_run' to get more info on how your case will be run`. `GMAKE_J=4` tells the build to compile 4 files at a time. `./case.build` compiles the model. It prints many lines and ends with `MODEL BUILD HAS FINISHED SUCCESSFULLY`. On UHPC it takes about 1.5 minutes, and the line `Time spent building:` near the end gives the time in seconds. Stay inside tmux while it runs.
+`cat user_nl_cice` prints the file, so you can check that the four lines are at the end. `GMAKE_J=4` tells the build to compile 4 files at a time. `./case.build` compiles the model. It prints many lines and ends with `MODEL BUILD HAS FINISHED SUCCESSFULLY`. On UHPC it takes about 1.5 minutes, and the line `Time spent building:` near the end gives the time in seconds. Stay inside tmux while it runs.
 
 The build runs on the shared login computer. The cluster allows builds there, with up to 4 parallel compile processes, which is what `GMAKE_J=4` sets. Model runs never run there: they go to a compute node through `./case.submit`.
 

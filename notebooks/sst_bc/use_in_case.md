@@ -71,4 +71,4 @@ zgrep "readstrm) open" $MYROOT/archive/f2000.test/logs/ocn.log.*
 
 `zgrep` searches inside compressed (`.gz`) files, like `grep` does for plain files. Each run left one ocean log, so you see one line per run. The last line belongs to the run you just made and should end with `.../sst/sst_example_enso.nc`. The line before it, from the quickstart run, shows the stock HadOIBl file. If `zgrep` prints nothing, email me the output of `ls $MYROOT/archive/f2000.test/logs`.
 
-Keep a note of which SST file each case used. Open the case's notes file with `nano README.case`, add a line at the bottom such as `SST file: sst_example_enso.nc (idealized El Nino warm patch)`, and save it.
+Keep a note of which SST file each case used. Open the case's notes file, `README.case` in `/usr/local/research/miyawaki/users/<your-username>/cases/f2000.test`, in the file editor ({ref}`Editing text files <uhpc-editing>`). Add a line at the bottom such as `SST file: sst_example_enso.nc (idealized El Nino warm patch)`, and click **Save**.
