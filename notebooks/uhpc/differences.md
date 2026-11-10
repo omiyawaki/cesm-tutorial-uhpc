@@ -21,7 +21,7 @@ CESM's own commands (`./case.submit`, `./case.build`) are the same. CESM transla
 - **Building:** on NCAR machines you build with `qcmd -- ./case.build`. On UHPC you run `./case.build` on the login node, in the OnDemand Shell inside tmux. The cluster allows builds there with up to 4 parallel jobs, so set `./xmlchange GMAKE_J=4` first (the UHPC default is 8). Other heavy computing and Jupyter are not allowed on the login node. Do not build in Jupyter, which has a 4-hour limit.
 - **Partitions:** `hpcc` (nodes hpcc01-04) and `gpu` (hpcc03 and hpcc04). CESM runs on CPUs, so set `JOB_QUEUE=hpcc`.
 - **GPU nodes:** CPU jobs must use `--exclude=hpcc03,hpcc04`, for example `./case.submit -a "--exclude=hpcc03,hpcc04"`. CESM does not add this for you, so always pass it.
-- **Limits:** maximum job length 3 days (Cheyenne's regular queue was 12 hours), about 2 GB of memory per CPU by default, QOS `normal`.
+- **Limits:** maximum job length 3 days (Cheyenne's regular queue was 12 hours) and about 2 GB of memory per CPU by default.
 - **Accounts:** There is no CESM `PROJECT` setting on UHPC, so ignore `--project`, `PROJECT=` and the tutorial project numbers (`UESM0011`, `UESM0012`, `P93300642`). Your jobs use your default Slurm account, `general`, which works for CESM on `hpcc`, so you do not set an account anywhere.
 - **Queue names:** wherever the NCAR text has `JOB_QUEUE=regular`, use `JOB_QUEUE=hpcc`. The daily tutorial reservations do not exist on UHPC.
 
@@ -70,6 +70,6 @@ The NCAR tutorial has each user clone CESM with git. On UHPC everyone uses the s
 
 ## Compute cost and sharing
 
-- UHPC is shared with other users. An `F2000climo` run at `f19_f19_mg17` with 8 tasks on one node takes about 45 minutes for 5 model days.
+- UHPC is shared with other users. Building `F2000climo` at `f19_f19_mg17` with `GMAKE_J=4` takes about 1.5 minutes on the login node. A run with 8 tasks on one node takes about 45 minutes for 5 model days.
 - NCAR's tutorial uses the fully coupled `B1850` compset, which is much more expensive. This tutorial uses `F2000climo` throughout.
 - Start with short tests (5 days), and check `squeue` before submitting so other users can still run.

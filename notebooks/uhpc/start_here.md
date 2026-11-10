@@ -14,7 +14,7 @@ Do these once, at the start of your first session.
 2. **Sign in to the cluster.** Connect the VPN, go to <https://ondemand.hpc.union.edu>, and sign in. Your cluster username is the first part of your Union email address (the part before `@union.edu`). Your cluster password is not your Union (Okta) password. The cluster administrators emailed you a temporary password when they made your account, and you chose a new cluster password the first time you logged in. Use that cluster password here. Use your Union password only for the VPN.
 3. **Check your group.** Click **Clusters** → **HPC Cluster Shell Access**. A command line opens in a new browser tab, the OnDemand Shell tab. Type `id` and press **Enter**. The list of groups should include `res-miyawaki`, the research group that owns the CESM files.
 
-If `id` does not list `res-miyawaki`, your account has not been added to the group yet. Email me with the subject `CESM tutorial: res-miyawaki missing` and paste the output of `id`. Ask me to add your account to the group. Meanwhile, do step 1 of "The steps" below, which does not need the group. After you are added, close every OnDemand tab, sign out, and sign in again. Group changes take up to an hour to reach the cluster.
+If `id` does not list `res-miyawaki`, your account has not been added to the group yet. Email me with the subject `CESM tutorial: res-miyawaki missing`, write "Please add me to your ColdFront project", and paste the output of `id`. Meanwhile, do step 1 of "The steps" below, which does not need the group. After you are added, close every OnDemand tab, sign out, and sign in again. Group changes take up to an hour to reach the cluster.
 
 ## Every time you sit down to work
 

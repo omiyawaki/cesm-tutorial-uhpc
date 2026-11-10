@@ -71,7 +71,7 @@ If any line is `FAIL`, do not use the file. See [When something goes wrong](../u
 $PY make_sst_bc.py plot sst_era5_f19_clim.nc --month 8 --compare /usr/local/research/miyawaki/cesm/inputdata/atm/cam/sst/sst_HadOIBl_bc_1.9x2.5_2000climo_c180511.nc --out era5_vs_stock_aug.png
 ```
 
-This writes a picture with three maps for August: your SST, your sea ice, and your SST minus the stock file's SST. To view it, open the OnDemand **Files** app, click **Change directory**, type `/usr/local/research/miyawaki/users/<your-username>/sst`, click **OK**, and click the `.png` file.
+This writes a picture with three maps for August: your SST, your sea ice, and your SST minus the stock file's SST. To view it, open the OnDemand **Files** app, click **Change directory**, type `/usr/local/research/miyawaki/users/<your-username>/sst` with your username in place of `<your-username>` (`whoami` in the Shell tab prints it), click **OK**, and click the `.png` file.
 
 What to expect: over the open ocean the two products agree to within about half a degree on average. The root-mean-square difference in August is about 0.3 K over grid boxes that are entirely ocean. Larger differences show up near coasts and sea-ice edges. Over land the maps look blocky and strange, which does not matter, because land is filled and the model never uses it.
 

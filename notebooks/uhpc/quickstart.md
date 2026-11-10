@@ -132,7 +132,7 @@ Save with **Ctrl-O**, **Enter**, then quit with **Ctrl-X**. Then run these three
 ./case.build
 ```
 
-`./case.setup` ends with `You can now run './preview_run' to get more info on how your case will be run`. `GMAKE_J=4` tells the build to compile 4 files at a time. `./case.build` compiles the model. It prints many lines and ends with `MODEL BUILD HAS FINISHED SUCCESSFULLY`. Stay inside tmux while it runs.
+`./case.setup` ends with `You can now run './preview_run' to get more info on how your case will be run`. `GMAKE_J=4` tells the build to compile 4 files at a time. `./case.build` compiles the model. It prints many lines and ends with `MODEL BUILD HAS FINISHED SUCCESSFULLY`. On UHPC it takes about 1.5 minutes, and the line `Time spent building:` near the end gives the time in seconds. Stay inside tmux while it runs.
 
 The build runs on the shared login computer. The cluster allows builds there, with up to 4 parallel compile processes, which is what `GMAKE_J=4` sets. Model runs never run there: they go to a compute node through `./case.submit`.
 
