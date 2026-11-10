@@ -1,7 +1,5 @@
 # Getting started on Union HPC
 
-This page is the starting point for running CESM2 on Union College's HPC cluster (UHPC). Do the steps in order. Each step links to the page that explains it. Together they take about two working days, spread over as many sessions as you like. The pages are also in this order in the menu on the left, so the **Next** button at the bottom of each page takes you along the same path.
-
 In these steps you run two 5-day tests. They only prove that the model runs and reads your SST file. The atmosphere's monthly output folder (`atm/hist`) stays empty on purpose. Turning on atmosphere output and looking at it are covered in the namelist chapter.
 
 Common problems and their fixes are listed on [When something goes wrong](when_things_go_wrong.md). When a fix there does not work, ask for help by email, then go on to the next step you can do while you wait for an answer.
@@ -29,11 +27,11 @@ When you finish, close the browser tab and disconnect the VPN. Your tmux session
 
 ## The steps
 
-1. **Learn the tools (about 1 hour).** Read [Open OnDemand and shell basics](ondemand_basics.md) and try each command in the Shell basics table. Start one Jupyter session and run the import test in its step 5, then stop the session: in the top menu click **My Interactive Sessions**, and click **Delete** on the Jupyter session.
-2. **Make your first run (about 2 hours, most of it waiting).** Follow the [UHPC quickstart](quickstart.md) from top to bottom. You are done when `cat CaseStatus` shows `case.run success` and `st_archive success`.
-3. **Understand what you just did (about 2 hours of reading).** Read [Differences from the NCAR tutorial](differences.md), then read the [CESM Basics](../basics/basics_overview.ipynb) chapter, from its first page through "Checking Your Run". It explains each command from the quickstart in more detail. Only read these pages, and skip their exercises, because you already ran the UHPC versions in the quickstart. Do not paste their commands. The exceptions are the `ls`, `cd` and `pwd` commands on "Workspaces" and "Explore CESM Code", which only look at files, so you can type those. Each page starts with a note that says what to type there, if anything.
-4. **Make your own SST boundary condition (about 3 hours).** Work through the five pages of [Making your own SST boundary conditions](../sst_bc/sst_bc.md) in order. You download ERA5 data, turn it into a CESM SST file, add an idealized El Niño-type warm patch, and run a 5-day test with it. You are done when the ocean log shows `sst_example_enso.nc`.
-5. **Write down your questions.** Keep a list of anything that was unclear, any error you could not fix, and anything you would like to try next. Bring it to your next research meeting. This is the end of the getting-started steps. In the menu on the left, everything under "Further CESM material and reference" goes further: changing run length and output, troubleshooting, diagnostics and more.
+1. **Learn the tools.** Read [Open OnDemand and shell basics](ondemand_basics.md) and try each command in the Shell basics table. Start one Jupyter session and run the import test in its step 5, then stop the session: in the top menu click **My Interactive Sessions**, and click **Delete** on the Jupyter session.
+2. **Make your first run.** Follow the [UHPC quickstart](quickstart.md) from top to bottom. You are done when `cat CaseStatus` shows `case.run success` and `st_archive success`.
+3. **Understand what you just did.** Read [Differences from the NCAR tutorial](differences.md), then read the [CESM Basics](../basics/basics_overview.ipynb) chapter, from its first page through "Checking Your Run". Only read these pages, and skip their exercises, because you already ran the UHPC versions in the quickstart. Do not paste their commands. The exceptions are the `ls`, `cd` and `pwd` commands on "Workspaces" and "Explore CESM Code", which only look at files, so you can type those.
+4. **Make your own SST boundary condition.** Work through the five pages of [Making your own SST boundary conditions](../sst_bc/sst_bc.md). You download ERA5 data, turn it into a CESM SST file, add an idealized El Niño-type warm patch, and run a 5-day test with it. You are done when the ocean log shows `sst_example_enso.nc`.
+5. **Write down your questions.** Keep a list of anything that was unclear, any error you could not fix, and anything you would like to try next. Bring it to your next research meeting.
 
 ## Rules for using the cluster
 

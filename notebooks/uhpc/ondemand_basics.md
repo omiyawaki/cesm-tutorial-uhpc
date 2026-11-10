@@ -1,6 +1,6 @@
 # Open OnDemand and shell basics
 
-You will use UHPC mostly through **Open OnDemand**, a website that gives you the cluster's files, a command line and Jupyter notebooks in your Mac's web browser. This page explains the parts you need and the few shell commands used throughout this tutorial. It is not a full Linux course.
+You will use UHPC mostly through **Open OnDemand**, a website that gives you the cluster's files, a command line and Jupyter notebooks in your Mac's web browser.
 
 ## Logging in
 
@@ -126,7 +126,7 @@ The Shell runs on the shared login computer. Short commands such as `./case.setu
 
 ## Optional: an environment with cartopy
 
-This section is optional. Nothing in the getting-started steps needs it, and a failed install can fill your home folder. When you want coastlines on your maps, you can make your own Python environment once. Do this in the OnDemand Shell tab, inside tmux:
+Nothing in the getting-started steps needs it, and a failed install can fill your home folder. When you want coastlines on your maps, you can make your own Python environment once. Do this in the OnDemand Shell tab, inside tmux:
 
 ```bash
 module load python/miniforge

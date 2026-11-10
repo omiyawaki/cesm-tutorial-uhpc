@@ -1,6 +1,6 @@
 # Differences from the NCAR tutorial
 
-The NCAR tutorial was written for NCAR's Cheyenne supercomputer and Casper analysis cluster, which use the PBS scheduler and the GLADE file system. The pages in this tutorial use Union HPC (UHPC) commands and paths. This page lists how NCAR's computers and UHPC differ, so you can translate any NCAR command you meet.
+The NCAR tutorial was written for NCAR's Cheyenne supercomputer and Casper analysis cluster, which use the PBS scheduler and the GLADE file system. The pages in this tutorial use Union HPC (UHPC) commands and paths.
 
 ## Logging in
 
@@ -73,7 +73,3 @@ The NCAR tutorial has each user clone CESM with git. On UHPC everyone uses the s
 - UHPC is shared with other users. An `F2000climo` run at `f19_f19_mg17` with 8 tasks on one node takes about 45 minutes for 5 model days.
 - NCAR's tutorial uses the fully coupled `B1850` compset, which is much more expensive. This tutorial uses `F2000climo` throughout.
 - Start with short tests (5 days), and check `squeue` before submitting so you do not crowd out other users.
-
-## Where next
-
-Press **Next** to go to the CESM Basics chapter. Read it from its first page through "Checking Your Run" (step 3 of [Getting started on Union HPC](start_here.md)).
