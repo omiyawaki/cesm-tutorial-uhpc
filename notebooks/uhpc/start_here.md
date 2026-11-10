@@ -1,14 +1,14 @@
-# Over break: what to do, in order
+# Getting started on Union HPC
 
-This page is your plan for working through the tutorial on your own over break. Do the steps in order. Each step links to the page that explains it. Together they take about two working days, spread over as many sessions as you like. The pages are also in this order in the menu on the left, so the **Next** button at the bottom of each page takes you along the same path.
+This page is the starting point for running CESM2 on Union College's HPC cluster (UHPC). Do the steps in order. Each step links to the page that explains it. Together they take about two working days, spread over as many sessions as you like. The pages are also in this order in the menu on the left, so the **Next** button at the bottom of each page takes you along the same path.
 
-Over break you run two 5-day tests. They only prove that the model runs and reads your SST file. The atmosphere's monthly output folder (`atm/hist`) stays empty on purpose, and making maps of the model's output comes next term.
+In these steps you run two 5-day tests. They only prove that the model runs and reads your SST file. The atmosphere's monthly output folder (`atm/hist`) stays empty on purpose. Turning on atmosphere output and looking at it are covered in the namelist chapter.
 
-Professor Miyawaki will be slow to answer email over break, so every common problem has a fix you can do yourself on [When something goes wrong](when_things_go_wrong.md). When a fix does not work, email Professor Miyawaki, then go on to the next step you can do while you wait for an answer.
+Common problems and their fixes are listed on [When something goes wrong](when_things_go_wrong.md). When a fix there does not work, ask for help by email, then go on to the next step you can do while you wait for an answer.
 
-**To email Professor Miyawaki:** write to <a href="mailto:miyawako@union.edu">miyawako@union.edu</a> from your Union email, with the subject `CESM tutorial: <page>, step <number>`, and paste the command you typed and the first error message it printed into the body as text.
+**To ask for help by email:** write to the research group's contact, Professor Miyawaki (<a href="mailto:miyawako@union.edu">miyawako@union.edu</a>), from your Union email. Use the subject `CESM tutorial: <page>, step <number>`, and paste the command you typed and the first error message it printed into the body as text.
 
-## Your first session: check your setup
+## First session: check your setup
 
 Do these once, at the start of your first session.
 
@@ -16,7 +16,7 @@ Do these once, at the start of your first session.
 2. **Sign in to the cluster.** Connect the VPN, go to <https://ondemand.hpc.union.edu>, and sign in with your cluster username and your cluster password. The cluster password is not your Union password (see step 0 of the [quickstart](quickstart.md)).
 3. **Check your group.** Click **Clusters** → **HPC Cluster Shell Access**. A command line opens in a new browser tab, the OnDemand Shell tab. Type `id` and press **Enter**. The list of groups should include `res-miyawaki`, the research group that owns the CESM files.
 
-The cluster administrators are adding you to `res-miyawaki`. If `id` does not list it yet, do step 1 of "The steps" below, which does not need the group, then close every OnDemand tab, sign out, and type `id` again in your next session. Group changes take up to an hour to reach the cluster. If `res-miyawaki` is still missing a day later, email Professor Miyawaki with the subject `CESM tutorial: res-miyawaki missing` and paste the output of `id`.
+If `id` does not list `res-miyawaki`, your account has not been added to the group yet. Email the research group's contact with the subject `CESM tutorial: res-miyawaki missing` and paste the output of `id`, and ask to be added in ColdFront. Meanwhile, do step 1 of "The steps" below, which does not need the group. After you are added, close every OnDemand tab, sign out, and sign in again. Group changes take up to an hour to reach the cluster.
 
 ## Every time you sit down to work
 
@@ -33,13 +33,13 @@ When you finish, close the browser tab and disconnect the VPN. Your tmux session
 2. **Make your first run (about 2 hours, most of it waiting).** Follow the [UHPC quickstart](quickstart.md) from top to bottom. You are done when `cat CaseStatus` shows `case.run success` and `st_archive success`.
 3. **Understand what you just did (about 2 hours of reading).** Read [Differences from the NCAR tutorial](differences.md), then read the [CESM Basics](../basics/basics_overview.ipynb) chapter, from its first page through "Checking Your Run". It explains each command from the quickstart in more detail. Only read these pages, and skip their exercises, because you already ran the UHPC versions in the quickstart. Do not paste their commands. The exceptions are the `ls`, `cd` and `pwd` commands on "Workspaces" and "Explore CESM Code", which only look at files, so you can type those. Each page starts with a note that says what to type there, if anything.
 4. **Make your own SST boundary condition (about 3 hours).** Work through the five pages of [Making your own SST boundary conditions](../sst_bc/sst_bc.md) in order. You download ERA5 data, turn it into a CESM SST file, add an idealized El Niño-type warm patch, and run a 5-day test with it. You are done when the ocean log shows `sst_example_enso.nc`.
-5. **Write down your questions.** Keep a list of anything that was unclear, any error you could not fix, and anything you would like to try next. Bring it to your first meeting with Professor Miyawaki next term. This is the end of the plan for the break. In the menu on the left, everything under "Next term and reference" is for next term.
+5. **Write down your questions.** Keep a list of anything that was unclear, any error you could not fix, and anything you would like to try next. Bring it to your next research meeting. This is the end of the getting-started steps. In the menu on the left, everything under "Further CESM material and reference" goes further: changing run length and output, troubleshooting, diagnostics and more.
 
-## Rules for working alone
+## Rules for using the cluster
 
-- Run only the two 5-day tests in this tutorial. Do not submit anything longer.
+- Start with the two 5-day tests in these steps. Ask your research supervisor before you submit anything longer, because the cluster is shared.
 - Always submit with `./case.submit -a "--exclude=hpcc03,hpcc04"`.
 - Every Sunday from 12:45 to 5:45 AM (Eastern time) the whole cluster is reserved for weekly maintenance tests. A job that would still be running at 12:45 AM on Sunday waits in the queue (`PD` in `squeue`) until 5:45 AM. That is normal. Leave it in the queue.
 - Keep everything in your own folder, `/usr/local/research/miyawaki/users/<your-username>`. Do not change or delete files anywhere else under `/usr/local/research/miyawaki`.
-- Do not delete anything in your folder this term, and never delete anything in an `archive` folder. Your folder has plenty of space for both tests.
+- Do not delete anything in your folder unless you are told to, and never delete anything in an `archive` folder. Your folder has plenty of space for these tests.
 - Never share your cluster password or your ERA5 key.
