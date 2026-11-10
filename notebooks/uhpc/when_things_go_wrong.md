@@ -1,8 +1,8 @@
 # When something goes wrong
 
-This page lists the problems that come up most often on UHPC, what each one means, and what to do. Find the message you see, or the step you were on, and follow the fix. If the fix does not work, email me, then go on to the next step you can do while you wait for my answer.
+This page lists the problems that come up most often on UHPC, what each one means, and what to do. Find the message you see, or the step you were on, and follow the fix. If the fix does not work, email Professor Miyawaki, then go on to the next step you can do while you wait for an answer.
 
-**To email me:** write to miyawako@union.edu from your Union email, with the subject `CESM tutorial: <page>, step <number>`, and paste the command you typed and the first error message it printed into the body as text.
+**To email Professor Miyawaki:** write to <a href="mailto:miyawako@union.edu">miyawako@union.edu</a> from your Union email, with the subject `CESM tutorial: <page>, step <number>`, and paste the command you typed and the first error message it printed into the body as text.
 
 When a command fails, read the **first** error message it printed, not only the last line. To copy a message out of the Shell tab, select it with the mouse and press **Cmd-C**.
 
@@ -10,11 +10,11 @@ When a command fails, read the **first** error message it printed, not only the 
 
 ### The OnDemand page does not load, or times out
 
-You are not on the campus network. Connect the **Cisco Secure Client** VPN to `unionvpn.union.edu` and reload the page. ITS explains the setup in [How to Use the Cisco VPN Client (Mac/PC)](https://union.teamdynamix.com/TDClient/1831/Portal/KB/Article/56060/How-to-Use-the-Cisco-VPN-Client-Mac-PC). For problems with the VPN itself, contact the ITS Help Desk at helpdesk@union.edu or (518) 388-6400.
+You are not on the campus network. Connect the **Cisco Secure Client** VPN to `unionvpn.union.edu` and reload the page. ITS explains the setup in [How to Use the Cisco VPN Client (Mac/PC)](https://union.teamdynamix.com/TDClient/1831/Portal/KB/Article/56060/How-to-Use-the-Cisco-VPN-Client-Mac-PC). For problems with the VPN itself, contact the ITS Help Desk at <a href="mailto:helpdesk@union.edu">helpdesk@union.edu</a> or (518) 388-6400.
 
 ### The sign-in box keeps coming back
 
-The username or password is wrong. Use your cluster username (the first part of your Union email address, the part before `@union.edu`) and your cluster password. The cluster password is not your Union (Okta) password: it is the one you chose the first time you logged in to the cluster. For a forgotten cluster password, email the cluster administrators at hpcadmin@union.edu from your Union email address and ask them to reset it.
+The username or password is wrong. Use your cluster username (the first part of your Union email address, the part before `@union.edu`) and your cluster password. The cluster password is not your Union (Okta) password: it is the one you chose the first time you logged in to the cluster. For a forgotten cluster password, email the cluster administrators at <a href="mailto:hpcadmin@union.edu">hpcadmin@union.edu</a> from your Union email address and ask them to reset it.
 
 ### The Shell tab says the connection closed
 
@@ -36,11 +36,15 @@ You are already inside tmux (there is a green bar at the bottom of the window), 
 
 ### `Permission denied` on anything under `/usr/local/research/miyawaki`, or `ENV.sh: Permission denied`
 
-Your account is not yet in the `res-miyawaki` group, or the group was added after you logged in. Type `id`. If `res-miyawaki` is missing from the list, close every OnDemand tab, sign out, wait an hour, and sign in again. Group changes take up to an hour to reach the cluster. If it is still missing the next day, email me with the subject `CESM tutorial: res-miyawaki missing` and paste the output of `id`.
+Your account is not yet in the `res-miyawaki` group, or the group was added after you logged in. Type `id`. If `res-miyawaki` is missing from the list, close every OnDemand tab, sign out, wait an hour, and sign in again. Group changes take up to an hour to reach the cluster. If it is still missing the next day, email Professor Miyawaki with the subject `CESM tutorial: res-miyawaki missing` and paste the output of `id`.
 
-### `cesm-deps/ENV.sh: No such file or directory`, or `$MYROOT` is empty
+### `cesm-deps/ENV.sh: No such file or directory`
 
-The settings from `~/.bashrc` were not loaded. Type `echo $MYROOT`. It should print `/usr/local/research/miyawaki/users/<your-username>`. If it prints an empty line, open `nano ~/.bashrc` and check the three lines from step 3 of the [quickstart](quickstart.md) for typing mistakes, then run `source ~/.bashrc`.
+The `source` line in `~/.bashrc` has a typing mistake in the path. Open the file with `nano ~/.bashrc` and compare the line with the block in step 3 of the [quickstart](quickstart.md). It must be exactly `source /usr/local/research/miyawaki/opt/cesm-deps/ENV.sh`. Save, quit, and run `source ~/.bashrc`. If the path is correct and you still see the message together with `Permission denied`, see the entry above.
+
+### `$MYROOT` is empty
+
+`echo $MYROOT` prints an empty line, so commands such as `cd $MYROOT/cases` go to the wrong place. The `export MYROOT=...` line is missing from `~/.bashrc` or has a typing mistake. Open the file with `nano ~/.bashrc`, compare the three lines at the end with the block in step 3 of the [quickstart](quickstart.md), and fix or add them. Save, quit, and run `source ~/.bashrc`. Then `echo $MYROOT` should print `/usr/local/research/miyawaki/users/` followed by your username.
 
 ### `Disk quota exceeded`
 
@@ -81,7 +85,7 @@ grep -i -m 5 error cesm.log.*
 
 - An error that mentions your SST file name: the SST file in `SSTICE_DATA_FILENAME` was moved, renamed or mistyped. Check it with `./xmlquery SSTICE_DATA_FILENAME` and `ls -l <that path>`.
 - `ABORT` in `ice.log`: check that the four sea-ice lines from step 5 of the quickstart are in the case, with `cat user_nl_cice`. Add any that are missing with `nano user_nl_cice` and submit again.
-- An error about a missing input file: the shared input data does not have a file this case needs. Do not download it yourself. Email me the exact message, and leave this case as it is.
+- An error about a missing input file: the shared input data does not have a file this case needs. Do not download it yourself. Email Professor Miyawaki the exact message, and leave this case as it is.
 
 ### `sacct` shows `TIMEOUT`
 
@@ -120,10 +124,18 @@ The key file `~/.cdsapirc` is missing or wrong. Open it with `nano ~/.cdsapirc` 
 
 The Climate Data Store has a queue. Leave it running inside tmux and come back later.
 
+### I installed cdsapi on my Mac, or made `.cdsapirc` on my Mac
+
+The CDS instructions for Windows and macOS install the download tool on your own computer. This tutorial does not use it there. Everything runs on the cluster: the tool is installed with `$PY -m pip install --user cdsapi` in step 4 of [Set up Python and an ERA5 account](../sst_bc/python_setup.md), and the key file is `~/.cdsapirc` on the cluster, made with `nano` in the OnDemand Shell tab in step 5. You can leave the copy on your Mac alone, or remove it later. It does no harm.
+
 ### `ModuleNotFoundError: No module named 'cdsapi'` or `'netCDF4'`
 
 You ran the script with a different Python. Use `$PY make_sst_bc.py ...`, not `python make_sst_bc.py ...`. Check with `echo $PY`. It should print `/usr/local/Dist/anaconda3-latest/envs/datascience/bin/python`.
 
 ### `check` says `FAIL`
 
-Do not use that file. Delete it with `rm <file name>` and run the step that made it again, copying the command exactly from the page.
+Do not use that file. Rename it so you do not use it by mistake, for example `mv sst_example_enso.nc sst_example_enso.FAILED.nc`, and run the step that made it again, copying the command exactly from the page.
+
+## Where next
+
+This is the last page of the over-break path. Everything after it in the menu, under "Next term and reference", is for next term. Go back to [Over break: what to do, in order](over_break.md) whenever you are not sure what to do next.

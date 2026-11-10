@@ -37,11 +37,11 @@ CESM's own commands (`./case.submit`, `./case.build`) are the same. CESM transla
 | Input data (`DIN_LOC_ROOT`) | `/glade/p/cesmdata/cseg/inputdata` | `/usr/local/research/miyawaki/cesm/inputdata` (shared, about 23 GB, only the files for the 2-degree CESM2 setup) |
 | Home directory | `/glade/u/home/$USER` | your UHPC home directory (`~`). Keep CESM files out of it |
 
-The UHPC machine configuration points output at folders that belong to me, so always pass `--output-root /usr/local/research/miyawaki/users/$USER/scratch` to `create_newcase` and set `./xmlchange DOUT_S_ROOT=/usr/local/research/miyawaki/users/$USER/archive/$CASE` (with your case name in place of `$CASE`). Otherwise the build, run and archive folders go to the machine default, which you cannot write to.
+The UHPC machine configuration points output at Professor Miyawaki's own folders, so always pass `--output-root /usr/local/research/miyawaki/users/$USER/scratch` to `create_newcase` and set `./xmlchange DOUT_S_ROOT=/usr/local/research/miyawaki/users/$USER/archive/$CASE` (with your case name in place of `$CASE`). Otherwise the build, run and archive folders go to the machine default, which you cannot write to.
 
 The commands in this tutorial use the UHPC paths above. Where a page uses `$DIN_LOC_ROOT`, replace it with the input data path, or set it once with `export DIN_LOC_ROOT=<path>`.
 
-Your folder (`/usr/local/research/miyawaki/users/$USER`) has a soft limit of 300 GB. A 3-month (92-day) `F2000climo` archive is about 4 GB, and the run folder in `scratch` adds about 1.5 GB, so 300 GB fits dozens of runs. Check your usage now and then with `du -sh` and delete run folders you no longer need. Your home folder (`~`) has a 20 GB limit, and each compute node's `/scratch` is local to that node and wiped after 30 days, so do not use either for CESM output.
+Your folder (`/usr/local/research/miyawaki/users/$USER`) has a soft limit of 300 GB. A 3-month (92-day) `F2000climo` archive is about 4 GB, and the run folder in `scratch` adds about 1.5 GB, so 300 GB fits dozens of runs. Check your usage now and then with `du -sh $MYROOT/*`. Do not delete anything in your folder this term, and never delete anything in an `archive` folder. Your home folder (`~`) has a 20 GB limit, and each compute node's `/scratch` is local to that node and wiped after 30 days, so do not use either for CESM output.
 
 Some pages use data that exists only on NCAR's GLADE file system, such as tutorial archives under `/glade/p/cesm/tutorial`, the CESM2 Large Ensemble under `/glade/campaign`, chemistry emissions under `/glade/p/acom`, and forcing files in staff home directories. Those pages carry a **Skip on UHPC** note at the top. Read them for the ideas, but skip their commands.
 
@@ -62,7 +62,7 @@ NCAR runs its analysis notebooks on the Casper cluster through NCAR's JupyterHub
 - Outside network access from UHPC goes through a web proxy. The cluster sets `http_proxy` and `https_proxy` for you at login, so downloads with `wget`, `pip` and the ERA5 script work without any setup.
 - CESM input data downloads work over **HTTPS with wget**. FTP and svn do not work.
 - One NCAR data server (`osdf-data.gdex.ucar.edu`) still had an expired SSL certificate in November 2026, so downloads from it fail.
-- The shared input data already has every file the cases in this tutorial need. Do not run `./check_input_data --download` yourself. If a case you design later needs a file that is missing, send me the exact message and I will add the file to the shared input data.
+- The shared input data already has every file the cases in this tutorial need. Do not run `./check_input_data --download` yourself. If a case you design later needs a file that is missing, email Professor Miyawaki the exact message, and the file will be added to the shared input data.
 
 ## Downloading the code
 
@@ -76,4 +76,4 @@ The NCAR tutorial has each user clone CESM with git. On UHPC everyone uses the s
 
 ## Where next
 
-Go to [Workspaces](../basics/cesm_workspaces.ipynb), the first page of the CESM Basics chapter, and read through "Checking Your Run" (step 3 of [Over break: what to do, in order](over_break.md)).
+Press **Next** to go to the CESM Basics chapter. Read it from its first page through "Checking Your Run" (step 3 of [Over break: what to do, in order](over_break.md)).
