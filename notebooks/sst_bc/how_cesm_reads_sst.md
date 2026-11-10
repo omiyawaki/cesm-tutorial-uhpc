@@ -2,7 +2,7 @@
 
 ```{admonition} What you need from this page
 :class: tip
-This page has no commands to type. The three facts to know:
+This page has no commands to type. Know these three facts:
 - One file gives the model both its sea surface temperature (`SST_cpl`, in °C) and its sea-ice fraction (`ice_cov`, 0 to 1), for 12 months.
 - The case setting `SSTICE_DATA_FILENAME` holds the full path of that file. It is the only setting you change in this chapter.
 - `make_sst_bc.py` writes files in the same layout as the stock file, so you do not need to edit any file by hand.
@@ -10,7 +10,7 @@ This page has no commands to type. The three facts to know:
 
 ## The data ocean and prescribed ice
 
-In an `F` compset the ocean component is **DOCN**, the "data ocean". In SST mode (`DOCN_MODE=prescribed`, namelist `datamode = "SSTDATA"`) it reads SST from a file and hands it to the atmosphere. The sea-ice component (CICE in prescribed mode) reads the ice concentration from **the same file**. You change one file, and both SST and ice change.
+In an `F` compset the ocean component is **DOCN**, the "data ocean". In SST mode (`DOCN_MODE=prescribed`, namelist `datamode = "SSTDATA"`) it reads SST from a file and passes it to the atmosphere. The sea-ice component (CICE in prescribed mode) reads the ice concentration from **the same file**. You change one file, and both SST and ice change.
 
 Your case's compset name shows this. For `F2000climo` it contains `DOCN%DOM` (data ocean) and `CICE%PRES` (prescribed ice).
 
@@ -40,7 +40,7 @@ There are values everywhere, even over land. The model ignores land points, beca
 
 ## Two versions of each field
 
-Each field comes in two versions: `SST_cpl` and `ice_cov`, which the model reads, and `SST_cpl_prediddle` and `ice_cov_prediddle`, the true monthly means. `make_sst_bc.py` writes both for you, and its `check` command confirms they fit together. You do not need to know more to finish this chapter.
+Each field comes in two versions: `SST_cpl` and `ice_cov`, which the model reads, and `SST_cpl_prediddle` and `ice_cov_prediddle`, the true monthly means. `make_sst_bc.py` writes both for you, and its `check` command confirms they fit together.
 
 ```{dropdown} If you want to know why there are two versions ("diddling")
 CESM does not use a month's value for the whole month. It **interpolates linearly in time** between the mid-month values. A straight line between monthly means smooths out the seasonal cycle, so the model's actual monthly average would come out a little too weak at the peaks.
@@ -52,9 +52,9 @@ To fix this, the values in `SST_cpl` and `ice_cov` are adjusted ("diddled") so t
 
 ## The case settings that point to the file
 
-These settings are in `env_run.xml` in your case directory. You can view them with `./xmlquery` (see [the quickstart](../uhpc/quickstart.md)):
+These settings are in `env_run.xml` in your case directory. You can view them from that directory with `./xmlquery` (see [the quickstart](../uhpc/quickstart.md)):
 
-| Setting | What it means | Value in UHPC `F2000climo` cases |
+| Setting | Purpose | Value in UHPC `F2000climo` cases |
 |---|---|---|
 | `SSTICE_DATA_FILENAME` | full path of the SST/ice file | the stock HadOIBl file above |
 | `SSTICE_GRID_FILENAME` | the grid ("domain") file that describes the data's lat/lon | `.../inputdata/atm/cam/ocnfrac/domain.camocn.1.9x2.5_gx1v6_090403.nc` |

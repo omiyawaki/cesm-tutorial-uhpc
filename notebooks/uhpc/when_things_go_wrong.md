@@ -1,10 +1,10 @@
 # When something goes wrong
 
-Find the message you see, or the step you were on, and follow the fix. If the fix does not work, ask for help by email as described just below, then go on to the next step you can do while you wait for an answer.
+Find the message you see, or the step you were on, and follow the fix. If the fix does not work, email me, then go on to the next step you can do while you wait for an answer.
 
-**To ask for help by email:** write to the research group's contact, Professor Miyawaki (<a href="mailto:miyawako@union.edu">miyawako@union.edu</a>), from your Union email. Use the subject `CESM tutorial: <page>, step <number>`, and paste the command you typed and the first error message it printed into the body as text.
+**To ask for help by email:** write to me (<a href="mailto:miyawako@union.edu">miyawako@union.edu</a>) from your Union email. Use the subject `CESM tutorial: <page>, step <number>`, and paste the command you typed and the first error message it printed into the body as text.
 
-When a command fails, read the **first** error message it printed, not only the last line. To copy a message out of the Shell tab, select it with the mouse and press **Cmd-C**.
+When a command fails, read the **first** error message it printed. The last line is often later processes stopping. To copy a message out of the Shell tab, select it with the mouse and press **Cmd-C**.
 
 ## Getting in
 
@@ -18,7 +18,7 @@ The username or password is wrong. Use your cluster username (the first part of 
 
 ### The Shell tab says the connection closed
 
-The OnDemand Shell closes after about 5 minutes without typing, and after about 1 hour in any case. Your work inside tmux is safe. Open **Clusters** → **HPC Cluster Shell Access** again and type `tmux attach -t cesm || tmux new -s cesm`.
+The OnDemand Shell closes after about 5 minutes without typing, and after about 1 hour in any case. Open **Clusters** → **HPC Cluster Shell Access** again and type `tmux attach -t cesm || tmux new -s cesm`.
 
 ### `tmux attach` says `no sessions` or `can't find session`
 
@@ -36,7 +36,7 @@ You are already inside tmux (there is a green bar at the bottom of the window), 
 
 ### `Permission denied` on anything under `/usr/local/research/miyawaki`, or `ENV.sh: Permission denied`
 
-Your account is not yet in the `res-miyawaki` group, or the group was added after you logged in. Type `id`. If `res-miyawaki` is missing from the list, close every OnDemand tab, sign out, wait an hour, and sign in again. Group changes take up to an hour to reach the cluster. If it is still missing the next day, email the research group's contact (see the top of this page) with the subject `CESM tutorial: res-miyawaki missing` and paste the output of `id`.
+Your account is not yet in the `res-miyawaki` group, or the group was added after you logged in. Type `id`. If `res-miyawaki` is missing, close every OnDemand tab, sign out, and sign in again, then type `id` again. If it is still missing, email me with the subject `CESM tutorial: res-miyawaki missing` and paste the output of `id`. After you are added to the group, sign out and sign in again. Group changes take up to an hour to reach the cluster.
 
 ### `cesm-deps/ENV.sh: No such file or directory`
 
@@ -85,7 +85,7 @@ grep -i -m 5 error cesm.log.*
 
 - An error that mentions your SST file name: the SST file in `SSTICE_DATA_FILENAME` was moved, renamed or mistyped. Check it with `./xmlquery SSTICE_DATA_FILENAME` and `ls -l <that path>`.
 - `ABORT` in `ice.log`: check that the four sea-ice lines from step 5 of the quickstart are in the case, with `cat user_nl_cice`. Add any that are missing with `nano user_nl_cice` and submit again.
-- An error about a missing input file: the shared input data does not have a file this case needs. Do not download it yourself. Email the exact message to the research group's contact (see the top of this page), and leave this case as it is.
+- An error about a missing input file: the shared input data does not have a file this case needs. Do not download it yourself. Email me the exact message, and leave this case as it is.
 
 ### `sacct` shows `TIMEOUT`
 
@@ -114,7 +114,7 @@ The `datascience` environment does not have cartopy. Use plain `plt.pcolormesh` 
 
 ### `403 Client Error` or `required licences not accepted`
 
-You have not accepted the ERA5 licence. Open the dataset page "ERA5 monthly averaged data on single levels from 1940 to present" on the Climate Data Store, go to its **Download** tab, accept the **Terms of use**, and run the download again.
+You have not accepted the ERA5 licence. Open the dataset download page <https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels-monthly-means?tab=download>, accept the **Terms of use**, and run the download again.
 
 ### `401 Client Error`, `Unauthorized` or `Missing/incomplete configuration file`
 
@@ -124,9 +124,9 @@ The key file `~/.cdsapirc` is missing or wrong. Open it with `nano ~/.cdsapirc` 
 
 The Climate Data Store has a queue. Leave it running inside tmux and come back later.
 
-### I installed cdsapi on my Mac, or made `.cdsapirc` on my Mac
+### `cdsapi` or `.cdsapirc` is on your Mac
 
-The CDS instructions for Windows and macOS install the download tool on your own computer. This tutorial does not use it there. Everything runs on the cluster: the tool is installed with `$PY -m pip install --user cdsapi` in step 4 of [Set up Python and an ERA5 account](../sst_bc/python_setup.md), and the key file is `~/.cdsapirc` on the cluster, made with `nano` in the OnDemand Shell tab in step 5. You can leave the copy on your Mac alone, or remove it later. It does no harm.
+The CDS page has install steps for Windows and macOS. This tutorial does not use those steps. Everything runs on the cluster: the tool is installed with `$PY -m pip install --user cdsapi` in step 4 of [Set up Python and an ERA5 account](../sst_bc/python_setup.md), and the key file is `~/.cdsapirc` on the cluster, made with `nano` in the OnDemand Shell tab in step 5. A copy on your Mac is unused.
 
 ### `ModuleNotFoundError: No module named 'cdsapi'` or `'netCDF4'`
 

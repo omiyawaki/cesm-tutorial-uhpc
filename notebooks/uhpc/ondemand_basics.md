@@ -1,10 +1,10 @@
 # Open OnDemand and shell basics
 
-You will use UHPC mostly through **Open OnDemand**, a website that gives you the cluster's files, a command line and Jupyter notebooks in your Mac's web browser.
+You will use UHPC mostly through **Open OnDemand**, a website in your Mac's web browser with the cluster's files, a command line and Jupyter notebooks.
 
 ## Logging in
 
-You already have a cluster account and have logged in once. From now on you use the website, not the Mac Terminal app.
+You already have a cluster account and have logged in once. From now on you use the website. Do not use the Mac Terminal app.
 
 1. Connect to the Union VPN with the **Cisco Secure Client** app. The cluster's websites only load on the campus network or through the VPN. The one-time VPN setup is in [Getting started on Union HPC](start_here.md).
 2. In Safari or Chrome, go to <https://ondemand.hpc.union.edu>.
@@ -33,9 +33,9 @@ Every time you open the Shell app, type this line:
 tmux attach -t cesm || tmux new -s cesm
 ```
 
-`tmux attach -t cesm` goes back to your tmux session called `cesm`, with the same folder and earlier output. If no such session exists, it prints `no sessions` or `can't find session`, and `||` then runs the second command, `tmux new -s cesm`, which starts a new session with that name. A new session clears the screen and shows a green bar at the bottom. Work as usual inside it.
+`tmux attach -t cesm` goes back to your tmux session called `cesm`, with the same folder and earlier output. If no such session exists, it prints `no sessions` or `can't find session`, and `||` then runs the second command, `tmux new -s cesm`, which starts a new session with that name. A new session clears the screen and shows a green bar at the bottom. If you already see that bar, you are already inside tmux: do not type the line again.
 
-A new session does not remember the folder you were in, so `cd` back to it, for example `cd $MYROOT/cases/f2000.test`.
+A new session does not remember the folder you were in. Type `pwd` to see where you are, then `cd` back to it, for example `cd $MYROOT/cases/f2000.test`.
 
 To leave tmux on purpose and keep it running, press **Ctrl-B**, let go, then press **D**. To end the session completely, type `exit` inside it.
 
@@ -48,13 +48,13 @@ Use Jupyter for looking at model output and making plots, like Google Colab but 
 2. Fill in the form:
    - **Hours**: how long the session lasts, 1 to 4 (default 4). It stops at the end, so save your notebook before then.
    - **CPU cores**: 1 to 8. Use 2 for plotting.
-   - **Conda environment**: leave it as `datascience`.
-   - **Partition**: leave it as `hpcc`.
+   - **Conda environment**: leave it as `datascience` (the Python packages already on the cluster).
+   - **Partition**: leave it as `hpcc` (the CPU queue).
    - **GPUs**: 0.
 3. Click **Launch**. The session waits in the queue, then shows **Running**. Click **Connect to Jupyter**.
 4. JupyterLab opens in a new tab with the **Launcher**. Click **Python 3 (ipykernel)** under **Notebook** to make a new notebook in your home folder. The file browser on the left only shows your home folder, so to open model output, type its full path in your code, for example `xarray.open_dataset('/usr/local/research/miyawaki/users/<your-username>/...')`.
 5. In the first cell, type `import xarray, netCDF4, matplotlib.pyplot as plt` and press **Shift-Enter**. No error message means it worked.
-6. When you finish, save your notebook with **Cmd-S**, then stop the session so it stops using a compute node: go back to the OnDemand tab, click **My Interactive Sessions** in the top menu, and click **Delete** on the Jupyter session.
+6. When you finish, save your notebook with **Cmd-S**, then stop the session so it stops using a compute node: switch to the OnDemand dashboard tab (not the JupyterLab tab and not the Shell tab), click **My Interactive Sessions** in the top menu, and click **Delete** on the Jupyter session.
 
 The `datascience` environment has xarray, netCDF4 and matplotlib, but **not cartopy** (map projections and coastlines). Plain maps with `plt.pcolormesh(lon, lat, field)` work without it, and this tutorial does not need cartopy. Use `datascience` for everything in the getting-started steps.
 
@@ -62,7 +62,7 @@ Jupyter runs on a compute node. Never start Jupyter or other heavy calculations 
 
 ## Shell basics
 
-Type a command and press **Enter**. Most commands print nothing when they succeed.
+Type a command and press **Enter**. Most commands print nothing when they succeed. In the table, words inside `< >` are placeholders: replace them with a real folder or file name, and do not type the `<` or `>` characters. Where a path shows `<your-username>`, type the first part of your Union email instead.
 
 | Command | What it does | What you should see |
 |---|---|---|
@@ -80,27 +80,27 @@ Type a command and press **Enter**. Most commands print nothing when they succee
 | `grep <word> <file>` | show the lines that contain a word | matching lines |
 | `nano <file>` | edit a text file. **Ctrl-O** then **Enter** saves, **Ctrl-X** quits | an editor fills the screen |
 
-Useful keys:
+## Useful keys
 
 - **Tab** completes a file or folder name. Type the first few letters and press Tab. If nothing happens, press Tab twice to see the choices. This saves typing and avoids typos.
 - **Up arrow** brings back your previous command, so you can edit and rerun it.
 - **Ctrl-C** stops the command that is running now and gives you back the prompt. It does not cancel batch jobs that are already submitted. Use `scancel` for those.
 - To paste into the Shell tab, use **Cmd-V**, as on any Mac web page. To copy text from the Shell tab, select it with the mouse and press **Cmd-C**.
 
-A few ideas you will meet in the CESM pages:
+## Paths, variables, modules and permissions
 
 - **Paths.** `/` separates folders. A path starting with `/` is a full path. `~` means your home folder. `.` means "this folder", and `./case.submit` means "run the program `case.submit` in this folder".
-- **Variables.** `export MYROOT=/usr/local/research/miyawaki/users/$USER` saves a path under a short name, and `$MYROOT` then stands for it. `$USER` is already set to your username. Check a variable with `echo $MYROOT`. Variables are forgotten when the shell closes, unless you add the `export` line to `~/.bashrc` (open it with `nano ~/.bashrc`).
+- **Variables.** `export MYROOT=/usr/local/research/miyawaki/users/$USER` saves a path under a short name, and `$MYROOT` then stands for it. `$USER` is already set to your username, so type it as written. Check a variable with `echo $MYROOT`. Variables are forgotten when the shell closes, unless you add the `export` line to `~/.bashrc` (open it with `nano ~/.bashrc`).
 - **`source <file>`** runs the commands in a file in your current shell. CESM uses this to load compilers and libraries: `source /usr/local/research/miyawaki/opt/cesm-deps/ENV.sh`.
 - **Modules.** `module load <name>` makes a software package available, `module list` shows what is loaded, and `module avail` shows what exists. `ENV.sh` loads the modules CESM needs for you.
 - **Permissions.** `ls -l` starts each line with something like `-rw-r-----`: the first three letters after the first character are your permissions, the next three are your group's, and the last three are everyone else's (`r` read, `w` write, `x` run). If you see `Permission denied`, you are trying to read or change something you are not allowed to. Do not try to work around it. See [When something goes wrong](when_things_go_wrong.md).
-- **Reading errors.** When something fails, read the **first** error message, not the last line. `grep -i error <logfile>` finds error lines in a log. Copy the exact message when you ask for help.
+- **Reading errors.** When something fails, read the **first** error message. The last line is often later processes stopping. `grep -i error <logfile>` finds error lines in a log. Copy the exact message when you email me.
 
 ## Where to keep files
 
 | Place | Size limit | Use it for |
 |---|---|---|
-| your home folder `/home/<your-username>` (`~`) | 20 GB | settings files such as `~/.bashrc` and `~/.cdsapirc`. Not CESM output |
+| your home folder `/home/<your-username>` (`~`) | 20 GB | settings files such as `~/.bashrc` and `~/.cdsapirc`. Keep CESM output out of this folder |
 | `/usr/local/research/miyawaki/users/<your-username>` (`$MYROOT`) | soft limit of 300 GB per student | your CESM cases, runs, output and SST files |
 | `/scratch` | a separate disk on each compute node, cleaned after 30 days | do not use for CESM |
 
@@ -116,7 +116,7 @@ CESM runs as **batch jobs** on the compute nodes. You submit them with `./case.s
 
 | Command | What it does |
 |---|---|
-| `squeue -u $USER` | list your waiting (`PD`) and running (`R`) jobs. An empty list means none are left |
+| `squeue -u $USER` | list your waiting (`PD`) and running (`R`) jobs. If there is no job row under the header, you have no jobs left |
 | `sacct -j <jobid>` | show how a finished job ended (`COMPLETED`, `FAILED`, `TIMEOUT`) |
 | `scancel <jobid>` | cancel a job |
 
@@ -133,4 +133,4 @@ module load python/miniforge
 mamba create -n geo -c conda-forge python=3.12 jupyterlab ipykernel cartopy xarray netcdf4 matplotlib
 ```
 
-It asks `Proceed ([y]/n)?`. Type `y` and press Enter. Installing takes several minutes and uses about 2-3 GB of your 20 GB home folder (it goes in `~/.conda/envs/geo`). After that, type `geo` instead of `datascience` in the **Conda environment** box of the Jupyter form. `jupyterlab` has to be in the list above, or the Jupyter session will not start.
+It asks `Proceed ([y]/n)?`. Type `y` and press Enter. Installing uses about 2-3 GB of your 20 GB home folder (it goes in `~/.conda/envs/geo`). After that, type `geo` instead of `datascience` in the **Conda environment** box of the Jupyter form. `jupyterlab` has to be in the list above, or the Jupyter session will not start.

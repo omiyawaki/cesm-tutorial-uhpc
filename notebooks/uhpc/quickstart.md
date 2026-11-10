@@ -55,7 +55,7 @@ The shell forgets these settings when it closes. To have them set every time you
 nano ~/.bashrc
 ```
 
-Press the **down arrow** until the cursor is on the empty line below the last line. Then copy this block from this page and paste it with **Cmd-V**:
+Press the **down arrow** until the cursor is at the end of the last line, then press **Enter** to make a new blank line. Copy this block from this page and paste it with **Cmd-V**:
 
 ```bash
 source /usr/local/research/miyawaki/opt/cesm-deps/ENV.sh
@@ -109,7 +109,7 @@ Each `./xmlchange` line changes one or more case settings and prints nothing if 
 - `DOUT_S_ROOT`: where finished output is copied. You must set this, because the default points to a folder that is not yours.
 - `HIST_OPTION=never,REST_OPTION=ndays,REST_N=5`: no extra coupler output during the test, and one set of restart files at the end. This test only proves that CESM builds, starts, reads its input files and finishes. It writes no maps or monthly output on purpose. Atmosphere output is covered in the [CAM output](../namelist/output/output_cam.ipynb) section of the namelist chapter, where you turn on daily and monthly output.
 
-Next, add four sea-ice settings that every UHPC case uses. They make the sea-ice model work with the input files on UHPC. You do not need to understand them yet. Open the sea-ice settings file:
+Next, add four sea-ice settings that every UHPC case uses. They make the sea-ice model work with the input files on UHPC. Open the sea-ice settings file:
 
 ```bash
 nano user_nl_cice
@@ -132,7 +132,7 @@ Save with **Ctrl-O**, **Enter**, then quit with **Ctrl-X**. Then run these three
 ./case.build
 ```
 
-`./case.setup` takes under a minute and ends with `You can now run './preview_run' to get more info on how your case will be run`. `GMAKE_J=4` tells the build to compile 4 files at a time. `./case.build` compiles the model. It prints many lines and ends with `MODEL BUILD HAS FINISHED SUCCESSFULLY`. It usually takes a few minutes, and can take longer when the cluster is busy. Stay inside tmux while it runs.
+`./case.setup` ends with `You can now run './preview_run' to get more info on how your case will be run`. `GMAKE_J=4` tells the build to compile 4 files at a time. `./case.build` compiles the model. It prints many lines and ends with `MODEL BUILD HAS FINISHED SUCCESSFULLY`. Stay inside tmux while it runs.
 
 The build runs on the shared login computer. The cluster allows builds there, with up to 4 parallel compile processes, which is what `GMAKE_J=4` sets. Model runs never run there: they go to a compute node through `./case.submit`.
 
@@ -160,7 +160,7 @@ A 5-day run takes about 45 minutes once it starts. It keeps running if you close
 squeue -u $USER
 ```
 
-`squeue -u $USER` lists your jobs. `PD` in the `ST` column means waiting, and `R` means running. When the list is empty, the jobs are done. Then look at CESM's own record of each step:
+`squeue -u $USER` lists your jobs. `PD` in the `ST` column means waiting, and `R` means running. If there is no job row under the header, the jobs are done. Then look at CESM's own record of each step:
 
 ```bash
 cat CaseStatus
@@ -181,14 +181,14 @@ ls $MYROOT/cases/f2000.test/timing
 
 These are the run folder (where the model works), the compressed log files, the restart files, and the speed and cost of the run. The atmosphere writes monthly averages by default, and a 5-day run ends before the first month is complete, so `atm/hist` stays empty. You turn on more frequent output in later chapters. You can also browse these folders in the OnDemand **Files** app.
 
-## 9. Keep an eye on space
+## 9. Disk space
 
 Keep all CESM files in your own folder (`$MYROOT`). Your home folder is limited to 20 GB, and the `/scratch` disk on each compute node is wiped regularly.
 
-Your folder has a soft limit of 300 GB. The run folder of a test case is about 1.5 GB, and a 3-month (92-day) run with monthly output adds about 4 GB of archived output, so the limit fits dozens of runs. Check your usage now and then:
+Your folder has a soft limit of 300 GB. The run folder of a test case is about 1.5 GB, and a 3-month (92-day) run with monthly output adds about 4 GB of archived output. Check your usage now and then:
 
 ```bash
 du -sh $MYROOT/*
 ```
 
-`du -sh` prints how much space each folder uses. The runs in this tutorial use well under the limit. Do not delete anything in your folder unless you are told to, and never delete anything in `archive`.
+`du -sh` prints how much space each folder uses. Do not delete anything in your folder unless you are told to, and never delete anything in `archive`.
