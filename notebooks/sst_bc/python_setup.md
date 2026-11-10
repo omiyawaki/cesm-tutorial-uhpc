@@ -27,7 +27,7 @@ ls
 make_sst_bc.py
 ```
 
-If `cp` prints `Permission denied`, your account is not yet in the `res-miyawaki` group: see "Permission denied" in [When something goes wrong](../uhpc/when_things_go_wrong.md). If it prints `No such file or directory`, check the path for typing mistakes (press **Up arrow** to bring the command back). If it still fails, email me (see [When something goes wrong](../uhpc/when_things_go_wrong.md)).
+If `cp` prints `Permission denied`, your account is not yet in the `res-miyawaki` group: see "Permission denied" in [When something goes wrong](../uhpc/when_things_go_wrong.md). If it prints `No such file or directory`, check the path for typing mistakes (press **Up arrow** to bring the command back). If it still fails, email Professor Miyawaki (see [When something goes wrong](../uhpc/when_things_go_wrong.md)).
 
 ## 3. Choose the Python to use
 
@@ -62,16 +62,16 @@ $PY -c "import cdsapi; print('cdsapi OK')"
 ERA5 comes from the Copernicus Climate Data Store (CDS). Do items 1 to 3 in your Mac's web browser:
 
 1. Go to <https://cds.climate.copernicus.eu> and click **Login - Register** to make a free account. Confirm it from the email the CDS sends you, then log in.
-2. Open the ERA5 dataset's download page, <https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels-monthly-means?tab=download>. Scroll to the bottom of the form, to **Terms of use**, and click **Accept** for the licence (Licence to use Copernicus Products). Downloads fail with a licence error until you do this once. You do not need to fill in the rest of the form.
-3. Open <https://cds.climate.copernicus.eu/how-to-api> while logged in. Under "Setup the CDS API key" it shows two lines, starting `url:` and `key:`. The `key:` line holds your **Personal Access Token**. Keep this tab open, or copy the two lines into a note on your Mac, so you can paste them in the next step.
+2. Open the ERA5 dataset's download page, <https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels-monthly-means?tab=download>, while logged in. Scroll to the bottom of the form, to the section **Terms of use**. It lists one licence, the **CC-BY licence**. Click the button there to accept it. If the page says you have already accepted it, go on. Downloads fail with a licence error until you accept it once. You do not need to fill in the rest of the form.
+3. Open <https://cds.climate.copernicus.eu/how-to-api> while logged in. The page starts with sections for **Windows users** and **macOS users** that say "Please read How to install and use CDS API on ..." Ignore those sections: you do not install anything on your Mac. Scroll to **Linux users** and its step **1. Setup the CDS Api key**. It shows two lines, starting `url:` and `key:`. If the `key:` line says `<PERSONAL-ACCESS-TOKEN>`, you are not logged in: log in and reload the page. When you are logged in, the `key:` line shows your own **Personal Access Token**, a long string of letters, digits and dashes. Keep this tab open, or copy the two lines into a note on your Mac, so you can paste them in the next step. Ignore the rest of the page (installing the client and the examples), because step 4 above already installed it on the cluster.
 
-Back in the OnDemand Shell tab, create the key file:
+Back in the OnDemand Shell tab (not on your Mac), create the key file on the cluster:
 
 ```bash
 nano ~/.cdsapirc
 ```
 
-Paste the two lines from the CDS page with **Cmd-V**. They look like this, with your own token after `key:`:
+Paste only the two lines `url:` and `key:` from the CDS page with **Cmd-V**, and nothing else. They look like this, with your own token after `key:`:
 
 ```
 url: https://cds.climate.copernicus.eu/api
@@ -84,4 +84,4 @@ Save with **Ctrl-O**, **Enter**, and quit with **Ctrl-X**. Then make the file pr
 chmod 600 ~/.cdsapirc
 ```
 
-`chmod 600` means only you can read or change the file. Never share your token, and never paste it into an email or a chat, including an email to me. If you copied it into a note on your Mac, delete the note now.
+`chmod 600` means only you can read or change the file. Never share your token, and never paste it into an email or a chat, including an email to Professor Miyawaki. If you copied it into a note on your Mac, delete the note now.
