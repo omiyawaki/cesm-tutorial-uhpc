@@ -1,7 +1,7 @@
 
 # Welcome to the [CESM Tutorial](https://ncar.github.io/CESM-Tutorial/README.html)
 
-> **Union HPC edition.** This is a copy of the NCAR [CESM Tutorial](https://ncar.github.io/CESM-Tutorial/) ([source](https://github.com/NCAR/CESM-Tutorial), MIT License), starting from the upstream `tutorial_2023` tag (CESM2.1.4, written for NCAR's Cheyenne). It has been adapted to run **CESM2.1.5 on Union College's HPC cluster (UHPC)** with Slurm. Start with the [UHPC quickstart](notebooks/uhpc/quickstart.md) and see [Differences from the NCAR tutorial](notebooks/uhpc/differences.md). Anything marked **TODO** has not yet been confirmed on UHPC. The conceptual pages are NCAR's text, unchanged. See `PROVENANCE.md` for the upstream commit.
+> **Union HPC edition.** This is NCAR's [CESM Tutorial](https://ncar.github.io/CESM-Tutorial/) (MIT License), adapted to run **CESM2.1.5 on Union College's HPC cluster (UHPC)**. **Start with [Over break: what to do, in order](notebooks/uhpc/over_break.md).** It lists every step in order and links to the page for each one. The conceptual pages are NCAR's text, written for NCAR's own computers. [Differences from the NCAR tutorial](notebooks/uhpc/differences.md) explains how their commands translate to UHPC.
 
 <br>
 

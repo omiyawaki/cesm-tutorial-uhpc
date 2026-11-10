@@ -50,7 +50,7 @@ html:
   home_page_in_navbar  : true
   use_multitoc_numbering    : true
   extra_navbar              : ""
-  announcement              : 'This is the CESM2.1.x tutorial adapted for Union College HPC (UHPC) from the <a href="https://ncar.github.io/CESM-Tutorial/">NCAR CESM Tutorial</a> (<a href="https://github.com/NCAR/CESM-Tutorial">source</a>, MIT License). Text marked TODO is not yet confirmed for UHPC.'
+  announcement              : 'This is the CESM2.1.x tutorial adapted for Union College HPC (UHPC) from the <a href="https://ncar.github.io/CESM-Tutorial/">NCAR CESM Tutorial</a> (<a href="https://github.com/NCAR/CESM-Tutorial">source</a>, MIT License). Start with the page "Over break: what to do, in order".'
 
 
 launch_buttons:

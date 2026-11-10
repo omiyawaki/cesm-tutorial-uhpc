@@ -8,9 +8,11 @@ format: jb-book
 root: README
 
 chapters:
-- file: notebooks/uhpc/quickstart
+- file: notebooks/uhpc/over_break
   sections:
   - file: notebooks/uhpc/ondemand_basics
+  - file: notebooks/uhpc/quickstart
+  - file: notebooks/uhpc/when_things_go_wrong
   - file: notebooks/uhpc/differences
 
 - file: notebooks/intro/intro_overview
