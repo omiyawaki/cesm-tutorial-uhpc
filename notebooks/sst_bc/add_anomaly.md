@@ -33,7 +33,7 @@ Wrote sst_example_enso.nc
 The Gaussian shape is used because a sudden jump in SST at a box edge creates strong, unrealistic temperature gradients. A smooth bump is gentler on the atmosphere. Because the bump is small near the edges, its **average** over the box is much smaller than its peak: +0.27 K over the whole box here, and about +0.67 K over the Niño 3.4 region. The largest change is 1.44 K, not 1.5 K, because no grid point sits exactly on the equator. Keep this in mind when you compare it with observed anomalies, such as the Niño 3.4 index, which are box averages. To make the Niño 3.4 average larger, raise `--amp`.
 
 ```{note}
-The script has one other shape, `--shape flat`, which adds the same `--amp` everywhere in the box (the box average then equals `--amp`). NCAR's CAM challenge exercise 5 uses a flat box like this. The script's code (function `gaussian_box`) is short. To try other shapes, such as a map of observed anomalies, you would change that function. Ask Osamu before doing so.
+The script has one other shape, `--shape flat`, which adds the same `--amp` everywhere in the box (the box average then equals `--amp`). NCAR's CAM challenge exercise 5 uses a flat box like this. The script's code (function `gaussian_box`) is short. To try other shapes, such as a map of observed anomalies, you would change that function. Make a copy of the script under a new name before you change it, so the tutorial steps keep working.
 ```
 
 ## 3. How the file stays consistent

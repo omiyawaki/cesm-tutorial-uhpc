@@ -2,7 +2,7 @@
 
 A case reads its SST file at run time, so you do **not** need to rebuild the model to change it. You change one setting and check it.
 
-You need a case that is already set up and built, for example the `f2000.test` case from the [quickstart](../uhpc/quickstart.md). For a real experiment you make a new case (or a clone, see [create_clone](../basics/cesm_workflow/create_clone.ipynb)) for each SST file, so the control and perturbed runs stay separate.
+In this chapter you reuse the `f2000.test` case from the [quickstart](../uhpc/quickstart.md), which is already set up and built. For your own experiments later, you will make a separate case for each SST file, so the control and perturbed runs stay apart.
 
 ## 1. Look at the current settings
 
@@ -11,7 +11,7 @@ cd $MYROOT/cases/f2000.test
 ./xmlquery SSTICE_DATA_FILENAME,SSTICE_GRID_FILENAME,SSTICE_YEAR_ALIGN,SSTICE_YEAR_START,SSTICE_YEAR_END
 ```
 
-You should see the stock HadOIBl file, the `domain.camocn.1.9x2.5_gx1v6_090403.nc` grid file, and the year settings `1`, `0`, `0`. **TODO:** confirm these are the defaults for a new `F2000climo` case created by a student. They are the values in the existing UHPC cases.
+You should see the stock HadOIBl file (`.../sst_HadOIBl_bc_1.9x2.5_2000climo_c180511.nc`), the `domain.camocn.1.9x2.5_gx1v6_090403.nc` grid file, and the year settings `1`, `0`, `0`. These are the defaults for every new `F2000climo` case.
 
 ## 2. Point the case at your file
 
@@ -33,8 +33,22 @@ grep stream_fldfilename CaseDocs/ice_in
 
 Your file must stay where it is, unchanged, for as long as the case runs. If you change the file, the run uses the changed version from that point on. Make a new file with a new name instead.
 
-## 4. Before submitting
+## 4. Run a 5-day test with your file
 
-- Run a short test first (5 days, as in the quickstart). In `$MYROOT/scratch/f2000.test/run`, look in the ocean log (`ocn.log.*`) for your file name (**TODO:** confirm which log line shows it).
-- Do not submit until Osamu says your account is ready, and ask him before running anything longer than a test.
-- Keep a note of which SST file each case used, for example in the case's `README.case` (open it with `nano`).
+Submit the case again, exactly as in the quickstart:
+
+```bash
+./case.submit -a "--exclude=hpcc03,hpcc04"
+```
+
+The case starts again from day 1, now with your SST file. Check on it with `squeue -u $USER`. About 45 minutes after it starts, the list is empty and `cat CaseStatus` ends with `case.run success` and `st_archive success`. Then look for your file name in the data-ocean log:
+
+```bash
+zgrep "readstrm) open" $MYROOT/archive/f2000.test/logs/ocn.log.*
+```
+
+`zgrep` searches inside compressed (`.gz`) files, like `grep` does for plain files. Each run left one ocean log, so you see one line per run. The last line belongs to the run you just made and should end with `.../sst/sst_example_enso.nc`. The line before it, from the quickstart run, shows the stock HadOIBl file.
+
+Keep a note of which SST file each case used. Open the case's notes file with `nano README.case`, add a line at the bottom such as `SST file: sst_example_enso.nc (idealized El Nino warm patch)`, and save it.
+
+This is the end of the worked example. Go back to [Over break: what to do, in order](../uhpc/over_break.md) for the next step.

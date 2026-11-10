@@ -11,12 +11,10 @@ cd $MYROOT/sst
 ## 1. Download ERA5 monthly SST and sea ice
 
 ```bash
-export http_proxy=http://192.168.1.10:8888
-export https_proxy=http://192.168.1.10:8888
 $PY make_sst_bc.py download --first-year 1995 --last-year 2005 --out era5_sst_ice_monthly.nc
 ```
 
-This asks the Climate Data Store for ERA5 **monthly averaged** `sea_surface_temperature` and `sea_ice_cover` for 1995-2005, already averaged onto a 1-degree grid. The years match those of the stock file. Your request waits in a queue, so you will see `status has been updated to accepted`, then `running`, then a download bar, and finally `Wrote era5_sst_ice_monthly.nc`. A two-year test took about one minute. Eleven years may take longer.
+`$PY make_sst_bc.py download` runs the script's `download` step with the Python you chose. This asks the Climate Data Store for ERA5 **monthly averaged** `sea_surface_temperature` and `sea_ice_cover` for 1995-2005, already averaged onto a 1-degree grid. The years match those of the stock file. Your request waits in a queue, so you will see `status has been updated to accepted`, then `running`, then a download bar, and finally `Wrote era5_sst_ice_monthly.nc` (about 13 MB). It usually takes a few minutes, and longer when the Climate Data Store is busy. Stay inside tmux while you wait.
 
 What you downloaded (variable names as ERA5 delivers them):
 
@@ -32,7 +30,7 @@ What you downloaded (variable names as ERA5 delivers them):
 $PY make_sst_bc.py build --era5 era5_sst_ice_monthly.nc --first-year 1995 --last-year 2005 --out sst_era5_f19_clim.nc
 ```
 
-This takes about half a minute. It prints how many months it used and the fraction of land points, then `Wrote sst_era5_f19_clim.nc`. Here is what it does, step by step. Open `make_sst_bc.py` with `nano` or the OnDemand file editor and find the function `cmd_build` to follow along:
+This takes under a minute. It prints `Using 132 months (11 years) of ERA5`, the fraction of land points (34%), then `Wrote sst_era5_f19_clim.nc`. Here is what it does, step by step. Open `make_sst_bc.py` with `nano` or the OnDemand file editor and find the function `cmd_build` to follow along:
 
 1. **Average by calendar month.** All Januaries are averaged, then all Februaries, and so on, giving 12 maps (a climatology).
 2. **Convert units.** SST goes from kelvin to degrees Celsius (subtract 273.15), because the CAM file uses `deg_C`. Sea ice is already a fraction from 0 to 1, as CAM expects.
@@ -59,13 +57,13 @@ ok   datesec matches template
 ok   SST_cpl units = deg_C
 ok   ice_cov units = fraction
 ok   time units = days since 0000-01-01 00:00:00, calendar = 365_day
-     SST (monthly means) -1.80 to 35.03 deg C; ice 0.00 to 1.00
+     SST (monthly means) -1.80 to 34.40 deg C; ice 0.00 to 1.00
 ok   values are physical (SST >= -1.8 C, ice 0-1)
 ok   model monthly means match SST_cpl_prediddle at 100.0% of points (need 99%; the stock file gives 99.4%)
 ALL CHECKS PASSED
 ```
 
-(These numbers come from a 2000-2001 test. Yours will differ slightly.) If any line says `FAIL`, do not use the file. Copy the whole output and send it to Osamu.
+If any line says `FAIL`, do not use the file. See [When something goes wrong](../uhpc/when_things_go_wrong.md).
 
 ## 4. Look at it
 
@@ -75,8 +73,8 @@ $PY make_sst_bc.py plot sst_era5_f19_clim.nc --month 8 --compare /usr/local/rese
 
 This writes a picture with three maps for August: your SST, your sea ice, and your SST minus the stock file's SST. To view it, open the OnDemand **Files** app, go to your `sst` folder and click the `.png` file.
 
-What to expect: over the open ocean the two products agree to within about half a degree on average. In the 2000-2001 test the root-mean-square difference was 0.45 K over full-ocean grid boxes. Larger differences show up near coasts and sea-ice edges. Over land the maps look blocky and strange, which does not matter, because land is filled and the model never uses it.
+What to expect: over the open ocean the two products agree to within about half a degree on average. The root-mean-square difference in August is about 0.3 K over grid boxes that are entirely ocean. Larger differences show up near coasts and sea-ice edges. Over land the maps look blocky and strange, which does not matter, because land is filled and the model never uses it.
 
 ```{note}
-`make_sst_bc.py` simplifies the official CESM tool (`bcgen`) in two ways. It does not merge several observational products, and it does not apply bcgen's extra limits near the ice edge. For comparison: on the stock file, the script's time-interpolation check reproduces bcgen's monthly means at 99.4% of points, and the remaining 0.6% are the ice-edge points where bcgen applies those limits. **TODO:** ask Osamu whether a stricter SST-ice consistency rule (as in Hurrell et al. 2008) is wanted.
+`make_sst_bc.py` simplifies the official CESM tool (`bcgen`) in two ways. It does not merge several observational products, and it does not apply bcgen's extra limits near the ice edge. For comparison: on the stock file, the script's time-interpolation check reproduces bcgen's monthly means at 99.4% of points, and the remaining 0.6% are the ice-edge points where bcgen applies those limits.
 ```

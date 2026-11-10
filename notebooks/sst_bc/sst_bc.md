@@ -14,7 +14,6 @@ All the steps use one script, `make_sst_bc.py`, which is kept in this tutorial's
 
 ```{admonition} Before you start
 :class: warning
-- Finish the [UHPC quickstart](../uhpc/quickstart.md) first. You need to be comfortable with the OnDemand Shell, `cd`, `ls` and `nano`.
-- Do not submit any runs with your new file until Osamu says your account is ready.
-- Lines marked **TODO** have not yet been checked on UHPC.
+- Finish the [UHPC quickstart](../uhpc/quickstart.md) first. This chapter uses its `f2000.test` case and the `MYROOT` and `CESMROOT` settings in your `~/.bashrc`.
+- The only run in this chapter is one 5-day test. Do not submit anything longer.
 ```
