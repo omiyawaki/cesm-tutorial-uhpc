@@ -1,14 +1,14 @@
 # Table of contents
 # Learn more at https://jupyterbook.org/customize/toc.html
 #
-# The first part follows "Over break: what to do, in order" page by page,
+# The first part follows "Getting started on Union HPC" page by page,
 # so the Next button walks the student path. Everything else comes after.
 
 format: jb-book
-root: notebooks/uhpc/over_break
+root: notebooks/uhpc/start_here
 
 parts:
-- caption: Over break (start here)
+- caption: Start here
   chapters:
   - file: notebooks/uhpc/ondemand_basics
   - file: notebooks/uhpc/quickstart
@@ -36,7 +36,7 @@ parts:
     - file: notebooks/sst_bc/use_in_case
   - file: notebooks/uhpc/when_things_go_wrong
 
-- caption: Next term and reference
+- caption: Further CESM material and reference
   chapters:
   - file: README
   - file: notebooks/intro/intro_overview

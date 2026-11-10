@@ -8,6 +8,7 @@ logo: images/ncar_logo.png
 sphinx:
   config:
     html_show_copyright: false
+    html_extra_path: ["_extra"]
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
@@ -50,7 +51,7 @@ html:
   home_page_in_navbar  : true
   use_multitoc_numbering    : true
   extra_navbar              : ""
-  announcement              : 'This is the CESM2.1.x tutorial adapted for Union College HPC (UHPC) from the <a href="https://ncar.github.io/CESM-Tutorial/">NCAR CESM Tutorial</a> (<a href="https://github.com/NCAR/CESM-Tutorial">source</a>, MIT License). Start with the page "Over break: what to do, in order".'
+  announcement              : 'This is the CESM2.1.x tutorial adapted for Union College HPC (UHPC) from the <a href="https://ncar.github.io/CESM-Tutorial/">NCAR CESM Tutorial</a> (<a href="https://github.com/NCAR/CESM-Tutorial">source</a>, MIT License). Start with the page "Getting started on Union HPC".'
 
 
 launch_buttons:

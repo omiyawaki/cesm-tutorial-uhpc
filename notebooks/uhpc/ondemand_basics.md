@@ -6,7 +6,7 @@ You will use UHPC mostly through **Open OnDemand**, a website that gives you the
 
 You already have a cluster account and have logged in once. From now on you use the website, not the Mac Terminal app.
 
-1. Connect to the Union VPN with the **Cisco Secure Client** app. The cluster's websites only load on the campus network or through the VPN. The one-time VPN setup is in [Over break: what to do, in order](over_break.md).
+1. Connect to the Union VPN with the **Cisco Secure Client** app. The cluster's websites only load on the campus network or through the VPN. The one-time VPN setup is in [Getting started on Union HPC](start_here.md).
 2. In Safari or Chrome, go to <https://ondemand.hpc.union.edu>.
 3. A small sign-in box appears. Type your cluster username (the first part of your Union email address) and your cluster password. The cluster password is not your Union (Okta) password (see step 0 of the [quickstart](quickstart.md)). The OnDemand dashboard opens.
 
@@ -56,7 +56,7 @@ Use Jupyter for looking at model output and making plots, like Google Colab but 
 5. In the first cell, type `import xarray, netCDF4, matplotlib.pyplot as plt` and press **Shift-Enter**. No error message means it worked.
 6. When you finish, save your notebook with **Cmd-S**, then stop the session so it stops using a compute node: go back to the OnDemand tab, click **My Interactive Sessions** in the top menu, and click **Delete** on the Jupyter session.
 
-The `datascience` environment has xarray, netCDF4 and matplotlib, but **not cartopy** (map projections and coastlines). Plain maps with `plt.pcolormesh(lon, lat, field)` work without it, and this tutorial does not need cartopy. Use `datascience` for everything over break.
+The `datascience` environment has xarray, netCDF4 and matplotlib, but **not cartopy** (map projections and coastlines). Plain maps with `plt.pcolormesh(lon, lat, field)` work without it, and this tutorial does not need cartopy. Use `datascience` for everything in the getting-started steps.
 
 Jupyter runs on a compute node. Never start Jupyter or other heavy calculations from the Shell, which runs on the shared login computer.
 
@@ -124,9 +124,9 @@ CESM runs as **batch jobs** on the compute nodes. You submit them with `./case.s
 
 The Shell runs on the shared login computer. Short commands such as `./case.setup`, `./xmlchange` and the SST script are fine there, and so is `./case.build` (see the quickstart). Do not run the model or other heavy calculations there, and do not start Jupyter from it. Use `./case.submit` and the Jupyter app instead.
 
-## Optional, after the break: an environment with cartopy
+## Optional: an environment with cartopy
 
-Skip this section over break. Nothing in this tutorial needs it, and a failed install can fill your home folder. After the break, when you want coastlines on your maps, you can make your own Python environment once. Do this in the OnDemand Shell tab, inside tmux:
+This section is optional. Nothing in the getting-started steps needs it, and a failed install can fill your home folder. When you want coastlines on your maps, you can make your own Python environment once. Do this in the OnDemand Shell tab, inside tmux:
 
 ```bash
 module load python/miniforge

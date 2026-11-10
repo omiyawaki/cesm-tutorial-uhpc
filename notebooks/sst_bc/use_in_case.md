@@ -75,4 +75,4 @@ Keep a note of which SST file each case used. Open the case's notes file with `n
 
 ## Where next
 
-This is the end of the worked example and of step 4 of [Over break: what to do, in order](../uhpc/over_break.md). Step 5 is to write down your questions. The **Next** button takes you to [When something goes wrong](../uhpc/when_things_go_wrong.md), the list of fixes for common problems. Everything after that page in the menu is for next term.
+This is the end of the worked example and of step 4 of [Getting started on Union HPC](../uhpc/start_here.md). Step 5 is to write down your questions. The **Next** button takes you to [When something goes wrong](../uhpc/when_things_go_wrong.md), the list of fixes for common problems. Everything after that page in the menu is further material you can use later.

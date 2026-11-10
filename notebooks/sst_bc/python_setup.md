@@ -27,7 +27,7 @@ ls
 make_sst_bc.py
 ```
 
-If `cp` prints `Permission denied`, your account is not yet in the `res-miyawaki` group: see "Permission denied" in [When something goes wrong](../uhpc/when_things_go_wrong.md). If it prints `No such file or directory`, check the path for typing mistakes (press **Up arrow** to bring the command back). If it still fails, email Professor Miyawaki (see [When something goes wrong](../uhpc/when_things_go_wrong.md)).
+If `cp` prints `Permission denied`, your account is not yet in the `res-miyawaki` group: see "Permission denied" in [When something goes wrong](../uhpc/when_things_go_wrong.md). If it prints `No such file or directory`, check the path for typing mistakes (press **Up arrow** to bring the command back). If it still fails, ask for help by email (see the top of [When something goes wrong](../uhpc/when_things_go_wrong.md)).
 
 ## 3. Choose the Python to use
 
@@ -84,4 +84,4 @@ Save with **Ctrl-O**, **Enter**, and quit with **Ctrl-X**. Then make the file pr
 chmod 600 ~/.cdsapirc
 ```
 
-`chmod 600` means only you can read or change the file. Never share your token, and never paste it into an email or a chat, including an email to Professor Miyawaki. If you copied it into a note on your Mac, delete the note now.
+`chmod 600` means only you can read or change the file. Never share your token, and never paste it into an email or a chat, including an email asking for help. If you copied it into a note on your Mac, delete the note now.
