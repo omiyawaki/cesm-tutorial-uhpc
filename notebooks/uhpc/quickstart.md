@@ -6,7 +6,7 @@ This page takes you from your Union HPC (UHPC) account to a short CESM2 run whos
 
 You already have a UHPC account. Your username is the first part of your Union email address (the part before `@union.edu`).
 
-Your cluster password is **not** your Union (Okta) password. The cluster administrators emailed you a temporary password when they made your account, and you chose a new cluster password the first time you logged in. Use that cluster password for OnDemand. Use your Union password only for the VPN. If you forget the cluster password, email hpcadmin@union.edu from your Union email address and ask them to reset it.
+Your cluster password is **not** your Union (Okta) password. The cluster administrators emailed you a temporary password when they made your account, and you chose a new cluster password the first time you logged in. Use that cluster password for OnDemand. Use your Union password only for the VPN. If you forget the cluster password, email <a href="mailto:hpcadmin@union.edu">hpcadmin@union.edu</a> from your Union email address and ask them to reset it.
 
 You do not need the Mac Terminal app for anything in this tutorial. Every command goes into the OnDemand Shell tab.
 
@@ -49,13 +49,28 @@ ls $MYROOT
 - `mkdir -p` makes the three folders inside it, for cases, run files and finished output.
 - `ls $MYROOT` lists what is in your folder. You should see `archive  cases  scratch`.
 
-The shell forgets these settings when it closes. To have them set every time you log in, add the first three lines to the end of the file `~/.bashrc`, which the shell runs at every login:
+The shell forgets these settings when it closes. To have them set every time you log in, add them to the end of the file `~/.bashrc`, which the shell runs at every login. Open it in `nano`, a text editor inside the Shell tab:
 
 ```bash
 nano ~/.bashrc
 ```
 
-`nano` opens the file in a text editor inside the Shell tab. Press the **down arrow** until the cursor is below the last line, paste the three lines with **Cmd-V**, save with **Ctrl-O** then **Enter**, and quit with **Ctrl-X**. Then run `source ~/.bashrc` once.
+Press the **down arrow** until the cursor is on the empty line below the last line. Then copy this block from this page and paste it with **Cmd-V**:
+
+```bash
+source /usr/local/research/miyawaki/opt/cesm-deps/ENV.sh
+export CESMROOT=/usr/local/research/miyawaki/cesm/cesm2
+export MYROOT=/usr/local/research/miyawaki/users/$USER
+```
+
+Save the file with **Ctrl-O**, then press **Enter** to keep the name `.bashrc`. Quit `nano` with **Ctrl-X**. Back at the prompt, load the file and check it:
+
+```bash
+source ~/.bashrc
+echo $MYROOT
+```
+
+`echo $MYROOT` should print `/usr/local/research/miyawaki/users/` followed by your username. If it prints an empty line, see "`$MYROOT` is empty" in [When something goes wrong](when_things_go_wrong.md).
 
 ## 4. Create a small case
 
@@ -92,15 +107,15 @@ Each `./xmlchange` line changes one or more case settings and prints nothing if 
 - `STOP_OPTION=ndays,STOP_N=5`: run 5 model days.
 - `JOB_QUEUE=hpcc,JOB_WALLCLOCK_TIME=02:00:00`: use the cluster's CPU partition and allow the job up to 2 hours.
 - `DOUT_S_ROOT`: where finished output is copied. You must set this, because the default points to a folder that is not yours.
-- `HIST_OPTION=never,REST_OPTION=ndays,REST_N=5`: no extra coupler output during the test, and one set of restart files at the end. This test only checks that CESM builds, starts, reads its input files and finishes. You look at atmosphere output after the break, in the [CAM output](../namelist/output/output_cam.ipynb) section of the namelist chapter, where you turn on daily and monthly output.
+- `HIST_OPTION=never,REST_OPTION=ndays,REST_N=5`: no extra coupler output during the test, and one set of restart files at the end. This test only proves that CESM builds, starts, reads its input files and finishes. It writes no maps or monthly output on purpose. You look at atmosphere output after the break, in the [CAM output](../namelist/output/output_cam.ipynb) section of the namelist chapter, where you turn on daily and monthly output.
 
-Next, add four sea-ice settings that every UHPC case uses:
+Next, add four sea-ice settings that every UHPC case uses. They make the sea-ice model work with the input files on UHPC. You do not need to understand them yet. Open the sea-ice settings file:
 
 ```bash
 nano user_nl_cice
 ```
 
-Go to the bottom of the file and add these four lines:
+The file may be empty, or it may have a few lines starting with `!`, which are comments. Go to the bottom of the file and type or paste these four lines exactly, including the `=` signs, the dots around `.false.` and the double quotes around `"default"`:
 
 ```
 ktherm = 1
@@ -176,8 +191,8 @@ Your folder has a soft limit of 300 GB. The run folder of a test case is about 1
 du -sh $MYROOT/*
 ```
 
-`du -sh` prints how much space each folder uses. The runs in this tutorial use well under the limit, so you do not need to delete anything. Never delete anything in `archive`.
+`du -sh` prints how much space each folder uses. The runs in this tutorial use well under the limit. Do not delete anything in your folder this term, and never delete anything in `archive`.
 
 ## Where next
 
-Go back to [Over break: what to do, in order](over_break.md) for the next step.
+This was step 2 of [Over break: what to do, in order](over_break.md). Press **Next** to go to step 3, which starts with [Differences from the NCAR tutorial](differences.md).

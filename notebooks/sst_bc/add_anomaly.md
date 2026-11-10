@@ -8,6 +8,8 @@ The example's anomaly peaks at +1.5 K on the equator at 145°W and fades smoothl
 
 ## 1. Make the file
 
+Type this exact command. It is the anomaly for this tutorial, and the next pages expect the file it makes, `sst_example_enso.nc`.
+
 ```bash
 cd $MYROOT/sst
 $PY make_sst_bc.py anomaly --input sst_era5_f19_clim.nc --out sst_example_enso.nc \
@@ -33,7 +35,7 @@ Wrote sst_example_enso.nc
 The Gaussian shape is used because a sudden jump in SST at a box edge creates strong, unrealistic temperature gradients. A smooth bump is gentler on the atmosphere. Because the bump is small near the edges, its **average** over the box is much smaller than its peak: +0.27 K over the whole box here, and about +0.67 K over the Niño 3.4 region. The largest change is 1.44 K, not 1.5 K, because no grid point sits exactly on the equator. Keep this in mind when you compare it with observed anomalies, such as the Niño 3.4 index, which are box averages. To make the Niño 3.4 average larger, raise `--amp`.
 
 ```{note}
-The script has one other shape, `--shape flat`, which adds the same `--amp` everywhere in the box (the box average then equals `--amp`). NCAR's CAM challenge exercise 5 uses a flat box like this. The script's code (function `gaussian_box`) is short. To try other shapes, such as a map of observed anomalies, you would change that function. Make a copy of the script under a new name before you change it, so the tutorial steps keep working.
+**After the break.** Over break, use only the command in step 1. The script has one other shape, `--shape flat`, which adds the same `--amp` everywhere in the box (the box average then equals `--amp`). NCAR's CAM challenge exercise 5 uses a flat box like this. The script's code (function `gaussian_box`) is short. To try other shapes, such as a map of observed anomalies, you would change that function. Make a copy of the script under a new name before you change it, so the tutorial steps keep working.
 ```
 
 ## 3. How the file stays consistent
@@ -58,5 +60,6 @@ The check should end with `ALL CHECKS PASSED`. Open `example_anomaly_dec.png` in
 
 ```{figure} ../../images/sst_bc/example_anomaly_dec.png
 :width: 600px
+:alt: Three world maps for December. Top, SST from about -2 °C near the poles to about 30 °C in the tropics. Middle, sea-ice fraction, near 1 around Antarctica and in the Arctic. Bottom, SST difference from the control file, white everywhere except one red oval on the equator centred near 215 degrees east, peaking at about 1.4 K.
 Example output of the `plot` command above: December SST and sea ice in `sst_example_enso.nc`, and its difference from the control file `sst_era5_f19_clim.nc`. Your picture should look the same.
 ```

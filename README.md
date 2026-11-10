@@ -1,5 +1,5 @@
 
-# Welcome to the CESM Tutorial (Union HPC edition)
+# About this tutorial (Union HPC edition)
 
 > **Union HPC edition.** The published book is at <https://omiyawaki.github.io/cesm-tutorial-uhpc/>. **Start with [Over break: what to do, in order](https://omiyawaki.github.io/cesm-tutorial-uhpc/notebooks/uhpc/over_break.html).** It lists every step in order and links to the page for each one. This is NCAR's [CESM Tutorial](https://ncar.github.io/CESM-Tutorial/) (MIT License), adapted to run **CESM2.1.5 on Union College's HPC cluster (UHPC)**. The conceptual pages are NCAR's text, written for NCAR's own computers. [Differences from the NCAR tutorial](https://omiyawaki.github.io/cesm-tutorial-uhpc/notebooks/uhpc/differences.html) explains how their commands translate to UHPC.
 

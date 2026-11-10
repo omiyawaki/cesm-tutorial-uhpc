@@ -23,26 +23,6 @@ The Shell app opens a command line on the cluster's login computer in a new brow
 
 In the Files app, click **Change directory** near the top, type a path such as `/usr/local/research/miyawaki/users/<your-username>`, and click **OK** to jump to it.
 
-(uhpc-jupyter)=
-## Jupyter
-
-Use Jupyter for looking at model output and making plots, like Google Colab but on the cluster.
-
-1. Go to **Interactive Apps** → **Servers** → **Jupyter Notebook**.
-2. Fill in the form:
-   - **Hours**: how long the session lasts, 1 to 4 (default 4). It stops at the end, so save your notebook before then.
-   - **CPU cores**: 1 to 8. Use 2 for plotting.
-   - **Conda environment**: leave it as `datascience`.
-   - **Partition**: leave it as `hpcc`.
-   - **GPUs**: 0.
-3. Click **Launch**. The session waits in the queue, then shows **Running**. Click **Connect to Jupyter**.
-4. JupyterLab opens in a new tab with the **Launcher**. Click **Python 3 (ipykernel)** under **Notebook** to make a new notebook in your home folder. The file browser on the left only shows your home folder, so to open model output, type its full path in your code, for example `xarray.open_dataset('/usr/local/research/miyawaki/users/<your-username>/...')`.
-5. In the first cell, type `import xarray, netCDF4, matplotlib.pyplot as plt` and press **Shift-Enter**. No error message means it worked.
-
-The `datascience` environment has xarray, netCDF4 and matplotlib, but **not cartopy** (map projections and coastlines). Plain maps with `plt.pcolormesh(lon, lat, field)` work without it, and this tutorial does not need cartopy. Use `datascience` for everything over break.
-
-Jupyter runs on a compute node. Never start Jupyter or other heavy calculations from the Shell, which runs on the shared login computer.
-
 ## Always work inside tmux
 
 The Shell tab closes after about 5 minutes without typing, and after about 1 hour in any case. Anything running in it would stop. `tmux` keeps your command line running on the cluster even when the tab closes, so you can reconnect to it.
@@ -58,6 +38,27 @@ tmux attach -t cesm || tmux new -s cesm
 A new session does not remember the folder you were in, so `cd` back to it, for example `cd $MYROOT/cases/f2000.test`.
 
 To leave tmux on purpose and keep it running, press **Ctrl-B**, let go, then press **D**. To end the session completely, type `exit` inside it.
+
+(uhpc-jupyter)=
+## Jupyter
+
+Use Jupyter for looking at model output and making plots, like Google Colab but on the cluster.
+
+1. Go to **Interactive Apps** → **Servers** → **Jupyter Notebook**.
+2. Fill in the form:
+   - **Hours**: how long the session lasts, 1 to 4 (default 4). It stops at the end, so save your notebook before then.
+   - **CPU cores**: 1 to 8. Use 2 for plotting.
+   - **Conda environment**: leave it as `datascience`.
+   - **Partition**: leave it as `hpcc`.
+   - **GPUs**: 0.
+3. Click **Launch**. The session waits in the queue, then shows **Running**. Click **Connect to Jupyter**.
+4. JupyterLab opens in a new tab with the **Launcher**. Click **Python 3 (ipykernel)** under **Notebook** to make a new notebook in your home folder. The file browser on the left only shows your home folder, so to open model output, type its full path in your code, for example `xarray.open_dataset('/usr/local/research/miyawaki/users/<your-username>/...')`.
+5. In the first cell, type `import xarray, netCDF4, matplotlib.pyplot as plt` and press **Shift-Enter**. No error message means it worked.
+6. When you finish, save your notebook with **Cmd-S**, then stop the session so it stops using a compute node: go back to the OnDemand tab, click **My Interactive Sessions** in the top menu, and click **Delete** on the Jupyter session.
+
+The `datascience` environment has xarray, netCDF4 and matplotlib, but **not cartopy** (map projections and coastlines). Plain maps with `plt.pcolormesh(lon, lat, field)` work without it, and this tutorial does not need cartopy. Use `datascience` for everything over break.
+
+Jupyter runs on a compute node. Never start Jupyter or other heavy calculations from the Shell, which runs on the shared login computer.
 
 ## Shell basics
 

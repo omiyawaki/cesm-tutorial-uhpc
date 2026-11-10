@@ -1,5 +1,13 @@
 # How CESM reads SST and sea ice
 
+```{admonition} What you need from this page
+:class: tip
+This page has no commands to type. Read it to learn three things:
+- One file gives the model both its sea surface temperature (`SST_cpl`, in °C) and its sea-ice fraction (`ice_cov`, 0 to 1), for 12 months.
+- The case setting `SSTICE_DATA_FILENAME` holds the full path of that file. It is the only setting you change in this chapter.
+- `make_sst_bc.py` writes files in the same layout as the stock file, so you do not need to edit any file by hand.
+```
+
 ## The data ocean and prescribed ice
 
 In an `F` compset the ocean component is **DOCN**, the "data ocean". In SST mode (`DOCN_MODE=prescribed`, namelist `datamode = "SSTDATA"`) it reads SST from a file and hands it to the atmosphere. The sea-ice component (CICE in prescribed mode) reads the ice concentration from **the same file**. You change one file, and both SST and ice change.

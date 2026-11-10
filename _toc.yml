@@ -1,121 +1,115 @@
 # Table of contents
 # Learn more at https://jupyterbook.org/customize/toc.html
 #
-# Union HPC edition: pages not needed for prescribed-SST (F compset) CAM
-# experiments on UHPC were moved to archive/ (see archive/README.md).
+# The first part follows "Over break: what to do, in order" page by page,
+# so the Next button walks the student path. Everything else comes after.
 
 format: jb-book
-root: README
+root: notebooks/uhpc/over_break
 
-chapters:
-- file: notebooks/uhpc/over_break
-  sections:
+parts:
+- caption: Over break (start here)
+  chapters:
   - file: notebooks/uhpc/ondemand_basics
   - file: notebooks/uhpc/quickstart
-  - file: notebooks/uhpc/when_things_go_wrong
   - file: notebooks/uhpc/differences
-
-- file: notebooks/intro/intro_overview
-  sections:
-  - file: notebooks/intro/components
-  - file: notebooks/intro/coupling
-  - file: notebooks/intro/project
-  - file: notebooks/intro/getting_help
-
-- file: notebooks/prereqs/prereqs_overview
-  sections:
-  - file: notebooks/prereqs/exercises
-
-- file: notebooks/basics/basics_overview
-  sections:
-  - file: notebooks/basics/cesm_workspaces
-  - file: notebooks/basics/code_overview
+  - file: notebooks/basics/basics_overview
     sections:
-    - file: notebooks/basics/code/cesm_code_explore
-  - file: notebooks/basics/cesm_workflow
+    - file: notebooks/basics/cesm_workspaces
+    - file: notebooks/basics/code_overview
+      sections:
+      - file: notebooks/basics/code/cesm_code_explore
+    - file: notebooks/basics/cesm_workflow
+      sections:
+      - file: notebooks/basics/cesm_workflow/create_newcase
+      - file: notebooks/basics/cesm_workflow/case_setup
+      - file: notebooks/basics/cesm_workflow/case_build
+      - file: notebooks/basics/cesm_workflow/case_submit
+      - file: notebooks/basics/cesm_workflow/model_output
+      - file: notebooks/basics/cesm_workflow/checking_jobs_and_status
+  - file: notebooks/sst_bc/sst_bc
     sections:
-    - file: notebooks/basics/cesm_workflow/create_newcase
-    - file: notebooks/basics/cesm_workflow/case_setup
-    - file: notebooks/basics/cesm_workflow/case_build
-    - file: notebooks/basics/cesm_workflow/case_submit
-    - file: notebooks/basics/cesm_workflow/model_output
-    - file: notebooks/basics/cesm_workflow/checking_jobs_and_status
-    - file: notebooks/basics/cesm_workflow/create_clone
+    - file: notebooks/sst_bc/how_cesm_reads_sst
+    - file: notebooks/sst_bc/python_setup
+    - file: notebooks/sst_bc/era5_to_cesm
+    - file: notebooks/sst_bc/add_anomaly
+    - file: notebooks/sst_bc/use_in_case
+  - file: notebooks/uhpc/when_things_go_wrong
+
+- caption: Next term and reference
+  chapters:
+  - file: README
+  - file: notebooks/intro/intro_overview
+    sections:
+    - file: notebooks/intro/components
+    - file: notebooks/intro/coupling
+    - file: notebooks/intro/project
+    - file: notebooks/intro/getting_help
+  - file: notebooks/prereqs/prereqs_overview
+    sections:
+    - file: notebooks/prereqs/exercises
+  - file: notebooks/basics/cesm_workflow/create_clone
   - file: notebooks/basics/exercises_overview
     sections:
     - file: notebooks/basics/exercises/extra
     - file: notebooks/basics/exercises/review_questions
-
-- file: notebooks/modifications/xml
-  sections:
-  - file: notebooks/modifications/xml/overview
-  - file: notebooks/modifications/xml/model_control_files
-  - file: notebooks/modifications/xml/run_length
+  - file: notebooks/modifications/xml
     sections:
-    - file: notebooks/modifications/xml/run_length/starting_and_stopping
-    - file: notebooks/modifications/xml/run_length/restarting
-    - file: notebooks/modifications/xml/run_length/changing_run_length
-    - file: notebooks/modifications/xml/run_length/number_of_submissions
-    - file: notebooks/modifications/xml/run_length/timing_files
-  - file: notebooks/modifications/xml/physics_timestep
-  - file: notebooks/modifications/xml/other_xml_variables
-  - file: notebooks/modifications/xml/exercises
+    - file: notebooks/modifications/xml/overview
+    - file: notebooks/modifications/xml/model_control_files
+    - file: notebooks/modifications/xml/run_length
+      sections:
+      - file: notebooks/modifications/xml/run_length/starting_and_stopping
+      - file: notebooks/modifications/xml/run_length/restarting
+      - file: notebooks/modifications/xml/run_length/changing_run_length
+      - file: notebooks/modifications/xml/run_length/number_of_submissions
+      - file: notebooks/modifications/xml/run_length/timing_files
+    - file: notebooks/modifications/xml/physics_timestep
+    - file: notebooks/modifications/xml/other_xml_variables
+    - file: notebooks/modifications/xml/exercises
+      sections:
+      - file: notebooks/modifications/xml/exercises/xml_length_exercise
+  - file: notebooks/namelist/namelist
     sections:
-    - file: notebooks/modifications/xml/exercises/xml_length_exercise
-
-- file: notebooks/namelist/namelist
-  sections:
-  - file: notebooks/namelist/overview
-  - file: notebooks/namelist/documentation
-  - file: notebooks/namelist/output
+    - file: notebooks/namelist/overview
+    - file: notebooks/namelist/documentation
+    - file: notebooks/namelist/output
+      sections:
+      - file: notebooks/namelist/output/output_cam
+      - file: notebooks/namelist/output/output_clm
+    - file: notebooks/namelist/exercises_overview
+      sections:
+      - file: notebooks/namelist/exercises/exercise_cam_output
+  - file: notebooks/troubleshooting/troubleshooting
     sections:
-    - file: notebooks/namelist/output/output_cam
-    - file: notebooks/namelist/output/output_clm
-  - file: notebooks/namelist/exercises_overview
+    - file: notebooks/troubleshooting/log_files
+    - file: notebooks/troubleshooting/debugging_flag
+    - file: notebooks/troubleshooting/exercises_overview
+      sections:
+      - file: notebooks/troubleshooting/exercises/troubleshooting_cam
+  - file: notebooks/diagnostics/diagnostics
     sections:
-    - file: notebooks/namelist/exercises/exercise_cam_output
-
-- file: notebooks/sst_bc/sst_bc
-  sections:
-  - file: notebooks/sst_bc/how_cesm_reads_sst
-  - file: notebooks/sst_bc/python_setup
-  - file: notebooks/sst_bc/era5_to_cesm
-  - file: notebooks/sst_bc/add_anomaly
-  - file: notebooks/sst_bc/use_in_case
-
-- file: notebooks/troubleshooting/troubleshooting
-  sections:
-  - file: notebooks/troubleshooting/log_files
-  - file: notebooks/troubleshooting/debugging_flag
-  - file: notebooks/troubleshooting/exercises_overview
+    - file: notebooks/diagnostics/cam/cam
+      sections:
+      - file: notebooks/diagnostics/cam/basics_cam
+      - file: notebooks/diagnostics/cam/advanced_cam
+    - file: notebooks/diagnostics/clm_ctsm/clm_ctsm
+      sections:
+      - file: notebooks/diagnostics/clm_ctsm/basics_clm
+    - file: notebooks/diagnostics/additional/additional
+      sections:
+      - file: notebooks/diagnostics/additional/postprocessing
+      - file: notebooks/diagnostics/additional/analysis_tools
+  - file: notebooks/challenge/challenge
     sections:
-    - file: notebooks/troubleshooting/exercises/troubleshooting_cam
-
-- file: notebooks/diagnostics/diagnostics
-  sections:
-  - file: notebooks/diagnostics/cam/cam
+    - file: notebooks/challenge/cam/cam
+      sections:
+      - file: notebooks/challenge/cam/exercise_1
+      - file: notebooks/challenge/cam/exercise_4
+      - file: notebooks/challenge/cam/exercise_5
+  - file: notebooks/resources/resources_overview
     sections:
-    - file: notebooks/diagnostics/cam/basics_cam
-    - file: notebooks/diagnostics/cam/advanced_cam
-  - file: notebooks/diagnostics/clm_ctsm/clm_ctsm
-    sections:
-    - file: notebooks/diagnostics/clm_ctsm/basics_clm
-  - file: notebooks/diagnostics/additional/additional
-    sections:
-    - file: notebooks/diagnostics/additional/postprocessing
-    - file: notebooks/diagnostics/additional/analysis_tools
-
-- file: notebooks/challenge/challenge
-  sections:
-  - file: notebooks/challenge/cam/cam
-    sections:
-    - file: notebooks/challenge/cam/exercise_1
-    - file: notebooks/challenge/cam/exercise_4
-    - file: notebooks/challenge/cam/exercise_5
-
-- file: notebooks/resources/resources_overview
-  sections:
-  - file: notebooks/resources/terminals
-  - file: notebooks/resources/unix
-  - file: notebooks/resources/text_editors
-  - file: notebooks/resources/netcdf
+    - file: notebooks/resources/terminals
+    - file: notebooks/resources/unix
+    - file: notebooks/resources/text_editors
+    - file: notebooks/resources/netcdf
