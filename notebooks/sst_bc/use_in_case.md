@@ -12,7 +12,7 @@ squeue -u $USER
 grep -E "case.run success|st_archive success" CaseStatus
 ```
 
-`squeue -u $USER` should print only its header line, which means no job of yours is waiting or running. `grep -E` prints the lines of `CaseStatus` that contain either phrase. You should see one line with `case.run success` and one with `st_archive success`. If either is missing, go back to step 7 of the quickstart.
+`squeue -u $USER` should show no job row under the header, which means no job of yours is waiting or running. `grep -E` prints the lines of `CaseStatus` that contain either phrase. You should see one line with `case.run success` and one with `st_archive success`. If either is missing, go back to step 7 of the quickstart.
 
 ## 1. Look at the current settings
 
@@ -44,7 +44,7 @@ Your file must stay where it is, unchanged, for as long as the case runs. If you
 
 ## 4. Run a 5-day test with your file
 
-First make sure the case starts again from day 1, rather than continuing from the end of the first run:
+First make sure the case starts again from day 1:
 
 ```bash
 ./xmlchange CONTINUE_RUN=FALSE
@@ -63,12 +63,12 @@ Then submit the case again, exactly as in the quickstart:
 ./case.submit -a "--exclude=hpcc03,hpcc04"
 ```
 
-The case starts again from day 1, now with your SST file. Check on it with `squeue -u $USER`. About 45 minutes after it starts, the list is empty and `cat CaseStatus` ends with `case.run success` and `st_archive success`. Then look for your file name in the data-ocean log:
+The case starts again from day 1, now with your SST file. Check on it with `squeue -u $USER`. About 45 minutes after it starts, there is no job row under the header and `cat CaseStatus` ends with `case.run success` and `st_archive success`. Then look for your file name in the data-ocean log:
 
 ```bash
 zgrep "readstrm) open" $MYROOT/archive/f2000.test/logs/ocn.log.*
 ```
 
-`zgrep` searches inside compressed (`.gz`) files, like `grep` does for plain files. Each run left one ocean log, so you see one line per run. The last line belongs to the run you just made and should end with `.../sst/sst_example_enso.nc`. The line before it, from the quickstart run, shows the stock HadOIBl file.
+`zgrep` searches inside compressed (`.gz`) files, like `grep` does for plain files. Each run left one ocean log, so you see one line per run. The last line belongs to the run you just made and should end with `.../sst/sst_example_enso.nc`. The line before it, from the quickstart run, shows the stock HadOIBl file. If `zgrep` prints nothing, email me the output of `ls $MYROOT/archive/f2000.test/logs`.
 
 Keep a note of which SST file each case used. Open the case's notes file with `nano README.case`, add a line at the bottom such as `SST file: sst_example_enso.nc (idealized El Nino warm patch)`, and save it.

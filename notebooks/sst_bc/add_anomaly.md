@@ -1,6 +1,6 @@
 # Add an SST anomaly
 
-Now you change the ocean. You start from your control file `sst_era5_f19_clim.nc` and add an SST anomaly inside a latitude-longitude box. You get a new file, and the control file stays as it was. The difference between a run with the new file and a run with the control file shows the atmosphere's response to that anomaly.
+You start from your control file `sst_era5_f19_clim.nc` and add an SST anomaly inside a latitude-longitude box. You get a new file, and the control file stays as it was. The difference between a run with the new file and a run with the control file shows the atmosphere's response to that anomaly.
 
 The worked example is an **idealized El Niño-type warm patch** in the central and eastern equatorial Pacific. During El Niño, this part of the ocean is warmer than usual. Forecasters track it with the average SST anomaly in the **Niño 3.4 region** (5°S-5°N, 170°W-120°W), which is about +1 to +2 K in a moderate to strong event.
 
@@ -16,7 +16,7 @@ $PY make_sst_bc.py anomaly --input sst_era5_f19_clim.nc --out sst_example_enso.n
     --shape gaussian --amp 1.5 --lat-min -10 --lat-max 10 --lon-min 170 --lon-max 260
 ```
 
-The `\` at the end of the first line means "this command continues on the next line". You can also type the whole command on one line without it. You should see something like:
+The `\` at the end of the first line means "this command continues on the next line". You should see something like:
 
 ```
 Box points changed: 370; largest change 1.44 K; area-mean change in box (August) +0.27 K
@@ -32,7 +32,7 @@ Wrote sst_example_enso.nc
 | `--lon-min`, `--lon-max` | western and eastern edges, in **degrees east from 0 to 360**. To convert a west longitude, subtract it from 360: 100°W = 260°E. So 170 to 260 means 170°E across the date line to 100°W |
 | `--shape gaussian` | a smooth bump. It peaks at the box centre and falls to almost zero (about 1% of the peak) at the box edges, so there is no sharp step at the edge |
 
-The Gaussian shape is used because a sudden jump in SST at a box edge creates strong, unrealistic temperature gradients. A smooth bump is gentler on the atmosphere. Because the bump is small near the edges, its **average** over the box is much smaller than its peak: +0.27 K over the whole box here, and about +0.67 K over the Niño 3.4 region. The largest change is 1.44 K, not 1.5 K, because no grid point sits exactly on the equator. Keep this in mind when you compare it with observed anomalies, such as the Niño 3.4 index, which are box averages. To make the Niño 3.4 average larger, raise `--amp`.
+The Gaussian shape is used because a sudden jump in SST at a box edge creates strong, unrealistic temperature gradients. A smooth bump avoids those gradients. Because the bump is small near the edges, its **average** over the box is much smaller than its peak: +0.27 K over the whole box here, and about +0.67 K over the Niño 3.4 region. The largest change is 1.44 K, not 1.5 K, because no grid point sits exactly on the equator. Keep this in mind when you compare it with observed anomalies, such as the Niño 3.4 index, which are box averages. To make the Niño 3.4 average larger, raise `--amp`.
 
 ```{note}
 **Optional, for later experiments.** For this chapter, use only the command in step 1. The script has one other shape, `--shape flat`, which adds the same `--amp` everywhere in the box (the box average then equals `--amp`). NCAR's CAM challenge exercise 5 uses a flat box like this. The script's code (function `gaussian_box`) is short. To try other shapes, such as a map of observed anomalies, you would change that function. Make a copy of the script under a new name before you change it, so the tutorial steps keep working.
@@ -56,7 +56,7 @@ $PY make_sst_bc.py check sst_example_enso.nc
 $PY make_sst_bc.py plot sst_example_enso.nc --month 12 --compare sst_era5_f19_clim.nc --out example_anomaly_dec.png
 ```
 
-The check should end with `ALL CHECKS PASSED`. Open `example_anomaly_dec.png` in the OnDemand **Files** app. December is shown because El Niño events usually peak around then, but this anomaly is the same in every month. The bottom map (difference from the control file) should show one red patch stretched east-west along the equator, centred near 215°E (145°W), and white everywhere else. If the patch is in the wrong place, check the signs of your latitudes and that your longitudes are in degrees east.
+The check should end with `ALL CHECKS PASSED`. To view the picture, open the OnDemand **Files** app, click **Change directory**, type `/usr/local/research/miyawaki/users/<your-username>/sst`, click **OK**, and click `example_anomaly_dec.png`. December is shown because El Niño events usually peak around then, but this anomaly is the same in every month. The bottom map (difference from the control file) should show one red patch stretched east-west along the equator, centred near 215°E (145°W), and white everywhere else. If the patch is in the wrong place, check the signs of your latitudes and that your longitudes are in degrees east.
 
 ```{figure} ../../images/sst_bc/example_anomaly_dec.png
 :width: 600px

@@ -23,7 +23,7 @@ CESM's own commands (`./case.submit`, `./case.build`) are the same. CESM transla
 - **GPU nodes:** CPU jobs must use `--exclude=hpcc03,hpcc04`, for example `./case.submit -a "--exclude=hpcc03,hpcc04"`. CESM does not add this for you, so always pass it.
 - **Limits:** maximum job length 3 days (Cheyenne's regular queue was 12 hours), about 2 GB of memory per CPU by default, QOS `normal`.
 - **Accounts:** There is no CESM `PROJECT` setting on UHPC, so ignore `--project`, `PROJECT=` and the tutorial project numbers (`UESM0011`, `UESM0012`, `P93300642`). Your jobs use your default Slurm account, `general`, which works for CESM on `hpcc`, so you do not set an account anywhere.
-- **Queue names:** wherever the NCAR text says `JOB_QUEUE=regular`, use `JOB_QUEUE=hpcc`. The daily tutorial reservations do not exist on UHPC.
+- **Queue names:** wherever the NCAR text has `JOB_QUEUE=regular`, use `JOB_QUEUE=hpcc`. The daily tutorial reservations do not exist on UHPC.
 
 ## File system paths
 
@@ -41,9 +41,9 @@ The UHPC machine configuration points output at folders you cannot write to, so 
 
 The commands in this tutorial use the UHPC paths above. Where a page uses `$DIN_LOC_ROOT`, replace it with the input data path, or set it once with `export DIN_LOC_ROOT=<path>`.
 
-Your folder (`/usr/local/research/miyawaki/users/$USER`) has a soft limit of 300 GB. A 3-month (92-day) `F2000climo` archive is about 4 GB, and the run folder in `scratch` adds about 1.5 GB, so 300 GB fits dozens of runs. Check your usage now and then with `du -sh $MYROOT/*`. Do not delete anything in your folder unless you are told to, and never delete anything in an `archive` folder. Your home folder (`~`) has a 20 GB limit, and each compute node's `/scratch` is local to that node and wiped after 30 days, so do not use either for CESM output.
+Your folder (`/usr/local/research/miyawaki/users/$USER`) has a soft limit of 300 GB. A 3-month (92-day) `F2000climo` archive is about 4 GB, and the run folder in `scratch` adds about 1.5 GB. Check your usage now and then with `du -sh $MYROOT/*`. Do not delete anything in your folder unless you are told to, and never delete anything in an `archive` folder. Your home folder (`~`) has a 20 GB limit, and each compute node's `/scratch` is local to that node and wiped after 30 days, so do not use either for CESM output.
 
-Some pages use data that exists only on NCAR's GLADE file system, such as tutorial archives under `/glade/p/cesm/tutorial`, the CESM2 Large Ensemble under `/glade/campaign`, chemistry emissions under `/glade/p/acom`, and forcing files in staff home directories. Those pages carry a **Skip on UHPC** note at the top. Read them for the ideas, but skip their commands.
+Some pages use data that exists only on NCAR's GLADE file system, such as tutorial archives under `/glade/p/cesm/tutorial`, the CESM2 Large Ensemble under `/glade/campaign`, chemistry emissions under `/glade/p/acom`, and forcing files in staff home directories. Those pages have a **Skip on UHPC** note at the top. Read them for the ideas, but skip their commands.
 
 The example outputs on the `create_newcase`, `case.setup` and `case.build` pages are from UHPC. Most other example outputs, such as the `case.submit` messages, are from Cheyenne. On UHPC you will see Slurm job IDs and `sbatch` instead of PBS, but the CESM messages are the same.
 
@@ -61,15 +61,15 @@ NCAR runs its analysis notebooks on the Casper cluster through NCAR's JupyterHub
 
 - Outside network access from UHPC goes through a web proxy. The cluster sets `http_proxy` and `https_proxy` for you at login, so downloads with `wget`, `pip` and the ERA5 script work without any setup.
 - CESM input data downloads work over **HTTPS with wget**. FTP and svn do not work.
-- Downloads from one NCAR data server (`osdf-data.gdex.ucar.edu`) can fail with an SSL certificate error. If a download from it fails, ask for help by email with the exact message instead of working around it.
-- The shared input data already has every file the cases in this tutorial need. Do not run `./check_input_data --download` yourself. If a case you design later needs a file that is missing, email the research group's contact the exact message (see [Getting started on Union HPC](start_here.md)), and the file will be added to the shared input data.
+- Downloads from one NCAR data server (`osdf-data.gdex.ucar.edu`) can fail with an SSL certificate error. If a download from it fails, email me the exact message instead of working around it.
+- The shared input data already has every file the cases in this tutorial need. Do not run `./check_input_data --download` yourself. If a case you design later needs a file that is missing, email me the exact message (see [Getting started on Union HPC](start_here.md)), and I will add the file to the shared input data.
 
 ## Downloading the code
 
-The NCAR tutorial has each user clone CESM with git. On UHPC everyone uses the shared, already-configured CESM2.1.5 tree, so you do **not** need to download CESM. You can still follow the download page in your own folder to learn how it works (GitHub access works through the proxy). A personal copy will not have the UHPC machine settings unless you copy them in. You do not need to do this.
+The NCAR tutorial has each user clone CESM with git. On UHPC everyone uses the shared, already-configured CESM2.1.5 tree, so you do **not** download CESM. If you clone a personal copy, it will not have the UHPC machine settings unless you copy them in.
 
 ## Compute cost and sharing
 
 - UHPC is shared with other users. An `F2000climo` run at `f19_f19_mg17` with 8 tasks on one node takes about 45 minutes for 5 model days.
 - NCAR's tutorial uses the fully coupled `B1850` compset, which is much more expensive. This tutorial uses `F2000climo` throughout.
-- Start with short tests (5 days), and check `squeue` before submitting so you do not crowd out other users.
+- Start with short tests (5 days), and check `squeue` before submitting so other users can still run.

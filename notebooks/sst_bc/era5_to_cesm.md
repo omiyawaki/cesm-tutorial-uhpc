@@ -1,6 +1,6 @@
 # ERA5 to a CESM SST file
 
-In this step you make your own version of the stock SST/ice file, built from ERA5 instead of the Hadley/OI data. Doing this first teaches you each step of the conversion. It also gives you a control file built the same way as any perturbed file you make later.
+In this step you make your own version of the stock SST/ice file, built from ERA5 instead of the Hadley/OI data. The file you make here is the control. Later you add an anomaly to a copy of it.
 
 All commands run in the OnDemand Shell, inside `tmux`, in your SST folder:
 
@@ -14,7 +14,7 @@ cd $MYROOT/sst
 $PY make_sst_bc.py download --first-year 1995 --last-year 2005 --out era5_sst_ice_monthly.nc
 ```
 
-`$PY make_sst_bc.py download` runs the script's `download` step with the Python you chose. This asks the Climate Data Store for ERA5 **monthly averaged** `sea_surface_temperature` and `sea_ice_cover` for 1995-2005, already averaged onto a 1-degree grid. The years match those of the stock file. Your request waits in a queue, so you will see `status has been updated to accepted`, then `running`, then a download bar, and finally `Wrote era5_sst_ice_monthly.nc` (about 13 MB). It usually takes a few minutes, and longer when the Climate Data Store is busy. Stay inside tmux while you wait.
+`$PY make_sst_bc.py download` runs the script's `download` step with the Python you chose. This asks the Climate Data Store for ERA5 **monthly averaged** `sea_surface_temperature` and `sea_ice_cover` for 1995-2005, already averaged onto a 1-degree grid. The years match those of the stock file. Your request waits in a queue, so you will see `status has been updated to accepted`, then `running`, then a download bar, and finally `Wrote era5_sst_ice_monthly.nc` (about 13 MB). Stay inside tmux while you wait.
 
 What you downloaded (variable names as ERA5 delivers them):
 
@@ -30,15 +30,17 @@ What you downloaded (variable names as ERA5 delivers them):
 $PY make_sst_bc.py build --era5 era5_sst_ice_monthly.nc --first-year 1995 --last-year 2005 --out sst_era5_f19_clim.nc
 ```
 
-This takes under a minute. It prints `Using 132 months (11 years) of ERA5`, the fraction of land points (34%), then `Wrote sst_era5_f19_clim.nc`. Here is what it does, step by step. Open `make_sst_bc.py` with `nano` or the OnDemand file editor and find the function `cmd_build` to follow along:
+It prints `Using 132 months (11 years) of ERA5`, the fraction of land points (34%), then `Wrote sst_era5_f19_clim.nc`. The `build` step does the following.
 
-1. **Average by calendar month.** All Januaries are averaged, then all Februaries, and so on, giving 12 maps (a climatology).
+1. **Average by calendar month.** All Januaries are averaged, then all Februaries, and so on. The result is 12 maps (a climatology).
 2. **Convert units.** SST goes from kelvin to degrees Celsius (subtract 273.15), because the CAM file uses `deg_C`. Sea ice is already a fraction from 0 to 1, as CAM expects.
 3. **Keep the ocean physical.** No SST colder than -1.8 °C, the freezing point of sea water. Ice is kept between 0 and 1, and missing ice over the ocean is set to 0.
 4. **Fill land.** ERA5 has no SST over land, but the CESM file needs a value at every point. Land points are filled with the average of their neighbours, repeated until no gaps are left. The model ignores land, but the filling keeps coastlines from pulling in missing values when the model interpolates.
 5. **Regrid to the CESM2 1.9x2.5 grid.** Each CESM grid box gets the area-weighted average of the ERA5 boxes that overlap it (first-order conservative regridding), so averages are preserved. The target `lat`, `lon` and time axis are copied from the stock file on UHPC (the "template").
 6. **Adjust for time interpolation.** The monthly means are stored as `SST_cpl_prediddle` and `ice_cov_prediddle`. The adjusted ("diddled") values that CESM reads are stored as `SST_cpl` and `ice_cov` (see [How CESM reads SST and sea ice](how_cesm_reads_sst.md)).
 7. **Write the NetCDF file** with the same variable names, units, time axis (`days since 0000-01-01`, `365_day` calendar) and format as the stock file.
+
+To see this in the script, open it with `nano make_sst_bc.py`, press **Ctrl-W**, type `cmd_build`, and press **Enter**. Do not change the file. Quit with **Ctrl-X**. If `nano` asks whether to save, press **N**.
 
 ## 3. Check the file
 
@@ -63,7 +65,7 @@ ok   model monthly means match SST_cpl_prediddle at 100.0% of points (need 99%; 
 ALL CHECKS PASSED
 ```
 
-If any line says `FAIL`, do not use the file. See [When something goes wrong](../uhpc/when_things_go_wrong.md).
+If any line is `FAIL`, do not use the file. See [When something goes wrong](../uhpc/when_things_go_wrong.md).
 
 ## 4. Look at it
 
@@ -71,7 +73,7 @@ If any line says `FAIL`, do not use the file. See [When something goes wrong](..
 $PY make_sst_bc.py plot sst_era5_f19_clim.nc --month 8 --compare /usr/local/research/miyawaki/cesm/inputdata/atm/cam/sst/sst_HadOIBl_bc_1.9x2.5_2000climo_c180511.nc --out era5_vs_stock_aug.png
 ```
 
-This writes a picture with three maps for August: your SST, your sea ice, and your SST minus the stock file's SST. To view it, open the OnDemand **Files** app, go to your `sst` folder and click the `.png` file.
+This writes a picture with three maps for August: your SST, your sea ice, and your SST minus the stock file's SST. To view it, open the OnDemand **Files** app, click **Change directory**, type `/usr/local/research/miyawaki/users/<your-username>/sst`, click **OK**, and click the `.png` file.
 
 What to expect: over the open ocean the two products agree to within about half a degree on average. The root-mean-square difference in August is about 0.3 K over grid boxes that are entirely ocean. Larger differences show up near coasts and sea-ice edges. Over land the maps look blocky and strange, which does not matter, because land is filled and the model never uses it.
 
