@@ -4,24 +4,24 @@ You will use UHPC mostly through **Open OnDemand**, a website that gives you the
 
 ## Logging in
 
-You did the first login (and changed your temporary password) once, in the Mac Terminal app, with `ssh <your-username>@hpcc.union.edu`. You do not need the Terminal app after that.
+You already have a cluster account and have logged in once. From now on you use the website, not the Mac Terminal app.
 
-1. Connect to campus Wi-Fi or the Union VPN.
-2. In your web browser, go to <https://ondemand.hpc.union.edu>.
-3. Log in with your cluster username and password. **TODO:** confirm that OnDemand uses the same username and password.
+1. Connect to the Union VPN with the **Cisco Secure Client** app. The cluster's websites only load on the campus network or through the VPN. The one-time VPN setup is in [Over break: what to do, in order](over_break.md).
+2. In Safari or Chrome, go to <https://ondemand.hpc.union.edu>.
+3. A small sign-in box appears. Type your cluster username (the first part of your Union email address) and your cluster password. The OnDemand dashboard opens.
 
-## The three apps you will use
+## The apps you will use
 
 | App | Where in OnDemand | Use it for |
 |---|---|---|
 | **Files** | top menu, **Files** → **Files App** (or **Home Directory**) | browsing folders, opening and editing text files, viewing pictures, uploading and downloading files to and from your Mac |
-| **Shell** | top menu, **Clusters** → the shell entry (**TODO:** confirm its exact name, probably **HPC Cluster Shell Access**) | typing commands, for example CESM's `./create_newcase` and `./case.submit` |
+| **Shell** | top menu, **Clusters** → **HPC Cluster Shell Access** | typing commands, for example CESM's `./create_newcase` and `./case.submit` |
 | **Jupyter** | top menu, **Interactive Apps** → **Servers** → **Jupyter Notebook** | Python notebooks for plotting model output. They run on a compute node for 1 to 4 hours (see {ref}`uhpc-jupyter` below) |
 | **Active Jobs** | top menu, **Jobs** → **Active Jobs** | a web view of your waiting and running batch jobs, the same as `squeue -u $USER` |
 
 The Shell app opens a command line on the same login computer you reached with `ssh`, with the same home folder and the same `/usr/local/research` files.
 
-In the Files app you can type a path such as `/usr/local/research/miyawaki/users/<your-username>` into the path box at the top to jump to it.
+In the Files app, click **Change directory** near the top, type a path such as `/usr/local/research/miyawaki/users/<your-username>`, and click **OK** to jump to it.
 
 (uhpc-jupyter)=
 ## Jupyter
@@ -36,10 +36,14 @@ Use Jupyter for looking at model output and making plots, like Google Colab but 
    - **Partition**: leave it as `hpcc`.
    - **GPUs**: 0.
 3. Click **Launch**. The session waits in the queue, then shows **Running**. Click **Connect to Jupyter**.
-4. In JupyterLab, use the file browser on the left to go to your folder, then click **Python 3 (ipykernel)** under **Notebook** to make a new notebook.
+4. JupyterLab opens in a new tab with the **Launcher**. Click **Python 3 (ipykernel)** under **Notebook** to make a new notebook in your home folder. The file browser on the left only shows your home folder, so to open model output, type its full path in your code, for example `xarray.open_dataset('/usr/local/research/miyawaki/users/<your-username>/...')`.
 5. In the first cell, type `import xarray, netCDF4, matplotlib.pyplot as plt` and press **Shift-Enter**. No error message means it worked.
 
-The `datascience` environment has xarray, netCDF4 and matplotlib, but **not cartopy** (map projections and coastlines). Plain maps with `plt.pcolormesh(lon, lat, field)` work without it. If you want cartopy, make your own environment once. Do this in the **Shell** app, inside tmux:
+The `datascience` environment has xarray, netCDF4 and matplotlib, but **not cartopy** (map projections and coastlines). Plain maps with `plt.pcolormesh(lon, lat, field)` work without it, and this tutorial does not need cartopy.
+
+### Later: an environment with cartopy
+
+When you want coastlines on your maps, make your own Python environment once. Do this in the **Shell** app, inside tmux:
 
 ```bash
 module load python/miniforge
@@ -97,7 +101,7 @@ Useful keys:
 - **Tab** completes a file or folder name. Type the first few letters and press Tab. If nothing happens, press Tab twice to see the choices. This saves typing and avoids typos.
 - **Up arrow** brings back your previous command, so you can edit and rerun it.
 - **Ctrl-C** stops the command that is running now and gives you back the prompt. It does not cancel batch jobs that are already submitted. Use `scancel` for those.
-- To paste into the Shell tab, use **Cmd-V** as on any Mac web page. **TODO:** confirm that paste works in the OnDemand Shell.
+- To paste into the Shell tab, use **Cmd-V**, as on any Mac web page. To copy text from the Shell tab, select it with the mouse and press **Cmd-C**.
 
 A few ideas you will meet in the CESM pages:
 
@@ -105,7 +109,7 @@ A few ideas you will meet in the CESM pages:
 - **Variables.** `export MYROOT=/usr/local/research/miyawaki/users/$USER` saves a path under a short name, and `$MYROOT` then stands for it. `$USER` is already set to your username. Check a variable with `echo $MYROOT`. Variables are forgotten when the shell closes, unless you add the `export` line to `~/.bashrc` (open it with `nano ~/.bashrc`).
 - **`source <file>`** runs the commands in a file in your current shell. CESM uses this to load compilers and libraries: `source /usr/local/research/miyawaki/opt/cesm-deps/ENV.sh`.
 - **Modules.** `module load <name>` makes a software package available, `module list` shows what is loaded, and `module avail` shows what exists. `ENV.sh` loads the modules CESM needs for you.
-- **Permissions.** `ls -l` starts each line with something like `-rw-r-----`: the first three letters after the first character are your permissions, the next three are your group's, and the last three are everyone else's (`r` read, `w` write, `x` run). If you see `Permission denied`, you are trying to read or change something you are not allowed to. Ask Osamu instead of trying to work around it.
+- **Permissions.** `ls -l` starts each line with something like `-rw-r-----`: the first three letters after the first character are your permissions, the next three are your group's, and the last three are everyone else's (`r` read, `w` write, `x` run). If you see `Permission denied`, you are trying to read or change something you are not allowed to. Do not try to work around it. See [When something goes wrong](when_things_go_wrong.md).
 - **Reading errors.** When something fails, read the **first** error message, not the last line. `grep -i error <logfile>` finds error lines in a log. Copy the exact message when you ask for help.
 
 ## Where to keep files
@@ -113,10 +117,10 @@ A few ideas you will meet in the CESM pages:
 | Place | Size limit | Use it for |
 |---|---|---|
 | your home folder `/home/<your-username>` (`~`) | 20 GB | settings files such as `~/.bashrc` and `~/.cdsapirc`. Not CESM output |
-| `/usr/local/research/miyawaki/users/<your-username>` (`$MYROOT`) | shared group space (planned soft limit about 300 GB per student, **TODO:** not decided yet) | your CESM cases, runs, output and SST files. **TODO:** these folders are planned but not created yet |
-| `/scratch` | only on each compute node, cleaned after 30 days | do not use for CESM |
+| `/usr/local/research/miyawaki/users/<your-username>` (`$MYROOT`) | soft limit of 300 GB per student | your CESM cases, runs, output and SST files |
+| `/scratch` | a separate disk on each compute node, cleaned after 30 days | do not use for CESM |
 
-A 3-month CESM run's archive is about 4 GB, plus its run folder (**TODO:** size not yet measured). Run `du -sh $MYROOT/*` now and then to see how much space each folder uses, and delete run folders you no longer need (see the end of the [quickstart](quickstart.md)).
+A case's run folder is about 1.5 GB, and a 3-month CESM run adds about 4 GB of archived output. Run `du -sh $MYROOT/*` now and then to see how much space each folder uses.
 
 ## Copying files to and from your Mac
 
