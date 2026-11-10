@@ -75,6 +75,6 @@ This writes a picture with three maps for August: your SST, your sea ice, and yo
 
 What to expect: over the open ocean the two products agree to within about half a degree on average. The root-mean-square difference in August is about 0.3 K over grid boxes that are entirely ocean. Larger differences show up near coasts and sea-ice edges. Over land the maps look blocky and strange, which does not matter, because land is filled and the model never uses it.
 
-```{note}
+```{dropdown} If you want to know how the script differs from NCAR's official tool
 `make_sst_bc.py` simplifies the official CESM tool (`bcgen`) in two ways. It does not merge several observational products, and it does not apply bcgen's extra limits near the ice edge. For comparison: on the stock file, the script's time-interpolation check reproduces bcgen's monthly means at 99.4% of points, and the remaining 0.6% are the ice-edge points where bcgen applies those limits.
 ```

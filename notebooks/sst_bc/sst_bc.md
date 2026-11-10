@@ -10,7 +10,7 @@ This chapter is written for UHPC and adds to the NCAR tutorial. It walks you thr
 4. [Add an SST anomaly](add_anomaly.md): warm or cool the ocean inside a box.
 5. [Use the file in a case](use_in_case.md): point a case at your file and check that CESM picked it up.
 
-All the steps use one script, `make_sst_bc.py`, which is kept in this tutorial's repository under `tools/`. The worked example adds an idealized El Niño-type warm patch to the central and eastern equatorial Pacific. It is a made-up anomaly for practising the method, not a reconstruction of any real El Niño event, and it makes no claim about what such an anomaly does to the climate.
+All the steps use one script, `make_sst_bc.py`. You copy it from `/usr/local/research/miyawaki/tutorial/tools/` on UHPC in step 2 of [Set up Python and an ERA5 account](python_setup.md). The worked example adds an idealized El Niño-type warm patch to the central and eastern equatorial Pacific. It is a made-up anomaly for practising the method, not a reconstruction of any real El Niño event, and it makes no claim about what such an anomaly does to the climate.
 
 ```{admonition} Before you start
 :class: warning

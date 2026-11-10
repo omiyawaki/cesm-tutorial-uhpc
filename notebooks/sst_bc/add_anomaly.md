@@ -58,5 +58,5 @@ The check should end with `ALL CHECKS PASSED`. Open `example_anomaly_dec.png` in
 
 ```{figure} ../../images/sst_bc/example_anomaly_dec.png
 :width: 600px
-Example output of the `plot` step (from a 2000-2001 ERA5 test file): December SST, sea ice, and the difference from the control file.
+Example output of the `plot` command above: December SST and sea ice in `sst_example_enso.nc`, and its difference from the control file `sst_era5_f19_clim.nc`. Your picture should look the same.
 ```

@@ -1,6 +1,8 @@
 # When something goes wrong
 
-This page lists the problems that come up most often on UHPC, what each one means, and what to do. Find the message you see, or the step you were on, and follow the fix. If the fix does not work, copy the exact message into your list of questions, go on to the next step you can do, and bring the list to our first meeting.
+This page lists the problems that come up most often on UHPC, what each one means, and what to do. Find the message you see, or the step you were on, and follow the fix. If the fix does not work, email me, then go on to the next step you can do while you wait for my answer.
+
+**To email me:** write to miyawako@union.edu from your Union email, with the subject `CESM tutorial: <page>, step <number>`, and paste the command you typed and the first error message it printed into the body as text.
 
 When a command fails, read the **first** error message it printed, not only the last line. To copy a message out of the Shell tab, select it with the mouse and press **Cmd-C**.
 
@@ -8,25 +10,33 @@ When a command fails, read the **first** error message it printed, not only the 
 
 ### The OnDemand page does not load, or times out
 
-You are not on the campus network. Connect the **Cisco Secure Client** VPN to `unionvpn.union.edu` and reload the page. For problems with the VPN itself, contact the ITS Help Desk at helpdesk@union.edu or (518) 388-6400.
+You are not on the campus network. Connect the **Cisco Secure Client** VPN to `unionvpn.union.edu` and reload the page. ITS explains the setup in [How to Use the Cisco VPN Client (Mac/PC)](https://union.teamdynamix.com/TDClient/1831/Portal/KB/Article/56060/How-to-Use-the-Cisco-VPN-Client-Mac-PC). For problems with the VPN itself, contact the ITS Help Desk at helpdesk@union.edu or (518) 388-6400.
 
 ### The sign-in box keeps coming back
 
-The username or password is wrong. Use your cluster username (the first part of your Union email address, for example `<your-username>`) and your cluster password. For a forgotten cluster password, email the cluster administrators at hpcadmin@union.edu from your Union email address.
+The username or password is wrong. Use your cluster username (the first part of your Union email address, the part before `@union.edu`) and your cluster password. The cluster password is not your Union (Okta) password: it is the one you chose the first time you logged in to the cluster. For a forgotten cluster password, email the cluster administrators at hpcadmin@union.edu from your Union email address and ask them to reset it.
 
 ### The Shell tab says the connection closed
 
-The OnDemand Shell closes after about 5 minutes without typing, and after about 1 hour in any case. Your work inside tmux is safe. Open **Clusters** → **HPC Cluster Shell Access** again and type `tmux attach -t cesm`.
+The OnDemand Shell closes after about 5 minutes without typing, and after about 1 hour in any case. Your work inside tmux is safe. Open **Clusters** → **HPC Cluster Shell Access** again and type `tmux attach -t cesm || tmux new -s cesm`.
 
 ### `tmux attach` says `no sessions` or `can't find session`
 
-The tmux session ended, for example because the login computer restarted. Start a new one with `tmux new -s cesm`, then run `source ~/.bashrc` and `cd` back to the folder you were in. Anything you were building when the session ended has to be started again.
+The tmux session ended, for example because the login computer restarted. If you typed `tmux attach -t cesm || tmux new -s cesm`, a new session has already started, with a green bar at the bottom. If you typed only `tmux attach -t cesm`, type `tmux new -s cesm`. Then `cd` back to the folder you were in, for example `cd $MYROOT/cases/f2000.test`. Anything you were building when the session ended has to be started again.
+
+### `duplicate session: cesm`
+
+You typed `tmux new -s cesm` while a session called `cesm` was still running. Type `tmux attach -t cesm` to go back to it.
+
+### `sessions should be nested with care`
+
+You are already inside tmux (there is a green bar at the bottom of the window), so there is nothing to attach to. Keep working where you are.
 
 ## Permissions and setup
 
 ### `Permission denied` on anything under `/usr/local/research/miyawaki`, or `ENV.sh: Permission denied`
 
-Your account is not yet in the `res-miyawaki` group, or the group was added after you logged in. Type `id`. If `res-miyawaki` is missing from the list, close every OnDemand tab, sign out, wait an hour, and sign in again. Group changes take up to an hour to reach the cluster. If it is still missing the next day, email me.
+Your account is not yet in the `res-miyawaki` group, or the group was added after you logged in. Type `id`. If `res-miyawaki` is missing from the list, close every OnDemand tab, sign out, wait an hour, and sign in again. Group changes take up to an hour to reach the cluster. If it is still missing the next day, email me with the subject `CESM tutorial: res-miyawaki missing` and paste the output of `id`.
 
 ### `cesm-deps/ENV.sh: No such file or directory`, or `$MYROOT` is empty
 
@@ -71,7 +81,7 @@ grep -i -m 5 error cesm.log.*
 
 - An error that mentions your SST file name: the SST file in `SSTICE_DATA_FILENAME` was moved, renamed or mistyped. Check it with `./xmlquery SSTICE_DATA_FILENAME` and `ls -l <that path>`.
 - `ABORT` in `ice.log`: check that the four sea-ice lines from step 5 of the quickstart are in the case, with `cat user_nl_cice`. Add any that are missing with `nano user_nl_cice` and submit again.
-- An error about a missing input file: the shared input data does not have a file this case needs. Do not download it yourself. Write down the file name and stop this case.
+- An error about a missing input file: the shared input data does not have a file this case needs. Do not download it yourself. Email me the exact message, and leave this case as it is.
 
 ### `sacct` shows `TIMEOUT`
 

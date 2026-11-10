@@ -8,7 +8,7 @@ You already have a cluster account and have logged in once. From now on you use 
 
 1. Connect to the Union VPN with the **Cisco Secure Client** app. The cluster's websites only load on the campus network or through the VPN. The one-time VPN setup is in [Over break: what to do, in order](over_break.md).
 2. In Safari or Chrome, go to <https://ondemand.hpc.union.edu>.
-3. A small sign-in box appears. Type your cluster username (the first part of your Union email address) and your cluster password. The OnDemand dashboard opens.
+3. A small sign-in box appears. Type your cluster username (the first part of your Union email address) and your cluster password. The cluster password is not your Union (Okta) password (see step 0 of the [quickstart](quickstart.md)). The OnDemand dashboard opens.
 
 ## The apps you will use
 
@@ -17,9 +17,9 @@ You already have a cluster account and have logged in once. From now on you use 
 | **Files** | top menu, **Files** → **Files App** (or **Home Directory**) | browsing folders, opening and editing text files, viewing pictures, uploading and downloading files to and from your Mac |
 | **Shell** | top menu, **Clusters** → **HPC Cluster Shell Access** | typing commands, for example CESM's `./create_newcase` and `./case.submit` |
 | **Jupyter** | top menu, **Interactive Apps** → **Servers** → **Jupyter Notebook** | Python notebooks for plotting model output. They run on a compute node for 1 to 4 hours (see {ref}`uhpc-jupyter` below) |
-| **Active Jobs** | top menu, **Jobs** → **Active Jobs** | a web view of your waiting and running batch jobs, the same as `squeue -u $USER` |
+| **Active Jobs** | top menu, **Jobs** → **Active Jobs** | a web view of your waiting and running batch jobs, the same as the command `squeue -u $USER` (`$USER` stands for your username) |
 
-The Shell app opens a command line on the same login computer you reached with `ssh`, with the same home folder and the same `/usr/local/research` files.
+The Shell app opens a command line on the cluster's login computer in a new browser tab. This tutorial calls it the **OnDemand Shell tab**. Every command in this tutorial goes there. Do not use `ssh` from the Mac Terminal app.
 
 In the Files app, click **Change directory** near the top, type a path such as `/usr/local/research/miyawaki/users/<your-username>`, and click **OK** to jump to it.
 
@@ -39,18 +39,7 @@ Use Jupyter for looking at model output and making plots, like Google Colab but 
 4. JupyterLab opens in a new tab with the **Launcher**. Click **Python 3 (ipykernel)** under **Notebook** to make a new notebook in your home folder. The file browser on the left only shows your home folder, so to open model output, type its full path in your code, for example `xarray.open_dataset('/usr/local/research/miyawaki/users/<your-username>/...')`.
 5. In the first cell, type `import xarray, netCDF4, matplotlib.pyplot as plt` and press **Shift-Enter**. No error message means it worked.
 
-The `datascience` environment has xarray, netCDF4 and matplotlib, but **not cartopy** (map projections and coastlines). Plain maps with `plt.pcolormesh(lon, lat, field)` work without it, and this tutorial does not need cartopy.
-
-### Later: an environment with cartopy
-
-When you want coastlines on your maps, make your own Python environment once. Do this in the **Shell** app, inside tmux:
-
-```bash
-module load python/miniforge
-mamba create -n geo -c conda-forge python=3.12 jupyterlab ipykernel cartopy xarray netcdf4 matplotlib
-```
-
-It asks `Proceed ([y]/n)?`. Type `y` and press Enter. Installing takes several minutes and uses about 2-3 GB of your 20 GB home folder (it goes in `~/.conda/envs/geo`). After that, type `geo` instead of `datascience` in the **Conda environment** box of the Jupyter form. `jupyterlab` has to be in the list above, or the Jupyter session will not start.
+The `datascience` environment has xarray, netCDF4 and matplotlib, but **not cartopy** (map projections and coastlines). Plain maps with `plt.pcolormesh(lon, lat, field)` work without it, and this tutorial does not need cartopy. Use `datascience` for everything over break.
 
 Jupyter runs on a compute node. Never start Jupyter or other heavy calculations from the Shell, which runs on the shared login computer.
 
@@ -58,21 +47,15 @@ Jupyter runs on a compute node. Never start Jupyter or other heavy calculations 
 
 The Shell tab closes after about 5 minutes without typing, and after about 1 hour in any case. Anything running in it would stop. `tmux` keeps your command line running on the cluster even when the tab closes, so you can reconnect to it.
 
-The first time you open the Shell app each day, type:
+Every time you open the Shell app, type this line:
 
 ```bash
-tmux new -s cesm
+tmux attach -t cesm || tmux new -s cesm
 ```
 
-Your screen clears and a green bar appears at the bottom. You are now inside a tmux session called `cesm`. Work as usual.
+`tmux attach -t cesm` goes back to your tmux session called `cesm`, with the same folder and earlier output. If no such session exists, it prints `no sessions` or `can't find session`, and `||` then runs the second command, `tmux new -s cesm`, which starts a new session with that name. A new session clears the screen and shows a green bar at the bottom. Work as usual inside it.
 
-When the tab closes, or you come back later, open the Shell app again and type:
-
-```bash
-tmux attach -t cesm
-```
-
-You are back where you left off, with the same folder and earlier output. If it says `no sessions` or `can't find session`, the session has ended (for example after the login computer restarted). Start a new one with `tmux new -s cesm`.
+A new session does not remember the folder you were in, so `cd` back to it, for example `cd $MYROOT/cases/f2000.test`.
 
 To leave tmux on purpose and keep it running, press **Ctrl-B**, let go, then press **D**. To end the session completely, type `exit` inside it.
 
@@ -120,7 +103,7 @@ A few ideas you will meet in the CESM pages:
 | `/usr/local/research/miyawaki/users/<your-username>` (`$MYROOT`) | soft limit of 300 GB per student | your CESM cases, runs, output and SST files |
 | `/scratch` | a separate disk on each compute node, cleaned after 30 days | do not use for CESM |
 
-A case's run folder is about 1.5 GB, and a 3-month CESM run adds about 4 GB of archived output. Run `du -sh $MYROOT/*` now and then to see how much space each folder uses.
+A case's run folder is about 1.5 GB, and a 3-month CESM run adds about 4 GB of archived output. After you set `$MYROOT` in step 3 of the [quickstart](quickstart.md), run `du -sh $MYROOT/*` now and then. `du -sh` prints how much space each folder uses.
 
 ## Copying files to and from your Mac
 
@@ -136,4 +119,17 @@ CESM runs as **batch jobs** on the compute nodes. You submit them with `./case.s
 | `sacct -j <jobid>` | show how a finished job ended (`COMPLETED`, `FAILED`, `TIMEOUT`) |
 | `scancel <jobid>` | cancel a job |
 
+`$USER` stands for your username, so you can type these commands exactly as shown.
+
 The Shell runs on the shared login computer. Short commands such as `./case.setup`, `./xmlchange` and the SST script are fine there, and so is `./case.build` (see the quickstart). Do not run the model or other heavy calculations there, and do not start Jupyter from it. Use `./case.submit` and the Jupyter app instead.
+
+## Optional, after the break: an environment with cartopy
+
+Skip this section over break. Nothing in this tutorial needs it, and a failed install can fill your home folder. After the break, when you want coastlines on your maps, you can make your own Python environment once. Do this in the OnDemand Shell tab, inside tmux:
+
+```bash
+module load python/miniforge
+mamba create -n geo -c conda-forge python=3.12 jupyterlab ipykernel cartopy xarray netcdf4 matplotlib
+```
+
+It asks `Proceed ([y]/n)?`. Type `y` and press Enter. Installing takes several minutes and uses about 2-3 GB of your 20 GB home folder (it goes in `~/.conda/envs/geo`). After that, type `geo` instead of `datascience` in the **Conda environment** box of the Jupyter form. `jupyterlab` has to be in the list above, or the Jupyter session will not start.
