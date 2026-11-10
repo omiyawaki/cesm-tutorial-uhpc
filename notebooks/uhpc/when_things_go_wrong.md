@@ -32,6 +32,10 @@ You typed `tmux new -s cesm` while a session called `cesm` was still running. Ty
 
 You are already inside tmux (there is a green bar at the bottom of the window), so there is nothing to attach to. Keep working where you are.
 
+### The file editor does not open, or **Save** fails
+
+First check the path at the top of the editor tab. You can only save files you are allowed to change, such as the files in your home folder and in `/usr/local/research/miyawaki/users/<your-username>`. If the editor still does not work, edit the file in the OnDemand Shell tab with `nano`, a text editor that runs inside the Shell. Type `nano` and the file name, for example `nano ~/.bashrc`. Move with the arrow keys, because clicking does not move the cursor. Paste with **Cmd-V**. Press **Ctrl-O**, then **Enter** to save, and **Ctrl-X** to quit.
+
 ## Permissions and setup
 
 ### `Permission denied` on anything under `/usr/local/research/miyawaki`, or `ENV.sh: Permission denied`
@@ -40,11 +44,11 @@ Your account is not yet in the `res-miyawaki` group, or the group was added afte
 
 ### `cesm-deps/ENV.sh: No such file or directory`
 
-The `source` line in `~/.bashrc` has a typing mistake in the path. Open the file with `nano ~/.bashrc` and compare the line with the block in step 3 of the [quickstart](quickstart.md). It must be exactly `source /usr/local/research/miyawaki/opt/cesm-deps/ENV.sh`. Save, quit, and run `source ~/.bashrc`. If the path is correct and you still see the message together with `Permission denied`, see the entry above.
+The `source` line in `~/.bashrc` has a typing mistake in the path. Open `~/.bashrc` in the file editor ({ref}`Editing text files <uhpc-editing>`) and compare the line with the block in step 3 of the [quickstart](quickstart.md). It must be exactly `source /usr/local/research/miyawaki/opt/cesm-deps/ENV.sh`. Click **Save**, then run `source ~/.bashrc` in the Shell tab. If the path is correct and you still see the message together with `Permission denied`, see the entry above.
 
 ### `$MYROOT` is empty
 
-`echo $MYROOT` prints an empty line, so commands such as `cd $MYROOT/cases` go to the wrong place. The `export MYROOT=...` line is missing from `~/.bashrc` or has a typing mistake. Open the file with `nano ~/.bashrc`, compare the three lines at the end with the block in step 3 of the [quickstart](quickstart.md), and fix or add them. Save, quit, and run `source ~/.bashrc`. Then `echo $MYROOT` should print `/usr/local/research/miyawaki/users/` followed by your username.
+`echo $MYROOT` prints an empty line, so commands such as `cd $MYROOT/cases` go to the wrong place. The `export MYROOT=...` line is missing from `~/.bashrc` or has a typing mistake. Open `~/.bashrc` in the file editor ({ref}`Editing text files <uhpc-editing>`), compare the three lines at the end with the block in step 3 of the [quickstart](quickstart.md), and fix or add them. Click **Save**, then run `source ~/.bashrc` in the Shell tab. Then `echo $MYROOT` should print `/usr/local/research/miyawaki/users/` followed by your username.
 
 ### `Disk quota exceeded`
 
@@ -84,7 +88,7 @@ grep -i -m 5 error cesm.log.*
 `ls -t | head` lists the newest files first. `tail -n 30` shows the last 30 lines of the log, and `grep -i -m 5 error` shows the first 5 lines that contain "error". The log of the component that failed (`atm.log.*`, `lnd.log.*`, `ice.log.*`, `ocn.log.*`) usually says more near its end. Common causes:
 
 - An error that mentions your SST file name: the SST file in `SSTICE_DATA_FILENAME` was moved, renamed or mistyped. Check it with `./xmlquery SSTICE_DATA_FILENAME` and `ls -l <that path>`.
-- `ABORT` in `ice.log`: check that the four sea-ice lines from step 5 of the quickstart are in the case, with `cat user_nl_cice`. Add any that are missing with `nano user_nl_cice` and submit again.
+- `ABORT` in `ice.log`: check that the four sea-ice lines from step 5 of the quickstart are in the case, with `cat user_nl_cice`. Add any that are missing in the file editor ({ref}`Editing text files <uhpc-editing>`) and submit again.
 - An error about a missing input file: the shared input data does not have a file this case needs. Do not download it yourself. Email me the exact message, and leave this case as it is.
 
 ### `sacct` shows `TIMEOUT`
@@ -118,7 +122,7 @@ You have not accepted the ERA5 licence. Open the dataset download page <https://
 
 ### `401 Client Error`, `Unauthorized` or `Missing/incomplete configuration file`
 
-The key file `~/.cdsapirc` is missing or wrong. Open it with `nano ~/.cdsapirc` and compare it with step 5 of [Set up Python and an ERA5 account](../sst_bc/python_setup.md). The key must be your own **Personal Access Token**, with no extra spaces.
+The key file `~/.cdsapirc` is missing or wrong. Open it in the file editor ({ref}`Editing text files <uhpc-editing>`) and compare it with step 5 of [Set up Python and an ERA5 account](../sst_bc/python_setup.md). The key must be your own **Personal Access Token**, with no extra spaces.
 
 ### The download waits at `accepted` or `running` for a long time
 
