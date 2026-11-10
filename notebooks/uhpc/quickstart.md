@@ -4,20 +4,24 @@ This page takes you from your Union HPC (UHPC) account to a short CESM2 run whos
 
 ## 0. What you already have
 
-You already have a UHPC account. Your username is the first part of your Union email address (for example `<your-username>`), and your password is the cluster password you used when you first logged in. You do not need the Mac Terminal app for anything in this tutorial.
+You already have a UHPC account. Your username is the first part of your Union email address (the part before `@union.edu`).
+
+Your cluster password is **not** your Union (Okta) password. The cluster administrators emailed you a temporary password when they made your account, and you chose a new cluster password the first time you logged in. Use that cluster password for OnDemand. Use your Union password only for the VPN. If you forget the cluster password, email hpcadmin@union.edu from your Union email address and ask them to reset it.
+
+You do not need the Mac Terminal app for anything in this tutorial. Every command goes into the OnDemand Shell tab.
 
 ## 1. Open OnDemand and start a shell
 
 1. Connect to the Union VPN with the **Cisco Secure Client** app (see [Over break: what to do, in order](over_break.md) for the one-time setup). The cluster's website does not load from off campus without it.
 2. In Safari or Chrome, go to <https://ondemand.hpc.union.edu>. A small sign-in box appears. Type your cluster username and password.
 3. In the top menu, click **Clusters** → **HPC Cluster Shell Access**. A black command-line window opens in a new browser tab.
-4. Start tmux, so your work keeps running when the tab closes:
+4. Type this line to get into tmux, so your work keeps running when the tab closes:
 
 ```bash
-tmux new -s cesm
+tmux attach -t cesm || tmux new -s cesm
 ```
 
-The next time you come back, type `tmux attach -t cesm` instead.
+This line goes back to your tmux session named `cesm` if it exists, and starts a new one with that name if it does not (`||` means "if the first command fails, run the second"). Use the same line every time you open a Shell tab.
 
 ## 2. Check that your account is ready
 
@@ -88,7 +92,7 @@ Each `./xmlchange` line changes one or more case settings and prints nothing if 
 - `STOP_OPTION=ndays,STOP_N=5`: run 5 model days.
 - `JOB_QUEUE=hpcc,JOB_WALLCLOCK_TIME=02:00:00`: use the cluster's CPU partition and allow the job up to 2 hours.
 - `DOUT_S_ROOT`: where finished output is copied. You must set this, because the default points to a folder that is not yours.
-- `HIST_OPTION=never,REST_OPTION=ndays,REST_N=5`: no extra coupler output during the test, and one set of restart files at the end.
+- `HIST_OPTION=never,REST_OPTION=ndays,REST_N=5`: no extra coupler output during the test, and one set of restart files at the end. This test only checks that CESM builds, starts, reads its input files and finishes. You look at atmosphere output after the break, in the [CAM output](../namelist/output/output_cam.ipynb) section of the namelist chapter, where you turn on daily and monthly output.
 
 Next, add four sea-ice settings that every UHPC case uses:
 
@@ -160,7 +164,7 @@ ls $MYROOT/archive/f2000.test/rest
 ls $MYROOT/cases/f2000.test/timing
 ```
 
-These are the run folder (where the model works), the compressed log files, the restart files, and the speed and cost of the run. A 5-day test with `HIST_OPTION=never` writes no monthly history files, so `atm/hist` stays empty. You turn on monthly output in later chapters. You can also browse these folders in the OnDemand **Files** app.
+These are the run folder (where the model works), the compressed log files, the restart files, and the speed and cost of the run. The atmosphere writes monthly averages by default, and a 5-day run ends before the first month is complete, so `atm/hist` stays empty. You turn on more frequent output in later chapters. You can also browse these folders in the OnDemand **Files** app.
 
 ## 9. Keep an eye on space
 
