@@ -12,7 +12,7 @@ You are not on the campus network. Connect the **Cisco Secure Client** VPN to `u
 
 ### The sign-in box keeps coming back
 
-The username or password is wrong. Use your cluster username (the first part of your Union email address, for example `kromerk`) and your cluster password. For a forgotten cluster password, email the cluster administrators at hpcadmin@union.edu from your Union email address.
+The username or password is wrong. Use your cluster username (the first part of your Union email address, for example `<your-username>`) and your cluster password. For a forgotten cluster password, email the cluster administrators at hpcadmin@union.edu from your Union email address.
 
 ### The Shell tab says the connection closed
 

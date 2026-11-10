@@ -4,7 +4,7 @@ This page takes you from your Union HPC (UHPC) account to a short CESM2 run whos
 
 ## 0. What you already have
 
-You already have a UHPC account. Your username is the first part of your Union email address (for example `tompkinc`), and your password is the cluster password you used when you first logged in. You do not need the Mac Terminal app for anything in this tutorial.
+You already have a UHPC account. Your username is the first part of your Union email address (for example `<your-username>`), and your password is the cluster password you used when you first logged in. You do not need the Mac Terminal app for anything in this tutorial.
 
 ## 1. Open OnDemand and start a shell
 
