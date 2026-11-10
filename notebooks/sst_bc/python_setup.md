@@ -5,25 +5,23 @@ This is a one-time setup. You will use the **Shell** app in Open OnDemand, insid
 ## 1. Make a folder for your SST work
 
 ```bash
-export MYROOT=/usr/local/research/miyawaki/users/$USER
 mkdir -p $MYROOT/sst
 cd $MYROOT/sst
 pwd
 ```
 
-`mkdir -p` makes the folder (and does nothing if it already exists). `cd` moves into it, and `pwd` prints where you are. You should see `/usr/local/research/miyawaki/users/<your username>/sst`.
-
-**TODO:** the per-user folders under `/usr/local/research/miyawaki/users` are planned but not created yet.
+`mkdir -p` makes the folder (and does nothing if it already exists). `cd` moves into it, and `pwd` prints where you are. You should see `/usr/local/research/miyawaki/users/<your-username>/sst`. `$MYROOT` comes from the line you added to `~/.bashrc` in the quickstart.
 
 ## 2. Get the script
 
-The script is `tools/make_sst_bc.py` in this tutorial's repository. Get the file from Osamu (or download it from the repository) and save it on your Mac. Then put it in your `sst` folder:
+A copy of the script is kept on UHPC for everyone in the group. Copy it into your `sst` folder:
 
-1. In OnDemand, open the **Files App** and type `/usr/local/research/miyawaki/users/<your-username>/sst` in the path box at the top.
-2. Click **Upload** and choose `make_sst_bc.py` from your Mac.
-3. Back in the Shell, run `ls`. It should list `make_sst_bc.py`.
+```bash
+cp /usr/local/research/miyawaki/tutorial/tools/make_sst_bc.py .
+ls
+```
 
-**TODO:** a shared copy on UHPC, so this becomes a single `cp` command, has not been placed yet.
+`cp <from> <to>` copies a file. The `.` at the end means "this folder", so the copy lands in your `sst` folder. `ls` should now list `make_sst_bc.py`.
 
 ## 3. Choose the Python to use
 
@@ -34,26 +32,24 @@ export PY=/usr/local/Dist/anaconda3-latest/envs/datascience/bin/python
 $PY -c "import xarray, netCDF4, matplotlib; print('python OK')"
 ```
 
-You should see `python OK`. The `export` lines only last until you close the shell. Add both `export` lines (for `MYROOT` and `PY`) to the end of your `~/.bashrc` so they are set every time you log in:
+`$PY -c "..."` runs one line of Python with this environment. You should see `python OK`. The `export` line only lasts until you close the shell, so add it to the end of your `~/.bashrc` as well:
 
 ```bash
 nano ~/.bashrc
 ```
 
-Use the arrow keys to go to the bottom, paste the two lines, then press **Ctrl-O**, **Enter** to save and **Ctrl-X** to quit.
+Use the **down arrow** to go to the bottom, paste the `export PY=...` line, then press **Ctrl-O**, **Enter** to save and **Ctrl-X** to quit.
 
 ## 4. Install the ERA5 download tool
 
-The download uses the `cdsapi` package, which is not in `datascience`. Install it into your home folder. The cluster reaches the internet through a proxy, so set that first:
+The download uses the `cdsapi` package, which is not in `datascience`. Install it into your home folder:
 
 ```bash
-export http_proxy=http://192.168.1.10:8888
-export https_proxy=http://192.168.1.10:8888
 $PY -m pip install --user cdsapi
 $PY -c "import cdsapi; print('cdsapi OK')"
 ```
 
-**TODO:** it has been checked that PyPI can be reached through the proxy, but not that `pip install --user` into this environment works for a student account.
+`pip install --user` downloads a Python package and installs it in your home folder, where `$PY` finds it. It ends with `Successfully installed cdsapi-...` and a few other package names. The second line should print `cdsapi OK`.
 
 ## 5. Get a free ERA5 (Copernicus) account
 

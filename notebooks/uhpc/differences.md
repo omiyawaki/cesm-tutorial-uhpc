@@ -1,17 +1,17 @@
 # Differences from the NCAR tutorial
 
-The NCAR tutorial was written for NCAR's Cheyenne supercomputer and Casper analysis cluster, which use the PBS scheduler and the GLADE file system. This edition has been edited so the commands match Union HPC (UHPC). This page lists what changed, so you can translate anything that was missed. Items marked **TODO** are not yet confirmed on UHPC.
+The NCAR tutorial was written for NCAR's Cheyenne supercomputer and Casper analysis cluster, which use the PBS scheduler and the GLADE file system. This edition has been edited so the commands match Union HPC (UHPC). This page lists what changed, so you can translate anything that was missed.
 
 ## Logging in
 
-NCAR users log in to Cheyenne with `ssh` and a two-factor token. On UHPC you use **Open OnDemand** at <https://ondemand.hpc.union.edu> (campus network or VPN) in your web browser. Its Shell app replaces the NCAR terminal login, its Files app lets you browse and transfer files, and its Jupyter app replaces NCAR's JupyterHub. The shell is `bash`. See [Open OnDemand and shell basics](ondemand_basics.md). Wherever an NCAR page says to `ssh` to Cheyenne or Casper, open the OnDemand Shell instead.
+NCAR users log in to Cheyenne with `ssh` and a two-factor token. On UHPC you use **Open OnDemand** at <https://ondemand.hpc.union.edu> (campus network or Union VPN) in your web browser. Its Shell app replaces the NCAR terminal login, its Files app lets you browse and transfer files, and its Jupyter app replaces NCAR's JupyterHub. The shell is `bash`. See [Open OnDemand and shell basics](ondemand_basics.md). Wherever an NCAR page says to `ssh` to Cheyenne or Casper, open the OnDemand Shell instead.
 
 ## Scheduler: PBS to Slurm
 
 | Task | NCAR (PBS) | UHPC (Slurm) |
 |---|---|---|
 | Submit a batch script | `qsub script` | `sbatch script` |
-| Run a command on a compute node | `qcmd -- command` | `srun ...` (**TODO:** confirm how to request an interactive allocation) |
+| Run a command on a compute node | `qcmd -- command` | `salloc -p hpcc -n 1 -t 01:00:00 --exclude=hpcc03,hpcc04` opens a shell on a compute node; type `exit` to end it |
 | List your jobs | `qstat -u $USER` | `squeue -u $USER` |
 | Cancel a job | `qdel <jobid>` | `scancel <jobid>` |
 | Finished job information | `qhist` | `sacct -j <jobid>` |
@@ -22,28 +22,28 @@ CESM's own commands (`./case.submit`, `./case.build`) are the same. CESM transla
 - **Partitions:** `hpcc` (nodes hpcc01-04) and `gpu` (hpcc03 and hpcc04). CESM runs on CPUs, so set `JOB_QUEUE=hpcc`.
 - **GPU nodes:** CPU jobs must use `--exclude=hpcc03,hpcc04`, for example `./case.submit -a "--exclude=hpcc03,hpcc04"`. The UHPC machine configuration does **not** add this (checked), so always pass it.
 - **Limits:** maximum job length 3 days (Cheyenne's regular queue was 12 hours), about 2 GB of memory per CPU by default, QOS `normal`.
-- **Accounts:** Slurm accounts are `general` and `res-miyawaki`. There is no CESM `PROJECT` setting on UHPC, so ignore `--project`, `PROJECT=` and the tutorial project numbers (`UESM0011`, `UESM0012`, `P93300642`). New student accounts start with only the `general` account, which works for CESM on `hpcc`, so you do not need to set anything. Once Osamu adds you to the research group (**TODO:** not done yet; it takes effect about an hour later), add `--account=res-miyawaki` inside the `-a "..."` quotes of `./case.submit`. He will tell you when.
+- **Accounts:** There is no CESM `PROJECT` setting on UHPC, so ignore `--project`, `PROJECT=` and the tutorial project numbers (`UESM0011`, `UESM0012`, `P93300642`). Your jobs use your default Slurm account, `general`, which works for CESM on `hpcc`, so you do not set an account anywhere.
 - **Queue names:** wherever the NCAR text says `JOB_QUEUE=regular`, use `JOB_QUEUE=hpcc`. The daily tutorial reservations do not exist on UHPC.
 
 ## File system paths
 
 | What | NCAR path | UHPC path |
 |---|---|---|
-| CESM code (`SRCROOT`) | `/glade/work/$USER/code/my_cesm_code` | `/usr/local/research/miyawaki/cesm/cesm2` (shared; planned read-only for students) |
+| CESM code (`SRCROOT`) | `/glade/work/$USER/code/my_cesm_code` | `/usr/local/research/miyawaki/cesm/cesm2` (shared; do not change it) |
 | Tutorial copy of the code | `/glade/p/cesm/tutorial/cesm2.1_tutorial2022` | same shared tree as above |
-| Your cases (`CASEROOT`) | `/glade/work/$USER/cases` or `/glade/u/home/$USER/cases` | `/usr/local/research/miyawaki/users/$USER/cases` (planned) |
-| Build and run directories | `/glade/scratch/$USER/$CASE` | `/usr/local/research/miyawaki/users/$USER/scratch/$CASE` (planned) |
-| Short-term archive (`DOUT_S_ROOT`) | `/glade/scratch/$USER/archive/$CASE` | `/usr/local/research/miyawaki/users/$USER/archive/$CASE` (planned) |
+| Your cases (`CASEROOT`) | `/glade/work/$USER/cases` or `/glade/u/home/$USER/cases` | `/usr/local/research/miyawaki/users/$USER/cases` |
+| Build and run directories | `/glade/scratch/$USER/$CASE` | `/usr/local/research/miyawaki/users/$USER/scratch/$CASE` |
+| Short-term archive (`DOUT_S_ROOT`) | `/glade/scratch/$USER/archive/$CASE` | `/usr/local/research/miyawaki/users/$USER/archive/$CASE` |
 | Input data (`DIN_LOC_ROOT`) | `/glade/p/cesmdata/cseg/inputdata` | `/usr/local/research/miyawaki/cesm/inputdata` (shared, about 23 GB, only the files for the 2-degree CESM2 setup) |
 | Home directory | `/glade/u/home/$USER` | your UHPC home directory (`~`). Keep CESM files out of it |
 
-The UHPC machine configuration points output at Osamu's folders, so always pass `--output-root /usr/local/research/miyawaki/users/$USER/scratch` to `create_newcase` and set `./xmlchange DOUT_S_ROOT=/usr/local/research/miyawaki/users/$USER/archive/$CASE` (with your case name in place of `$CASE`). Otherwise the build, run and archive folders go to the machine default, which you cannot write to.
+The UHPC machine configuration points output at my folders, so always pass `--output-root /usr/local/research/miyawaki/users/$USER/scratch` to `create_newcase` and set `./xmlchange DOUT_S_ROOT=/usr/local/research/miyawaki/users/$USER/archive/$CASE` (with your case name in place of `$CASE`). Otherwise the build, run and archive folders go to the machine default, which you cannot write to.
 
 In this edition, commands that used `/glade/...` paths were changed to the UHPC paths above. Where a page uses `$DIN_LOC_ROOT`, replace it with the input data path, or set it once with `export DIN_LOC_ROOT=<path>`.
 
-The per-user folders (`/usr/local/research/miyawaki/users/$USER`) are a **plan**. **TODO:** create them and set permissions. The group's space is limited to 4.9 TB in total, and a soft limit of about 300 GB per student is planned but not yet decided. A 3-month (92-day) `F2000climo` archive is about 4 GB, plus the run folder in `scratch` (**TODO:** not yet measured), so 300 GB fits dozens of runs. Check your usage now and then with `du -sh` and delete run folders you no longer need. Your home folder (`~`) has a 20 GB limit, and each compute node's `/scratch` is local to that node and wiped after 30 days, so do not use either for CESM output.
+Your folder (`/usr/local/research/miyawaki/users/$USER`) has a soft limit of 300 GB. A 3-month (92-day) `F2000climo` archive is about 4 GB, and the run folder in `scratch` adds about 1.5 GB, so 300 GB fits dozens of runs. Check your usage now and then with `du -sh` and delete run folders you no longer need. Your home folder (`~`) has a 20 GB limit, and each compute node's `/scratch` is local to that node and wiped after 30 days, so do not use either for CESM output.
 
-Some pages use data that exists only on NCAR's GLADE file system, such as tutorial archives under `/glade/p/cesm/tutorial`, the CESM2 Large Ensemble under `/glade/campaign`, chemistry emissions under `/glade/p/acom`, and forcing files in staff home directories. Those pages carry a note at the top. **TODO:** copy or download the files you need, or skip those exercises.
+Some pages use data that exists only on NCAR's GLADE file system, such as tutorial archives under `/glade/p/cesm/tutorial`, the CESM2 Large Ensemble under `/glade/campaign`, chemistry emissions under `/glade/p/acom`, and forcing files in staff home directories. Those pages carry a **Skip on UHPC** note at the top. Read them for the ideas, but skip their commands.
 
 The example outputs printed in the pages, such as build logs and `case.submit` messages, are from Cheyenne. On UHPC you will see Slurm job IDs and `sbatch` instead of PBS, but the CESM messages are the same.
 
@@ -59,10 +59,10 @@ NCAR runs its analysis notebooks on the Casper cluster through NCAR's JupyterHub
 
 ## Input data downloads and the proxy
 
-- Outside network access from UHPC goes through a proxy at `192.168.1.10:8888` (set `http_proxy` and `https_proxy`, see the [quickstart](quickstart.md)).
+- Outside network access from UHPC goes through a web proxy. The cluster sets `http_proxy` and `https_proxy` for you at login, so downloads with `wget`, `pip` and the ERA5 script work without any setup.
 - CESM input data downloads work over **HTTPS with wget**. FTP and svn do not work.
-- One NCAR data server (`osdf-data.gdex.ucar.edu`) failed with an expired SSL certificate when this was checked. **TODO:** recheck.
-- Because the shared input data is planned to be read-only for students, ask Osamu before running `./check_input_data --download`. **TODO:** agree how missing files get added.
+- One NCAR data server (`osdf-data.gdex.ucar.edu`) still had an expired SSL certificate in November 2026, so downloads from it fail.
+- The shared input data already has every file the cases in this tutorial need. Do not run `./check_input_data --download` yourself. If a case you design later needs a file that is missing, send me the exact message and I will add the file to the shared input data.
 
 ## Downloading the code
 
