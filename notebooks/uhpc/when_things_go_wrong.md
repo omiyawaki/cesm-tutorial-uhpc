@@ -1,6 +1,6 @@
 # When something goes wrong
 
-This page lists the problems that come up most often on UHPC, what each one means, and what to do. Find the message you see, or the step you were on, and follow the fix. If the fix does not work, ask for help by email as described just below, then go on to the next step you can do while you wait for an answer.
+Find the message you see, or the step you were on, and follow the fix. If the fix does not work, ask for help by email as described just below, then go on to the next step you can do while you wait for an answer.
 
 **To ask for help by email:** write to the research group's contact, Professor Miyawaki (<a href="mailto:miyawako@union.edu">miyawako@union.edu</a>), from your Union email. Use the subject `CESM tutorial: <page>, step <number>`, and paste the command you typed and the first error message it printed into the body as text.
 
@@ -135,7 +135,3 @@ You ran the script with a different Python. Use `$PY make_sst_bc.py ...`, not `p
 ### `check` says `FAIL`
 
 Do not use that file. Rename it so you do not use it by mistake, for example `mv sst_example_enso.nc sst_example_enso.FAILED.nc`, and run the step that made it again, copying the command exactly from the page.
-
-## Where next
-
-This is the last page of the getting-started steps. Everything after it in the menu, under "Further CESM material and reference", goes further. Go back to [Getting started on Union HPC](start_here.md) whenever you are not sure what to do next.

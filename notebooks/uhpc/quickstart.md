@@ -1,6 +1,6 @@
 # UHPC quickstart: your first CESM2 run on Union HPC
 
-This page takes you from your Union HPC (UHPC) account to a short CESM2 run whose output you can look at. Follow it from top to bottom. Read [Open OnDemand and shell basics](ondemand_basics.md) before you start, because this page uses the tools explained there. The rest of this tutorial explains each step in more detail. It was written by NCAR for its own computers and has been adapted here for UHPC, which runs CESM version 2.1.5.
+Read [Open OnDemand and shell basics](ondemand_basics.md) before you start. UHPC runs CESM version 2.1.5.
 
 ## 0. What you already have
 
@@ -192,7 +192,3 @@ du -sh $MYROOT/*
 ```
 
 `du -sh` prints how much space each folder uses. The runs in this tutorial use well under the limit. Do not delete anything in your folder unless you are told to, and never delete anything in `archive`.
-
-## Where next
-
-This was step 2 of [Getting started on Union HPC](start_here.md). Press **Next** to go to step 3, which starts with [Differences from the NCAR tutorial](differences.md).

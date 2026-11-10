@@ -72,7 +72,3 @@ zgrep "readstrm) open" $MYROOT/archive/f2000.test/logs/ocn.log.*
 `zgrep` searches inside compressed (`.gz`) files, like `grep` does for plain files. Each run left one ocean log, so you see one line per run. The last line belongs to the run you just made and should end with `.../sst/sst_example_enso.nc`. The line before it, from the quickstart run, shows the stock HadOIBl file.
 
 Keep a note of which SST file each case used. Open the case's notes file with `nano README.case`, add a line at the bottom such as `SST file: sst_example_enso.nc (idealized El Nino warm patch)`, and save it.
-
-## Where next
-
-This is the end of the worked example and of step 4 of [Getting started on Union HPC](../uhpc/start_here.md). Step 5 is to write down your questions. The **Next** button takes you to [When something goes wrong](../uhpc/when_things_go_wrong.md), the list of fixes for common problems. Everything after that page in the menu is further material you can use later.

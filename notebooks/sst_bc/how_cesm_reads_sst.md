@@ -2,7 +2,7 @@
 
 ```{admonition} What you need from this page
 :class: tip
-This page has no commands to type. Read it to learn three things:
+This page has no commands to type. The three facts to know:
 - One file gives the model both its sea surface temperature (`SST_cpl`, in °C) and its sea-ice fraction (`ice_cov`, 0 to 1), for 12 months.
 - The case setting `SSTICE_DATA_FILENAME` holds the full path of that file. It is the only setting you change in this chapter.
 - `make_sst_bc.py` writes files in the same layout as the stock file, so you do not need to edit any file by hand.
