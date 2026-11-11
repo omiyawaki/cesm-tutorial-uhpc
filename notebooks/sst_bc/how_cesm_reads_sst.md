@@ -2,7 +2,7 @@
 
 ```{admonition} What you need from this page
 :class: tip
-This page has no commands to type. Know these three facts:
+This page has no commands to type. It explains what's inside the file you'll be changing, and these three facts are the ones to remember:
 - One file gives the model both its sea surface temperature (`SST_cpl`, in °C) and its sea-ice fraction (`ice_cov`, 0 to 1), for 12 months.
 - The case setting `SSTICE_DATA_FILENAME` holds the full path of that file. It is the only setting you change in this chapter.
 - `make_sst_bc.py` writes files in the same layout as the stock file, so you do not need to edit any file by hand.
@@ -10,7 +10,7 @@ This page has no commands to type. Know these three facts:
 
 ## The data ocean and prescribed ice
 
-In an `F` compset the ocean component is **DOCN**, the "data ocean". In SST mode (`DOCN_MODE=prescribed`, namelist `datamode = "SSTDATA"`) it reads SST from a file and passes it to the atmosphere. The sea-ice component (CICE in prescribed mode) reads the ice concentration from **the same file**. You change one file, and both SST and ice change.
+In an `F` compset the ocean component is **DOCN**, the "data ocean". In SST mode (`DOCN_MODE=prescribed`, namelist `datamode = "SSTDATA"`) it reads SST from a file and passes it to the atmosphere. The sea-ice component (CICE in prescribed mode) reads the ice concentration from **the same file**. You change one file, and both SST and ice change, which is why the script handles both together.
 
 Your case's compset name shows this. For `F2000climo` it contains `DOCN%DOM` (data ocean) and `CICE%PRES` (prescribed ice).
 
@@ -45,7 +45,7 @@ Each field comes in two versions: `SST_cpl` and `ice_cov`, which the model reads
 ```{dropdown} If you want to know why there are two versions ("diddling")
 CESM does not use a month's value for the whole month. It **interpolates linearly in time** between the mid-month values. A straight line between monthly means smooths out the seasonal cycle, so the model's actual monthly average would come out a little too weak at the peaks.
 
-To fix this, the values in `SST_cpl` and `ice_cov` are adjusted ("diddled") so that, after the model interpolates, each month's average comes out equal to the real monthly mean. The real monthly means are kept in the `_prediddle` variables. The model reads only `SST_cpl` and `ice_cov`. The diddled values can fall slightly outside the physical range, for example ice below 0 or SST below the freezing point. That is expected.
+To fix this, the values in `SST_cpl` and `ice_cov` are adjusted ("diddled") so that, after the model interpolates, each month's average comes out equal to the real monthly mean. The real monthly means are kept in the `_prediddle` variables. The model reads only `SST_cpl` and `ice_cov`. The diddled values can fall slightly outside the physical range, for example ice below 0 or SST below the freezing point. That's expected, so don't be alarmed if you see it.
 
 `make_sst_bc.py` does this adjustment for you. Its `check` command confirms that, after interpolation, the monthly means in your file match its `_prediddle` values. That check gives the same result on the stock file.
 ```
@@ -79,4 +79,4 @@ When the case is set up, CESM writes these settings into "stream" files. Here is
 
 The data-ocean namelist (`CaseDocs/docn_in`) also shows `datamode = "SSTDATA"`, `taxmode = "cycle"` (repeat the 12 months every year), `tintalgo = "linear"` (linear in time) and `mapalgo = "bilinear"`. The ice namelist (`CaseDocs/ice_in`) has `stream_fldfilename` set to the same file and `stream_fldvarname = "ice_cov"`.
 
-You do not edit these files by hand. Do not use `user_nl_docn` for this either. Change `SSTICE_DATA_FILENAME`, and CESM rewrites the streams when you run `./preview_namelists` or submit.
+You don't edit these files by hand, and you don't use `user_nl_docn` for this either. Change `SSTICE_DATA_FILENAME`, and CESM rewrites the streams when you run `./preview_namelists` or submit.

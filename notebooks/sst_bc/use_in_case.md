@@ -1,8 +1,8 @@
 # Use the file in a case
 
-A case reads its SST file at run time, so you do **not** need to rebuild the model to change it. You change one setting and check it.
+This is where your SST file meets the model. A case reads its SST file at run time, so you do **not** need to rebuild the model to change it. You change one setting and check that CESM picked it up.
 
-In this chapter you reuse the `f2000.test` case from the [quickstart](../uhpc/quickstart.md), which is already set up and built. For your own experiments later, you will make a separate case for each SST file, so the control and perturbed runs stay apart.
+In this chapter you reuse the `f2000.test` case from the [quickstart](../uhpc/quickstart.md), which is already set up and built. For your own experiments later, you'll make a separate case for each SST file, so the control and perturbed runs stay apart and you can always tell which output came from which file.
 
 Start this page only after your quickstart run has finished. Check it first:
 
@@ -40,7 +40,7 @@ grep stream_fldfilename CaseDocs/ice_in
 
 `preview_namelists` rewrites the files in `CaseDocs/`. `grep -A2 "<fileNames>"` prints each line that contains `<fileNames>` and the 2 lines after it (`-A2` means "2 lines after"). The first `grep` should show `sst_example_enso.nc` in the second `<fileNames>` line (the first one is the grid file). The second should show the full path to your file for the sea ice. If you still see the stock file name, `xmlchange` did not work: run the `xmlquery` line again and look for typing mistakes.
 
-Your file must stay where it is, unchanged, for as long as the case runs. If you change the file, the run uses the changed version from that point on. Make a new file with a new name instead.
+This is easy to get wrong later: your file must stay where it is, unchanged, for as long as the case runs. If you change the file, the run uses the changed version from that point on. Make a new file with a new name instead.
 
 ## 4. Run a 5-day test with your file
 
@@ -63,12 +63,12 @@ Then submit the case again, exactly as in the quickstart:
 ./case.submit -a "--exclude=hpcc03,hpcc04"
 ```
 
-The case starts again from day 1, now with your SST file. Check on it with `squeue -u $USER`. About 45 minutes after it starts, there is no job row under the header and `cat CaseStatus` ends with `case.run success` and `st_archive success`. Then look for your file name in the data-ocean log:
+The case starts again from day 1, now with your SST file. Like before, it may wait in the queue first. Check on it with `squeue -u $USER`. About 45 minutes after it starts, there is no job row under the header and `cat CaseStatus` ends with `case.run success` and `st_archive success`. Then look for your file name in the data-ocean log:
 
 ```bash
 zgrep "readstrm) open" $MYROOT/archive/f2000.test/logs/ocn.log.*
 ```
 
-`zgrep` searches inside compressed (`.gz`) files, like `grep` does for plain files. Each run left one ocean log, so you see one line per run. The last line belongs to the run you just made and should end with `.../sst/sst_example_enso.nc`. The line before it, from the quickstart run, shows the stock HadOIBl file. If `zgrep` prints nothing, email me the output of `ls $MYROOT/archive/f2000.test/logs`.
+`zgrep` searches inside compressed (`.gz`) files, like `grep` does for plain files. Each run left one ocean log, so you see one line per run. The last line belongs to the run you just made and should end with `.../sst/sst_example_enso.nc`. If it does, CESM ran with an SST file you built yourself, which is what your own experiment will do too. The line before it, from the quickstart run, shows the stock HadOIBl file. If `zgrep` prints nothing, email me the output of `ls $MYROOT/archive/f2000.test/logs`.
 
-Keep a note of which SST file each case used. Open the case's notes file, `README.case` in `/usr/local/research/miyawaki/users/<your-username>/cases/f2000.test`, in the file editor ({ref}`Editing text files <uhpc-editing>`). Add a line at the bottom such as `SST file: sst_example_enso.nc (idealized El Nino warm patch)`, and click **Save**.
+Keep a note of which SST file each case used. Months from now, you won't remember. Open the case's notes file, `README.case` in `/usr/local/research/miyawaki/users/<your-username>/cases/f2000.test`, in the file editor ({ref}`Editing text files <uhpc-editing>`). Add a line at the bottom such as `SST file: sst_example_enso.nc (idealized El Nino warm patch)`, and click **Save**.
