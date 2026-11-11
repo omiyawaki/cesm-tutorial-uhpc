@@ -82,7 +82,7 @@ Keep a note of which SST file each case used. Months from now, you won't remembe
 
 ## 5. Map the response
 
-Now compare the two runs. Both started from the same state on the same day, so the differences between them come from their SST files. Start a Jupyter session as in {ref}`Jupyter <uhpc-jupyter>`, make a new notebook, and type this, with your username in place of `<your-username>` in both paths:
+Now compare the two runs. Both started from the same state on the same day, so the differences between them come from their SST files. Start a Jupyter session as in {ref}`Jupyter <uhpc-jupyter>`, make a new notebook, and type this into one cell, with your username in place of `<your-username>` in both paths:
 
 ```python
 import xarray as xr
@@ -91,24 +91,47 @@ import matplotlib.pyplot as plt
 ctrl = xr.open_dataset('/usr/local/research/miyawaki/users/<your-username>/analysis/control.cam.h0.nc')
 warm = xr.open_dataset('/usr/local/research/miyawaki/users/<your-username>/archive/f2000.test/atm/hist/f2000.test.cam.h0.0001-01-01-00000.nc')
 
-# PRECT is in metres per second; multiply by 1000 * 86400 for mm per day
-diff = (warm['PRECT'] - ctrl['PRECT']).mean('time') * 1000 * 86400
+# warm-patch run minus control, skipping the starting state (time step 0) and averaging the 5 days
+ts_change = (warm['TS'] - ctrl['TS']).isel(time=slice(1, None)).mean('time')
+
+# total precipitation = convective (PRECC) + large-scale (PRECL), in m/s; times 1000 * 86400 gives mm/day
+rain_ctrl = ctrl['PRECC'] + ctrl['PRECL']
+rain_warm = warm['PRECC'] + warm['PRECL']
+rain_change = (rain_warm - rain_ctrl).isel(time=slice(1, None)).mean('time') * 1000 * 86400
 
 plt.figure(figsize=(9, 4))
-plt.pcolormesh(ctrl['lon'], ctrl['lat'], diff, cmap='BrBG', vmin=-20, vmax=20)
+plt.pcolormesh(ctrl['lon'], ctrl['lat'], ts_change, cmap='RdBu_r', vmin=-2, vmax=2)
+plt.colorbar(label='Surface temperature change (K)')
+plt.xlabel('Longitude (degrees east)')
+plt.ylabel('Latitude (degrees north)')
+plt.title('Warm patch minus control: surface temperature')
+plt.show()
+
+plt.figure(figsize=(9, 4))
+plt.pcolormesh(ctrl['lon'], ctrl['lat'], rain_change, cmap='BrBG', vmin=-5, vmax=5)
 plt.colorbar(label='Precipitation change (mm/day)')
 plt.xlabel('Longitude (degrees east)')
 plt.ylabel('Latitude (degrees north)')
-plt.title('Warm patch minus control: 5-day mean precipitation')
+plt.title('Warm patch minus control: precipitation')
 plt.show()
 ```
 
-`.mean('time')` averages the five days, and the subtraction gives the warm-patch run minus the control. Green means more rain in the warm-patch run, brown means less.
+Press **Shift-Enter**. If you get a red `FileNotFoundError`, check that your username replaced `<your-username>` in both paths. `isel(time=slice(1, None))` drops the first time step, which is the starting state, and `.mean('time')` averages the five days. `vmin` and `vmax` fix the colour scales, so your colours mean the same as in the examples below.
 
-Look first at the equatorial Pacific between about 180°E and 260°E, where you added the warm water. Warmer water there feeds more rising air and more rain, so you should see a band of green along the equator over the warm patch, often with brown patches just north and south of it where the rain moved away from. Away from the Pacific the map is speckled with green and brown. That's weather: after a few days, the two runs' storms no longer line up, and in 5 days that noise is as large as the signal outside the tropics. Longer runs average it out. To save a run, this tutorial compares against your quickstart run, which used the stock SST file rather than your ERA5 control file, so small differences between the two SST products are mixed in too. The warm patch is much bigger than those differences, so it still stands out. In your own experiments you'll run the ERA5 control file as well, so the only difference between the runs is your anomaly.
+The first map is your check that the model really used your file. Over the ocean the model doesn't calculate SST, it reads it, so this map is mostly the difference between the two SST files: a red oval on the equator centred near 215°E, the warm patch you made. Away from the patch you'll also see weaker red and blue, mostly near sea ice in the Arctic and around Antarctica, and speckles over land. Those come from two things. To save a run, this tutorial compares against your quickstart run, which used the stock SST file rather than your ERA5 control file, so the small differences between the two SST products are mixed in. And over land the model does calculate the temperature, so the two runs' weather differs a little from day to day. In your own experiments you'll run the ERA5 control file as well, so the only difference in the SST is your anomaly.
+
+```{figure} ../../images/sst_bc/enso_minus_control_ts.png
+:width: 650px
+:alt: World map of the surface temperature difference, warm-patch run minus control. A red oval on the equator centred near 215 degrees east, strong red along the Arctic sea-ice edge, light blue around Antarctica, and small speckles elsewhere.
+Surface temperature in the warm-patch run minus the control, averaged over the 5 days, from UHPC test runs. Yours should look the same.
+```
+
+The second map is the atmosphere's response. Warmer water feeds more rising air and more rain, so look over the warm patch, on the equator between about 180°E and 240°E. In the test run below there's a green streak of extra rain along the equator from about 190°E to 230°E. Elsewhere in the tropics you'll see green and brown speckles of about the same size. That's weather: after a few days the two runs' storms no longer line up, and 5 days is too short for the response to stand out clearly from that noise. Longer runs average the noise down, which is why real experiments run for months or years.
 
 ```{figure} ../../images/sst_bc/enso_minus_control_prect.png
 :width: 650px
-:alt: World map of the 5-day mean precipitation difference, warm-patch run minus control. A green band of increased rain lies along the equator in the central and eastern Pacific, with speckled green and brown elsewhere.
-Precipitation in the warm-patch run minus the control, averaged over the 5 days, from UHPC test runs. Yours will differ in the speckles but should show the same green band over the warm patch. If you don't see it, email me your map.
+:alt: World map of the 5-day mean precipitation difference, warm-patch run minus control. Green and brown speckles of a few mm per day across the tropics, including a green streak along the equator from about 190 to 230 degrees east.
+Precipitation in the warm-patch run minus the control, averaged over the 5 days, from UHPC test runs. Your speckles will be different, because the weather noise differs from run to run.
 ```
+
+If your first map doesn't show the red oval, the run didn't use your file, so email me the map. Save the notebook and stop the Jupyter session when you're done.

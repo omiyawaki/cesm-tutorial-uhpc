@@ -213,28 +213,28 @@ ds = xr.open_dataset('/usr/local/research/miyawaki/users/<your-username>/archive
 ds
 ```
 
-Press **Shift-Enter**. Jupyter prints a summary of the file. Under **Dimensions** you'll see `time: 5` (the five days), `lat: 96` and `lon: 144` (the 2-degree grid) and `lev: 32` (the model's levels in the atmosphere). Under **Data variables** there's a long list, more than 300 of them, because CAM writes many variables by default. Click the small page icon at the right end of a row to see what a variable is and its units. `TS` is the surface temperature and `PRECT` is the total precipitation rate.
+Press **Shift-Enter**. Jupyter prints a summary of the file. Under **Dimensions** you'll see `time: 6` (the model's starting state, then the five daily averages), `lat: 96` and `lon: 144` (the 2-degree grid) and `lev: 32` (the model's levels in the atmosphere). Under **Data variables** there's a long list, more than 300 of them, because CAM writes many variables by default. Click the small page icon at the right end of a row to see what a variable is and its units. `TS` is the surface temperature, and `PRECC` and `PRECL` are the two parts of the precipitation rate (convective and large-scale).
 
-Now make a map of surface temperature on the first day. Type this in the next cell:
+Now make a map of surface temperature on the last day. Type this in the next cell:
 
 ```python
-ts = ds['TS'].isel(time=0)
+ts = ds['TS'].isel(time=-1)
 
 plt.figure(figsize=(9, 4))
 plt.pcolormesh(ds['lon'], ds['lat'], ts, cmap='RdYlBu_r')
 plt.colorbar(label='Surface temperature (K)')
 plt.xlabel('Longitude (degrees east)')
 plt.ylabel('Latitude (degrees north)')
-plt.title('f2000.test: surface temperature, day 1')
+plt.title('f2000.test: surface temperature, day 5')
 plt.show()
 ```
 
-`isel(time=0)` picks the first of the five days. Your map should look like the one below: warm (about 300 K, red) across the tropics, cold (blue) toward the poles, coldest over Antarctica and high ground such as the Himalayas, with the outlines of the continents showing. If the map is one flat colour, or the warm band isn't at the equator, email me the notebook cell and what you see.
+Press **Shift-Enter** to run the cell (in a notebook, plain **Enter** only starts a new line). `isel(time=-1)` picks the last time step, the average of day 5. If the cell prints a red `FileNotFoundError` instead of a map, the path is wrong, most often because `<your-username>` is still in it. Your map should look like the one below. The model starts on January 1, so it's summer in the southern hemisphere: warm (about 300 K, red) across the tropics and over Australia and southern Africa, and cold (blue) over the northern continents, the Arctic and Antarctica, with the outlines of the continents showing. If the map is one flat colour, or the warm band isn't at the equator, email me the notebook cell and what you see.
 
-```{figure} ../../images/uhpc/quickstart_ts_day1.png
+```{figure} ../../images/uhpc/quickstart_ts_day5.png
 :width: 650px
-:alt: World map of surface temperature on day 1 of the test run. Red and yellow around 300 K across the tropics, blue toward the poles, darkest blue over Antarctica, with continent shapes visible.
-Surface temperature on day 1 of a UHPC `f2000.test` run. Yours should look the same.
+:alt: World map of surface temperature on day 5 of the test run. Red around 300 K across the tropics and the southern summer continents, blue over northern Asia, North America, the Arctic and Antarctica, with continent shapes visible.
+Surface temperature on day 5 of a UHPC `f2000.test` run. Yours should look the same.
 ```
 
 Save the notebook with **Cmd-S** and stop the Jupyter session when you're done (step 6 of {ref}`Jupyter <uhpc-jupyter>`).

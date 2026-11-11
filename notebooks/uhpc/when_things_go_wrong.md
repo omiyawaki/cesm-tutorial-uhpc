@@ -64,7 +64,7 @@ The case was created without `--output-root $MYROOT/scratch`, so it points at a 
 
 ### `case.build` stops with an error
 
-The build output itself rarely says what went wrong, but it prints the name of a log file next to the error, for example `.../bld/atm.bldlog.<date>`. Open it with `less <path-to-log>` and press **Shift-G** to jump to the end, where the error is. If you'd rather use the mouse, open the `bld` folder in the Files app and click the log's name to read it in the browser. Also check that you ran the `source .../ENV.sh` line in this shell (it is in your `~/.bashrc`). Then run `./case.build` again. If it fails the same way, email me the last 30 lines of that log.
+The build output itself rarely says what went wrong, but it prints the name of a log file next to the error, for example `.../bld/atm.bldlog.<date>`. Open it with `less <path-to-log>` and press **Shift-G** to jump to the end, where the error is, and **Q** to quit. If you'd rather use the mouse, open the `bld` folder in the Files app and click the log's name to read it in the browser. Also check that you ran the `source .../ENV.sh` line in this shell (it is in your `~/.bashrc`). Then run `./case.build` again. If it fails the same way, email me the last 30 lines of that log.
 
 ## Jobs
 
@@ -140,7 +140,7 @@ The CDS page has install steps for Windows and macOS. We don't use those steps, 
 
 ### `ModuleNotFoundError: No module named 'cdsapi'` or `'netCDF4'`
 
-You ran the script with a different Python. Use `$PY make_sst_bc.py ...`, not `python make_sst_bc.py ...`. Check with `echo $PY`. It should print `/usr/local/Dist/anaconda3-latest/envs/datascience/bin/python`.
+If you see this in a Jupyter notebook, check that the **Conda environment** box in the Jupyter form says `datascience`. If you see it when running the SST script, you ran the script with a different Python. Use `$PY make_sst_bc.py ...`, not `python make_sst_bc.py ...`. Check with `echo $PY`. It should print `/usr/local/Dist/anaconda3-latest/envs/datascience/bin/python`.
 
 ### `check` says `FAIL`
 
