@@ -1,6 +1,8 @@
 # Getting started on Union HPC
 
-By the end of these steps you'll have run CESM twice on the cluster, each time as a 5-day test. The first run checks that the model builds and runs at all. The second checks that it reads an SST file you made yourself, which is the same kind of file you'll change for your own experiment. After each run you'll open the output in a Jupyter notebook and make a map, so you can see for yourself that the model did something sensible.
+This tutorial teaches you to run CESM, NCAR's climate model, on Union's computing cluster, and to change the sea surface temperatures (SSTs) that drive the model's atmosphere. That's the heart of a climate model experiment: you change one thing, run the model, and compare the result with a run where nothing changed. Once you can do that, you can design and run experiments of your own.
+
+You'll start with two short test runs of 5 days each. The first run checks that the model builds and runs at all. The second checks that it reads an SST file you made yourself, which is the same kind of file you'll change for your own experiment. After each run you'll open the output in a Jupyter notebook and make a map, so you can see for yourself that the model did something sensible.
 
 You'll get error messages along the way. Everyone does with CESM, and most of them have a known fix. Look for yours on [When something goes wrong](when_things_go_wrong.md). If you get stuck, email me (<a href="mailto:miyawako@union.edu">miyawako@union.edu</a>) and paste the command you typed and the error you're seeing, and I'll help. While you wait, go on with whatever you can do without it.
 
