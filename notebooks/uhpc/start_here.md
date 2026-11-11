@@ -1,6 +1,6 @@
 # Getting started on Union HPC
 
-This tutorial teaches you to run CESM, NCAR's climate model, on Union's computing cluster, and to change the sea surface temperatures (SSTs) that drive the model's atmosphere. That's how a climate model experiment works: you change one thing, run the model, and compare the result with a run where nothing changed. Once you can do that, you can design and run experiments of your own.
+This tutorial teaches you to run CESM, NCAR's climate model, on Union's computing cluster, and to change the sea surface temperatures (SSTs) that drive the model's atmosphere. That's how a climate model experiment works: you change one thing, such as the SSTs in one region, run the model, and compare the result with a control run that is identical except for that change. Once you can do that, you can design and run experiments of your own.
 
 You'll start with two short test runs of 5 days each. The first run checks that the model builds and runs at all. The second checks that it reads an SST file you made yourself, which is the same kind of file you'll change for your own experiment. After each run you'll open the output in a Jupyter notebook and make a map, so you can see for yourself that the model did something sensible.
 
