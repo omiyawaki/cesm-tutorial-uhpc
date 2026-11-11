@@ -128,7 +128,15 @@ Next, ask the atmosphere for daily output, so you'll have maps to look at when t
 nhtfrq = -24
 ```
 
-`nhtfrq = -24` means "write an average every 24 hours". Click **Save** and close the editor tab. Back in the OnDemand Shell tab, check the file and build the model, one command at a time:
+`nhtfrq = -24` means "write an average every 24 hours". Click **Save** and close the editor tab.
+
+The last settings file is `user_nl_clm`, for the land model. A new case would start the land from a file on a different grid, and converting it needs more memory than a test job gets, so the run would stop after about 25 minutes with `OUT_OF_MEMORY`. Instead, point it at a land starting file I've already made for this grid. Open `user_nl_clm` the same way and paste this as one line, including the single quotes:
+
+```
+finidat = '/usr/local/research/miyawaki/cesm/inputdata/lnd/clm2/initdata_map/clmi.f2000climo_ctrl_f19.clm2.r.0001-01-06-00000.layout_matched.nc'
+```
+
+Click **Save** and close the editor tab. Back in the OnDemand Shell tab, check the file and build the model, one command at a time:
 
 ```bash
 cat user_nl_cice
@@ -136,7 +144,7 @@ cat user_nl_cice
 ./case.build
 ```
 
-`cat user_nl_cice` prints the file, so you can check that the four lines are at the end. (Type `cat user_nl_cam` too, to check the `nhtfrq` line.) `GMAKE_J=4` tells the build to compile 4 files at a time. `./case.build` compiles the model, turning CESM's Fortran code into a program for your case. It prints a lot of output, and some of it can look alarming, including lines such as `Component mct build complete with 42 warnings`. Those warnings are normal. What matters is the last line, `MODEL BUILD HAS FINISHED SUCCESSFULLY`. On UHPC it takes about 1.5 minutes, and the line `Time spent building:` near the end gives the time in seconds. Stay inside tmux while it runs, so a closed tab doesn't stop it.
+`cat user_nl_cice` prints the file, so you can check that the four lines are at the end. (Type `cat user_nl_cam` and `cat user_nl_clm` too, to check the lines you added there.) `GMAKE_J=4` tells the build to compile 4 files at a time. `./case.build` compiles the model, turning CESM's Fortran code into a program for your case. It prints a lot of output, and some of it can look alarming, including lines such as `Component mct build complete with 42 warnings`. Those warnings are normal. What matters is the last line, `MODEL BUILD HAS FINISHED SUCCESSFULLY`. On UHPC it takes about 1.5 minutes, and the line `Time spent building:` near the end gives the time in seconds. Stay inside tmux while it runs, so a closed tab doesn't stop it.
 
 The build runs on the shared login computer. The cluster allows builds there, with up to 4 parallel compile processes, which is what `GMAKE_J=4` sets. The model itself never runs there: it goes to a compute node through `./case.submit`.
 

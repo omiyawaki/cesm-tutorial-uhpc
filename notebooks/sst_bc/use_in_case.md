@@ -1,6 +1,6 @@
 # Use the file in a case
 
-This is where your SST file meets the model. A case reads its SST file at run time, so you do **not** need to rebuild the model to change it. You change one setting and check that CESM picked it up.
+A case reads its SST file at run time, so you do **not** need to rebuild the model to change it. You change one setting and check that CESM picked it up.
 
 In this chapter you reuse the `f2000.test` case from the [quickstart](../uhpc/quickstart.md), which is already set up and built. For your own experiments later, you'll make a separate case for each SST file, so the control and perturbed runs stay apart and you can always tell which output came from which file.
 
@@ -82,7 +82,7 @@ Keep a note of which SST file each case used. Months from now, you won't remembe
 
 ## 5. Map the response
 
-Now for the part that makes it an experiment: comparing the two runs. Both runs started from the same state on the same day, so the differences between them come from the different SST file. Start a Jupyter session as in {ref}`Jupyter <uhpc-jupyter>`, make a new notebook, and type this, with your username in place of `<your-username>` in both paths:
+Now compare the two runs. Both started from the same state on the same day, so the differences between them come from their SST files. Start a Jupyter session as in {ref}`Jupyter <uhpc-jupyter>`, make a new notebook, and type this, with your username in place of `<your-username>` in both paths:
 
 ```python
 import xarray as xr
@@ -105,10 +105,10 @@ plt.show()
 
 `.mean('time')` averages the five days, and the subtraction gives the warm-patch run minus the control. Green means more rain in the warm-patch run, brown means less.
 
-Look first at the equatorial Pacific between about 180°E and 260°E, where you added the warm water. Warmer water there feeds more rising air and more rain, so you should see a band of green along the equator over the warm patch, often with brown patches just north and south of it where the rain moved away from. Away from the Pacific the map is speckled with green and brown. That's weather: after a few days, the two runs' storms no longer line up, and in 5 days that noise is as large as the signal outside the tropics. Longer runs average it out. The control also used the stock SST file rather than your ERA5 control file, so small differences between the two SST products show up too.
+Look first at the equatorial Pacific between about 180°E and 260°E, where you added the warm water. Warmer water there feeds more rising air and more rain, so you should see a band of green along the equator over the warm patch, often with brown patches just north and south of it where the rain moved away from. Away from the Pacific the map is speckled with green and brown. That's weather: after a few days, the two runs' storms no longer line up, and in 5 days that noise is as large as the signal outside the tropics. Longer runs average it out. To save a run, this tutorial compares against your quickstart run, which used the stock SST file rather than your ERA5 control file, so small differences between the two SST products are mixed in too. The warm patch is much bigger than those differences, so it still stands out. In your own experiments you'll run the ERA5 control file as well, so the only difference between the runs is your anomaly.
 
 ```{figure} ../../images/sst_bc/enso_minus_control_prect.png
 :width: 650px
 :alt: World map of the 5-day mean precipitation difference, warm-patch run minus control. A green band of increased rain lies along the equator in the central and eastern Pacific, with speckled green and brown elsewhere.
-Precipitation in the warm-patch run minus the control, averaged over the 5 days, from UHPC test runs. Yours will differ in the speckles but should show the same green band over the warm patch.
+Precipitation in the warm-patch run minus the control, averaged over the 5 days, from UHPC test runs. Yours will differ in the speckles but should show the same green band over the warm patch. If you don't see it, email me your map.
 ```

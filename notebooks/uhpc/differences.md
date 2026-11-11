@@ -19,6 +19,7 @@ NCAR users log in to Cheyenne with `ssh` and a two-factor token. On UHPC you'll 
 You won't need `salloc` in this tutorial. It's there for later, when you want a compute node to work on directly. CESM's own commands (`./case.submit`, `./case.build`) are the same on both machines. CESM translates `./case.submit` into `sbatch` for you, so you'll rarely type `sbatch` yourself.
 
 - **Building:** on NCAR machines you build with `qcmd -- ./case.build`. On UHPC you run `./case.build` on the login node, in the OnDemand Shell inside tmux. The cluster allows builds there with up to 4 parallel jobs, so set `./xmlchange GMAKE_J=4` first (the UHPC default is 8). Other heavy computing and Jupyter are not allowed on the login node. Don't build in Jupyter, which has a 4-hour limit.
+- **Every new case:** add the four `user_nl_cice` lines and the `finidat` line in `user_nl_clm` from step 5 of the [quickstart](quickstart.md) before you submit, or the run stops. This includes the cases the NCAR exercises have you make.
 - **Partitions:** `hpcc` (nodes hpcc01-04) and `gpu` (hpcc03 and hpcc04). CESM runs on CPUs, so set `JOB_QUEUE=hpcc`.
 - **GPU nodes:** CPU jobs must use `--exclude=hpcc03,hpcc04`, for example `./case.submit -a="--exclude=hpcc03,hpcc04"`. CESM doesn't add this for you, so always pass it, or your job may land on a node reserved for GPU work.
 - **Limits:** maximum job length 3 days (Cheyenne's regular queue was 12 hours) and about 2 GB of memory per CPU by default.

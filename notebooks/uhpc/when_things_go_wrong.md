@@ -60,11 +60,11 @@ You ran `create_newcase` twice with the same case name. CESM refuses to overwrit
 
 ### `case.setup` or `case.build` fails with `Permission denied` and a path that does not contain your username
 
-The case was created without `--output-root $MYROOT/scratch`, so it points at a folder that isn't yours. It's easier to start over than to repair it: make a new case with a new name, for example `f2000.test2`, and type the `create_newcase` command exactly as shown, including `--output-root`.
+The case was created without `--output-root $MYROOT/scratch`, so it points at a folder that isn't yours. It's easier to start over than to repair it: make a new case with a new name, for example `f2000.test2`, and type the `create_newcase` command exactly as shown, including `--output-root`, but with `f2000.test2` in place of `f2000.test`. Use `f2000.test2` wherever the later steps say `f2000.test`.
 
 ### `case.build` stops with an error
 
-The build output itself rarely says what went wrong, but it prints the name of a log file next to the error, for example `.../bld/atm.bldlog.<date>`. Open it with `less <path-to-log>` and press **Shift-G** to jump to the end, where the error is. Also check that you ran the `source .../ENV.sh` line in this shell (it is in your `~/.bashrc`). Then run `./case.build` again. If it fails the same way, email me the last 30 lines of that log.
+The build output itself rarely says what went wrong, but it prints the name of a log file next to the error, for example `.../bld/atm.bldlog.<date>`. Open it with `less <path-to-log>` and press **Shift-G** to jump to the end, where the error is. If you'd rather use the mouse, open the `bld` folder in the Files app and click the log's name to read it in the browser. Also check that you ran the `source .../ENV.sh` line in this shell (it is in your `~/.bashrc`). Then run `./case.build` again. If it fails the same way, email me the last 30 lines of that log.
 
 ## Jobs
 
@@ -92,6 +92,10 @@ grep -i -m 5 error cesm.log.*
 - An error that mentions your SST file name: the SST file in `SSTICE_DATA_FILENAME` was moved, renamed or mistyped. Check it with `./xmlquery SSTICE_DATA_FILENAME` and `ls -l <that path>`.
 - `ABORT` in `ice.log`: check that the four sea-ice lines from step 5 of the quickstart are in the case, with `cat user_nl_cice`. Add any that are missing in the file editor ({ref}`Editing text files <uhpc-editing>`) and submit again.
 - An error about a missing input file: the shared input data does not have a file this case needs. Don't download it yourself. Email me the exact message and leave this case as it is, and I'll add the file.
+
+### `sacct` shows `OUT_OF_MEMORY`
+
+The land model was converting its starting file to the model grid and ran out of memory. Check that the `finidat` line from step 5 of the [quickstart](quickstart.md) is in the case, with `cat user_nl_clm`. Add it in the file editor ({ref}`Editing text files <uhpc-editing>`) if it's missing, and submit again.
 
 ### `sacct` shows `TIMEOUT`
 
