@@ -1,14 +1,14 @@
 # Add an SST anomaly
 
-You start from your control file `sst_era5_f19_clim.nc` and add an SST anomaly inside a latitude-longitude box. You get a new file, and the control file stays as it was. The difference between a run with the new file and a run with the control file shows the atmosphere's response to that anomaly.
+You start from your control file `sst_era5_f19_clim.nc` and add an SST anomaly inside a latitude-longitude box. You get a new file, and the control file stays as it was. The difference between a run with the new file and a run with the control file shows the atmosphere's response to that anomaly. That comparison is the core of the experiments you'll run for your thesis.
 
 The worked example is an **idealized El Niño-type warm patch** in the central and eastern equatorial Pacific. During El Niño, this part of the ocean is warmer than usual. Forecasters track it with the average SST anomaly in the **Niño 3.4 region** (5°S-5°N, 170°W-120°W), which is about +1 to +2 K in a moderate to strong event.
 
-The example's anomaly peaks at +1.5 K on the equator at 145°W and fades smoothly to almost zero at the edges of a wider box, 10°S-10°N, 170°E-100°W, so it covers the whole Niño 3.4 region. A real El Niño has a more complicated shape that changes from month to month. This one has a fixed shape and is the same in every month. It is only practice for the method.
+The example's anomaly peaks at +1.5 K on the equator at 145°W and fades smoothly to almost zero at the edges of a wider box, 10°S-10°N, 170°E-100°W, so it covers the whole Niño 3.4 region. A real El Niño has a more complicated shape that changes from month to month. This one has a fixed shape and is the same in every month. It's only practice for the method.
 
 ## 1. Make the file
 
-Type this exact command. It is the anomaly for this tutorial, and the next pages expect the file it makes, `sst_example_enso.nc`.
+Type this exact command. It's the anomaly for this tutorial, and the next pages expect the file it makes, `sst_example_enso.nc`, so save your own ideas for later.
 
 ```bash
 cd $MYROOT/sst
@@ -32,10 +32,10 @@ Wrote sst_example_enso.nc
 | `--lon-min`, `--lon-max` | western and eastern edges, in **degrees east from 0 to 360**. To convert a west longitude, subtract it from 360: 100°W = 260°E. So 170 to 260 means 170°E across the date line to 100°W |
 | `--shape gaussian` | a smooth bump. It peaks at the box centre and falls to almost zero (about 1% of the peak) at the box edges, so there is no sharp step at the edge |
 
-The Gaussian shape is used because a sudden jump in SST at a box edge creates strong, unrealistic temperature gradients. Because the bump is small near the edges, its **average** over the box is much smaller than its peak: +0.27 K over the whole box here, and about +0.67 K over the Niño 3.4 region. The largest change is 1.44 K, not 1.5 K, because no grid point sits exactly on the equator. Keep this in mind when you compare it with observed anomalies, such as the Niño 3.4 index, which are box averages. To make the Niño 3.4 average larger, raise `--amp`.
+We use the Gaussian shape because a sudden jump in SST at a box edge creates strong, unrealistic temperature gradients. Because the bump is small near the edges, its **average** over the box is much smaller than its peak: +0.27 K over the whole box here, and about +0.67 K over the Niño 3.4 region. The largest change is 1.44 K, not 1.5 K, because no grid point sits exactly on the equator. This trips people up, so keep it in mind when you compare it with observed anomalies, such as the Niño 3.4 index, which are box averages. To make the Niño 3.4 average larger, raise `--amp`.
 
 ```{note}
-**Optional, for later experiments.** For this chapter, use only the command in step 1. The script has one other shape, `--shape flat`, which adds the same `--amp` everywhere in the box (the box average then equals `--amp`). NCAR's CAM challenge exercise 5 uses a flat box like this. The script's code (function `gaussian_box`) is short. To try other shapes, such as a map of observed anomalies, you would change that function. Make a copy of the script under a new name before you change it, so the tutorial steps keep working.
+**Optional, for later experiments.** For this chapter, use only the command in step 1. The script has one other shape, `--shape flat`, which adds the same `--amp` everywhere in the box (the box average then equals `--amp`). NCAR's CAM challenge exercise 5 uses a flat box like this. The script's code (function `gaussian_box`) is short. To try other shapes, such as a map of observed anomalies, you would change that function. Make a copy of the script under a new name before you change it, so the tutorial steps keep working. I'm happy to look over your changes with you.
 ```
 
 ## 3. How the file stays consistent
@@ -47,7 +47,7 @@ The `anomaly` step does more than add a number:
 - **Both versions of the field are updated.** The anomaly is added to the monthly means (`SST_cpl_prediddle`), and the matching adjustment is added to `SST_cpl`, which the model reads.
 - **The file's `history` attribute records what you did.** To see it, run `ncdump -h sst_example_enso.nc | grep history`. `ncdump` is in `/usr/local/research/miyawaki/opt/cesm-deps/bin` and is on your path once you have run the `ENV.sh` line from the quickstart.
 
-Land points inside the box are changed too, but the model ignores land, so this has no effect.
+Land points inside the box are changed too, but the model ignores land, so this has no effect on your run.
 
 ## 4. Check and look at it
 

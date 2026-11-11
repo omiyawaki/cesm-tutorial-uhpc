@@ -1,6 +1,6 @@
 # Set up Python and an ERA5 account
 
-This is a one-time setup. Use the OnDemand Shell tab, inside `tmux` (see [Open OnDemand and shell basics](../uhpc/ondemand_basics.md)), and, for step 5, your Mac's web browser.
+You only do this setup once. Use the OnDemand Shell tab, inside `tmux` (see [Open OnDemand and shell basics](../uhpc/ondemand_basics.md)), and, for step 5, your Mac's web browser.
 
 ## 1. Make a folder for your SST work
 
@@ -14,7 +14,7 @@ pwd
 
 ## 2. Get the script
 
-A copy of the script is kept on UHPC for everyone in the group. Copy it into your `sst` folder:
+I keep a copy of the script on UHPC for everyone in the group. Copy it into your own `sst` folder, so you can run it there and later change your copy without affecting anyone else:
 
 ```bash
 cp /usr/local/research/miyawaki/tutorial/tools/make_sst_bc.py .
@@ -27,11 +27,11 @@ ls
 make_sst_bc.py
 ```
 
-If `cp` prints `Permission denied`, your account is not yet in the `res-miyawaki` group: see "Permission denied" in [When something goes wrong](../uhpc/when_things_go_wrong.md). If it prints `No such file or directory`, check the path for typing mistakes (press **Up arrow** to bring the command back). If it still fails, email me (see the top of [When something goes wrong](../uhpc/when_things_go_wrong.md)).
+If `cp` prints `Permission denied`, your account is not yet in the `res-miyawaki` group: see "Permission denied" in [When something goes wrong](../uhpc/when_things_go_wrong.md). If it prints `No such file or directory`, check the path for typing mistakes (press **Up arrow** to bring the command back). If it still fails, email me and paste what it printed.
 
 ## 3. Choose the Python to use
 
-UHPC has a ready-made Python environment called `datascience`, with xarray, netCDF4, numpy, scipy and matplotlib. Save its location in a variable so the commands stay short:
+UHPC has a ready-made Python environment called `datascience`, with xarray, netCDF4, numpy, scipy and matplotlib, so you don't have to install those yourself. Save its location in a variable so the commands stay short:
 
 ```bash
 export PY=/usr/local/Dist/anaconda3-latest/envs/datascience/bin/python
@@ -55,15 +55,15 @@ $PY -m pip install --user cdsapi
 $PY -c "import cdsapi; print('cdsapi OK')"
 ```
 
-`pip install --user` downloads a Python package and installs it in your home folder, where `$PY` finds it. It ends with `Successfully installed cdsapi-...` and a few other package names. The second line should print `cdsapi OK`.
+`pip install --user` downloads a Python package and installs it in your home folder, where `$PY` finds it. It prints a fair amount of text, and it may warn that a newer version of pip is available, which you can ignore. It ends with `Successfully installed cdsapi-...` and a few other package names. The second line should print `cdsapi OK`.
 
 ## 5. Get a free ERA5 (Copernicus) account
 
-ERA5 comes from the Copernicus Climate Data Store (CDS). Do items 1 to 3 in your Mac's web browser:
+ERA5 comes from the Copernicus Climate Data Store (CDS), and the download script needs your own account to ask for it. Do items 1 to 3 in your Mac's web browser:
 
 1. Go to <https://cds.climate.copernicus.eu> and click **Login - Register** to make a free account. Confirm it from the email the CDS sends you, then log in.
 2. Open the ERA5 dataset's download page, <https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels-monthly-means?tab=download>, while logged in. Scroll to the bottom of the form, to the section **Terms of use**. It lists one licence, the **CC-BY licence**. Click the button there to accept it. If the page says you have already accepted it, go on. Downloads fail with a licence error until you accept it once. You do not need to fill in the rest of the form.
-3. Open <https://cds.climate.copernicus.eu/how-to-api> while logged in. The page starts with sections for **Windows users** and **macOS users**. Do not follow those sections: you do not install anything on your Mac. Scroll to **Linux users** and its step **1. Setup the CDS Api key**. It shows two lines, starting `url:` and `key:`. If the `key:` line is `<PERSONAL-ACCESS-TOKEN>`, you are not logged in: log in and reload the page. When you are logged in, the `key:` line shows your own **Personal Access Token**, a long string of letters, digits and dashes. Copy those two lines. You will paste them into a file on the cluster in the next step. Ignore the rest of the page (installing the client and the examples), because step 4 above already installed it on the cluster.
+3. Open <https://cds.climate.copernicus.eu/how-to-api> while logged in. The page starts with sections for **Windows users** and **macOS users**. Don't follow those sections, because you don't install anything on your Mac. This part of the page confuses almost everyone. Scroll to **Linux users** and its step **1. Setup the CDS Api key**. It shows two lines, starting `url:` and `key:`. If the `key:` line is `<PERSONAL-ACCESS-TOKEN>`, you are not logged in: log in and reload the page. When you are logged in, the `key:` line shows your own **Personal Access Token**, a long string of letters, digits and dashes. Copy those two lines. You will paste them into a file on the cluster in the next step. Ignore the rest of the page (installing the client and the examples), because step 4 above already installed it on the cluster.
 
 Back in the OnDemand Shell tab (not on your Mac), create an empty key file on the cluster:
 

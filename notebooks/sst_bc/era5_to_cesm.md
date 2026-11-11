@@ -1,6 +1,6 @@
 # ERA5 to a CESM SST file
 
-In this step you make your own version of the stock SST/ice file, built from ERA5 instead of the Hadley/OI data. The file you make here is the control. Later you add an anomaly to a copy of it.
+In this step you make your own version of the stock SST/ice file, built from ERA5 instead of the Hadley/OI data. The file you make here is your control, the "normal ocean" that every experiment gets compared against. Later you add an anomaly to a copy of it.
 
 All commands run in the OnDemand Shell, inside `tmux`, in your SST folder:
 
@@ -14,7 +14,7 @@ cd $MYROOT/sst
 $PY make_sst_bc.py download --first-year 1995 --last-year 2005 --out era5_sst_ice_monthly.nc
 ```
 
-`$PY make_sst_bc.py download` runs the script's `download` step with the Python you chose. This asks the Climate Data Store for ERA5 **monthly averaged** `sea_surface_temperature` and `sea_ice_cover` for 1995-2005, already averaged onto a 1-degree grid. The years match those of the stock file. Your request waits in a queue, so you will see `status has been updated to accepted`, then `running`, then a download bar, and finally `Wrote era5_sst_ice_monthly.nc` (about 13 MB). Stay inside tmux while you wait.
+`$PY make_sst_bc.py download` runs the script's `download` step with the Python you chose. This asks the Climate Data Store for ERA5 **monthly averaged** `sea_surface_temperature` and `sea_ice_cover` for 1995-2005, already averaged onto a 1-degree grid. The years match those of the stock file. Your request waits in the CDS queue, sometimes for a while, so don't worry if nothing seems to happen at first. You'll see `status has been updated to accepted`, then `running`, then a download bar, and finally `Wrote era5_sst_ice_monthly.nc` (about 13 MB). Stay inside tmux while you wait, so the download keeps going if the tab closes.
 
 What you downloaded (variable names as ERA5 delivers them):
 
@@ -30,7 +30,7 @@ What you downloaded (variable names as ERA5 delivers them):
 $PY make_sst_bc.py build --era5 era5_sst_ice_monthly.nc --first-year 1995 --last-year 2005 --out sst_era5_f19_clim.nc
 ```
 
-It prints `Using 132 months (11 years) of ERA5`, the fraction of land points (34%), then `Wrote sst_era5_f19_clim.nc`. The `build` step does the following.
+This is the step that does the real work. It prints `Using 132 months (11 years) of ERA5`, the fraction of land points (34%), then `Wrote sst_era5_f19_clim.nc`. The `build` step does the following.
 
 1. **Average by calendar month.** All Januaries are averaged, then all Februaries, and so on. The result is 12 maps (a climatology).
 2. **Convert units.** SST goes from kelvin to degrees Celsius (subtract 273.15), because the CAM file uses `deg_C`. Sea ice is already a fraction from 0 to 1, as CAM expects.
@@ -63,7 +63,7 @@ ok   model monthly means match SST_cpl_prediddle at 100.0% of points (need 99%; 
 ALL CHECKS PASSED
 ```
 
-If any line is `FAIL`, do not use the file. See [When something goes wrong](../uhpc/when_things_go_wrong.md).
+If any line is `FAIL`, don't use the file. See [When something goes wrong](../uhpc/when_things_go_wrong.md).
 
 ## 4. Look at it
 
@@ -73,7 +73,7 @@ $PY make_sst_bc.py plot sst_era5_f19_clim.nc --month 8 --compare /usr/local/rese
 
 This writes a picture with three maps for August: your SST, your sea ice, and your SST minus the stock file's SST. To view it, open the OnDemand **Files** app, click **Change directory**, type `/usr/local/research/miyawaki/users/<your-username>/sst` with your username in place of `<your-username>` (`whoami` in the Shell tab prints it), click **OK**, and click the `.png` file.
 
-What to expect: over the open ocean the two products agree to within about half a degree on average. The root-mean-square difference in August is about 0.3 K over grid boxes that are entirely ocean. Larger differences show up near coasts and sea-ice edges. Over land the maps look blocky and strange, which does not matter, because land is filled and the model never uses it.
+What to expect: over the open ocean the two products agree to within about half a degree on average. The root-mean-square difference in August is about 0.3 K over grid boxes that are entirely ocean. Larger differences show up near coasts and sea-ice edges. Over land the maps look blocky and strange. That looks wrong but doesn't matter, because land is filled and the model never uses it.
 
 ```{dropdown} If you want to know how the script differs from NCAR's official tool
 `make_sst_bc.py` simplifies the official CESM tool (`bcgen`) in two ways. It does not merge several observational products, and it does not apply bcgen's extra limits near the ice edge. For comparison: on the stock file, the script's time-interpolation check reproduces bcgen's monthly means at 99.4% of points, and the remaining 0.6% are the ice-edge points where bcgen applies those limits.
