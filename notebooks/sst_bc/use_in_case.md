@@ -57,10 +57,17 @@ First make sure the case starts again from day 1:
 	CONTINUE_RUN: FALSE
 ```
 
+Before you submit, save a copy of the atmosphere output from your quickstart run. The new run writes a file with the same name, and the archive step would replace the old one, which is the control you'll compare against:
+
+```bash
+mkdir -p $MYROOT/analysis
+cp $MYROOT/archive/f2000.test/atm/hist/f2000.test.cam.h0.0001-01-01-00000.nc $MYROOT/analysis/control.cam.h0.nc
+```
+
 Then submit the case again, exactly as in the quickstart:
 
 ```bash
-./case.submit -a "--exclude=hpcc03,hpcc04"
+./case.submit -a="--exclude=hpcc03,hpcc04"
 ```
 
 The case starts again from day 1, now with your SST file. Like before, it may wait in the queue first. Check on it with `squeue -u $USER`. About 45 minutes after it starts, there is no job row under the header and `cat CaseStatus` ends with `case.run success` and `st_archive success`. Then look for your file name in the data-ocean log:
@@ -72,3 +79,36 @@ zgrep "readstrm) open" $MYROOT/archive/f2000.test/logs/ocn.log.*
 `zgrep` searches inside compressed (`.gz`) files, like `grep` does for plain files. Each run left one ocean log, so you see one line per run. The last line belongs to the run you just made and should end with `.../sst/sst_example_enso.nc`. If it does, CESM ran with an SST file you built yourself, which is what your own experiment will do too. The line before it, from the quickstart run, shows the stock HadOIBl file. If `zgrep` prints nothing, email me the output of `ls $MYROOT/archive/f2000.test/logs`.
 
 Keep a note of which SST file each case used. Months from now, you won't remember. Open the case's notes file, `README.case` in `/usr/local/research/miyawaki/users/<your-username>/cases/f2000.test`, in the file editor ({ref}`Editing text files <uhpc-editing>`). Add a line at the bottom such as `SST file: sst_example_enso.nc (idealized El Nino warm patch)`, and click **Save**.
+
+## 5. Map the response
+
+Now for the part that makes it an experiment: comparing the two runs. Both runs started from the same state on the same day, so the differences between them come from the different SST file. Start a Jupyter session as in {ref}`Jupyter <uhpc-jupyter>`, make a new notebook, and type this, with your username in place of `<your-username>` in both paths:
+
+```python
+import xarray as xr
+import matplotlib.pyplot as plt
+
+ctrl = xr.open_dataset('/usr/local/research/miyawaki/users/<your-username>/analysis/control.cam.h0.nc')
+warm = xr.open_dataset('/usr/local/research/miyawaki/users/<your-username>/archive/f2000.test/atm/hist/f2000.test.cam.h0.0001-01-01-00000.nc')
+
+# PRECT is in metres per second; multiply by 1000 * 86400 for mm per day
+diff = (warm['PRECT'] - ctrl['PRECT']).mean('time') * 1000 * 86400
+
+plt.figure(figsize=(9, 4))
+plt.pcolormesh(ctrl['lon'], ctrl['lat'], diff, cmap='BrBG', vmin=-20, vmax=20)
+plt.colorbar(label='Precipitation change (mm/day)')
+plt.xlabel('Longitude (degrees east)')
+plt.ylabel('Latitude (degrees north)')
+plt.title('Warm patch minus control: 5-day mean precipitation')
+plt.show()
+```
+
+`.mean('time')` averages the five days, and the subtraction gives the warm-patch run minus the control. Green means more rain in the warm-patch run, brown means less.
+
+Look first at the equatorial Pacific between about 180°E and 260°E, where you added the warm water. Warmer water there feeds more rising air and more rain, so you should see a band of green along the equator over the warm patch, often with brown patches just north and south of it where the rain moved away from. Away from the Pacific the map is speckled with green and brown. That's weather: after a few days, the two runs' storms no longer line up, and in 5 days that noise is as large as the signal outside the tropics. Longer runs average it out. The control also used the stock SST file rather than your ERA5 control file, so small differences between the two SST products show up too.
+
+```{figure} ../../images/sst_bc/enso_minus_control_prect.png
+:width: 650px
+:alt: World map of the 5-day mean precipitation difference, warm-patch run minus control. A green band of increased rain lies along the equator in the central and eastern Pacific, with speckled green and brown elsewhere.
+Precipitation in the warm-patch run minus the control, averaged over the 5 days, from UHPC test runs. Yours will differ in the speckles but should show the same green band over the warm patch.
+```

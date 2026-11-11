@@ -77,6 +77,8 @@ Jupyter runs on a compute node, which is why we start it from the Jupyter app. N
 
 If you haven't used a command line before, this is the part to practise. Type a command and press **Enter**. Most commands print nothing when they succeed, which feels odd at first, but silence means it worked. In the table, words inside `< >` are placeholders: replace them with a real folder or file name, and don't type the `<` or `>` characters. Where a path shows `<your-username>`, type the first part of your Union email instead.
 
+A safe way to practise is in a folder of your own, where nothing you do can break anything. Type `mkdir -p ~/practice`, then `cd ~/practice`, then `cp ~/.bashrc notes.txt` to get a file to play with. Now try the commands on `notes.txt`: `ls -l`, `less notes.txt`, `tail -n 30 notes.txt`, `grep export notes.txt`, `mv notes.txt old_notes.txt`. Type `cd` when you're done to go back to your home folder.
+
 | Command | What it does | What you should see |
 |---|---|---|
 | `pwd` | print the folder you are in ("working directory") | a path such as `/home/<your-username>` |

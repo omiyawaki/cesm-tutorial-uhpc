@@ -6,7 +6,7 @@ In this page you'll make, build and run your first CESM case, a 5-day atmosphere
 
 You already have a UHPC account. Your username is the first part of your Union email address (the part before `@union.edu`).
 
-Your cluster password is **not** your Union (Okta) password, and mixing the two up is the most common reason a login fails. The cluster administrators emailed you a temporary password when they made your account, and you chose a new cluster password the first time you logged in. Use that cluster password for OnDemand, and your Union password only for the VPN. If you forget the cluster password, email <a href="mailto:hpcadmin@union.edu">hpcadmin@union.edu</a> from your Union email address and ask them to reset it.
+Your cluster password is **not** your Union (Okta) password, and mixing the two up is the most common reason a login fails. The cluster administrators emailed you a temporary password when they made your account, and you chose a new cluster password the first time you logged in. (If you haven't logged in yet and aren't sure how to set it, email me and we'll do it together.) Use that cluster password for OnDemand, and your Union password only for the VPN. If you forget the cluster password, email <a href="mailto:hpcadmin@union.edu">hpcadmin@union.edu</a> from your Union email address and ask them to reset it.
 
 You won't need the Mac Terminal app for anything here. Every command goes into the OnDemand Shell tab.
 
@@ -101,7 +101,7 @@ Now you tell the case how big to run and for how long. Each `./xmlchange` line c
 - `STOP_OPTION=ndays,STOP_N=5`: run 5 model days.
 - `JOB_QUEUE=hpcc,JOB_WALLCLOCK_TIME=02:00:00`: use the cluster's CPU partition and allow the job up to 2 hours.
 - `DOUT_S_ROOT`: where finished output is copied. You have to set this, because the default points to a folder that isn't yours, and the archive step at the end would fail.
-- `HIST_OPTION=never,REST_OPTION=ndays,REST_N=5`: no extra coupler output during the test, and one set of restart files at the end. This test only proves that CESM builds, starts, reads its input files and finishes, so it writes no maps or monthly output on purpose. Atmosphere output is covered in the [CAM output](../namelist/output/output_cam.ipynb) section of the namelist chapter, where you turn on daily and monthly output.
+- `HIST_OPTION=never,REST_OPTION=ndays,REST_N=5`: no extra coupler output during the test, and one set of restart files at the end. The atmosphere's own output is set separately, in `user_nl_cam` below. The [CAM output](../namelist/output/output_cam.ipynb) section of the namelist chapter explains the output settings in more detail.
 
 Next, set up the case, which writes the scripts and settings files the build and the run will use:
 
@@ -120,7 +120,15 @@ shortwave = "default"
 highfreq = .false.
 ```
 
-Click **Save** and close the editor tab. Back in the OnDemand Shell tab, check the file and build the model, one command at a time:
+Click **Save** and close the editor tab.
+
+Next, ask the atmosphere for daily output, so you'll have maps to look at when the run finishes. By default CAM only writes monthly averages, and a 5-day run ends before the first month is over, so without this line you'd get no atmosphere output at all. In the same folder in the Files app, click **⋮** next to `user_nl_cam`, click **Edit**, click at the end of the last line, press **Enter**, and type this line:
+
+```
+nhtfrq = -24
+```
+
+`nhtfrq = -24` means "write an average every 24 hours". Click **Save** and close the editor tab. Back in the OnDemand Shell tab, check the file and build the model, one command at a time:
 
 ```bash
 cat user_nl_cice
@@ -128,7 +136,7 @@ cat user_nl_cice
 ./case.build
 ```
 
-`cat user_nl_cice` prints the file, so you can check that the four lines are at the end. `GMAKE_J=4` tells the build to compile 4 files at a time. `./case.build` compiles the model, turning CESM's Fortran code into a program for your case. It prints a lot of output, and some of it can look alarming, including lines such as `Component mct build complete with 42 warnings`. Those warnings are normal. What matters is the last line, `MODEL BUILD HAS FINISHED SUCCESSFULLY`. On UHPC it takes about 1.5 minutes, and the line `Time spent building:` near the end gives the time in seconds. Stay inside tmux while it runs, so a closed tab doesn't stop it.
+`cat user_nl_cice` prints the file, so you can check that the four lines are at the end. (Type `cat user_nl_cam` too, to check the `nhtfrq` line.) `GMAKE_J=4` tells the build to compile 4 files at a time. `./case.build` compiles the model, turning CESM's Fortran code into a program for your case. It prints a lot of output, and some of it can look alarming, including lines such as `Component mct build complete with 42 warnings`. Those warnings are normal. What matters is the last line, `MODEL BUILD HAS FINISHED SUCCESSFULLY`. On UHPC it takes about 1.5 minutes, and the line `Time spent building:` near the end gives the time in seconds. Stay inside tmux while it runs, so a closed tab doesn't stop it.
 
 The build runs on the shared login computer. The cluster allows builds there, with up to 4 parallel compile processes, which is what `GMAKE_J=4` sets. The model itself never runs there: it goes to a compute node through `./case.submit`.
 
@@ -143,10 +151,10 @@ Slurm is the program that shares the cluster's compute nodes among users. You ha
 It prints the `sbatch` commands CESM will use, including `-p hpcc` and `--time 02:00:00`. Then submit:
 
 ```bash
-./case.submit -a "--exclude=hpcc03,hpcc04"
+./case.submit -a="--exclude=hpcc03,hpcc04"
 ```
 
-`-a "--exclude=hpcc03,hpcc04"` keeps the job off hpcc03 and hpcc04, the two nodes reserved for GPU work. CESM doesn't add this for you, so always add it when you submit. You should see lines that include `Submitted job id is` followed by a number, once for `case.run` (the model) and once for `case.st_archive` (copying the output afterwards). Write the numbers down, since you'll need them if something goes wrong.
+`-a="--exclude=hpcc03,hpcc04"` keeps the job off hpcc03 and hpcc04, the two nodes reserved for GPU work. CESM doesn't add this for you, so always add it when you submit. Type the `=` right after `-a`: without it, `case.submit` mistakes `--exclude` for one of its own options and stops with `expected one argument`. You should see lines that include `Submitted job id is` followed by a number, once for `case.run` (the model) and once for `case.st_archive` (copying the output afterwards). Write the numbers down, since you'll need them if something goes wrong.
 
 A 5-day run takes about 45 minutes once it starts, and it may wait in the queue before that if the cluster is busy. It keeps running if you close OnDemand or shut your Mac, so you don't need to watch it.
 
@@ -162,7 +170,7 @@ squeue -u $USER
 cat CaseStatus
 ```
 
-`cat` prints a whole file. The last lines should include `case.run success` and `st_archive success`. If you see both, your first CESM run worked. If they say `error`, see [When something goes wrong](when_things_go_wrong.md).
+`cat` prints a whole file. If you'd rather read it in the browser, open the case folder in the Files app and click `CaseStatus`: the Files app shows a text file or a picture when you click its name. The last lines should include `case.run success` and `st_archive success`. If you see both, your first CESM run worked. If they say `error`, see [When something goes wrong](when_things_go_wrong.md).
 
 Two more commands are useful later. `sacct -j <jobid>` shows how a finished job ended (`COMPLETED`, `FAILED` or `TIMEOUT`), and `scancel <jobid>` cancels a job. Replace `<jobid>` with the number you wrote down.
 
@@ -175,9 +183,55 @@ ls $MYROOT/archive/f2000.test/rest
 ls $MYROOT/cases/f2000.test/timing
 ```
 
-These are the run folder (where the model works), the compressed log files, the restart files, and the speed and cost of the run. You won't find any atmosphere maps yet. The atmosphere writes monthly averages by default, and a 5-day run ends before the first month is complete, so `atm/hist` stays empty. That's expected. You turn on more frequent output in later chapters. You can also browse these folders in the OnDemand **Files** app.
+These are the run folder (where the model works), the compressed log files, the restart files, and the speed and cost of the run. You can also browse these folders in the OnDemand **Files** app.
 
-## 9. Disk space
+The atmosphere's output is in `atm/hist`:
+
+```bash
+ls $MYROOT/archive/f2000.test/atm/hist
+```
+
+You should see one file, `f2000.test.cam.h0.0001-01-01-00000.nc`. It holds 5 daily averages of every atmosphere variable CAM writes by default. The name tells you the case, the component (`cam`), the history stream (`h0`) and the model date the file starts on.
+
+## 9. Look at your output
+
+Printed messages tell you the model finished, but a map tells you whether it made sense. Start a Jupyter session as in {ref}`Jupyter <uhpc-jupyter>` (leave **Conda environment** as `datascience`), make a new notebook, and type this in the first cell, with your username in place of `<your-username>`:
+
+```python
+import xarray as xr
+import matplotlib.pyplot as plt
+
+ds = xr.open_dataset('/usr/local/research/miyawaki/users/<your-username>/archive/f2000.test/atm/hist/f2000.test.cam.h0.0001-01-01-00000.nc')
+ds
+```
+
+Press **Shift-Enter**. Jupyter prints a summary of the file. Under **Dimensions** you'll see `time: 5` (the five days), `lat: 96` and `lon: 144` (the 2-degree grid) and `lev: 32` (the model's levels in the atmosphere). Under **Data variables** there's a long list, more than 300 of them, because CAM writes many variables by default. Click the small page icon at the right end of a row to see what a variable is and its units. `TS` is the surface temperature and `PRECT` is the total precipitation rate.
+
+Now make a map of surface temperature on the first day. Type this in the next cell:
+
+```python
+ts = ds['TS'].isel(time=0)
+
+plt.figure(figsize=(9, 4))
+plt.pcolormesh(ds['lon'], ds['lat'], ts, cmap='RdYlBu_r')
+plt.colorbar(label='Surface temperature (K)')
+plt.xlabel('Longitude (degrees east)')
+plt.ylabel('Latitude (degrees north)')
+plt.title('f2000.test: surface temperature, day 1')
+plt.show()
+```
+
+`isel(time=0)` picks the first of the five days. Your map should look like the one below: warm (about 300 K, red) across the tropics, cold (blue) toward the poles, coldest over Antarctica and high ground such as the Himalayas, with the outlines of the continents showing. If the map is one flat colour, or the warm band isn't at the equator, email me the notebook cell and what you see.
+
+```{figure} ../../images/uhpc/quickstart_ts_day1.png
+:width: 650px
+:alt: World map of surface temperature on day 1 of the test run. Red and yellow around 300 K across the tropics, blue toward the poles, darkest blue over Antarctica, with continent shapes visible.
+Surface temperature on day 1 of a UHPC `f2000.test` run. Yours should look the same.
+```
+
+Save the notebook with **Cmd-S** and stop the Jupyter session when you're done (step 6 of {ref}`Jupyter <uhpc-jupyter>`).
+
+## 10. Disk space
 
 Keep all CESM files in your own folder (`$MYROOT`). Your home folder is limited to 20 GB, and the `/scratch` disk on each compute node is wiped regularly, so output left there would disappear.
 

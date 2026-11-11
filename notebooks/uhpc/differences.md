@@ -1,6 +1,6 @@
 # Differences from the NCAR tutorial
 
-The NCAR tutorial was written for NCAR's Cheyenne supercomputer and Casper analysis cluster, which use the PBS scheduler and the GLADE file system. I've changed the pages in this tutorial to use Union HPC (UHPC) commands and paths, but some NCAR wording and example output is still there. When an NCAR page and UHPC seem to disagree, this page explains how to translate, and if you still aren't sure, ask me.
+The NCAR tutorial was written for NCAR's Cheyenne supercomputer and Casper analysis cluster, which use the PBS scheduler and the GLADE file system. I've changed the pages in this tutorial to use Union HPC (UHPC) commands and paths, but some NCAR wording and example output is still there. When an NCAR page and UHPC seem to disagree, this page explains how to translate, and if you still aren't sure, ask me. You don't need to type anything on this page. Read it once now so the NCAR pages make sense, and come back to it when one of them confuses you.
 
 ## Logging in
 
@@ -16,11 +16,11 @@ NCAR users log in to Cheyenne with `ssh` and a two-factor token. On UHPC you'll 
 | Cancel a job | `qdel <jobid>` | `scancel <jobid>` |
 | Finished job information | `qhist` | `sacct -j <jobid>` |
 
-CESM's own commands (`./case.submit`, `./case.build`) are the same on both machines. CESM translates `./case.submit` into `sbatch` for you, so you'll rarely type `sbatch` yourself.
+You won't need `salloc` in this tutorial. It's there for later, when you want a compute node to work on directly. CESM's own commands (`./case.submit`, `./case.build`) are the same on both machines. CESM translates `./case.submit` into `sbatch` for you, so you'll rarely type `sbatch` yourself.
 
 - **Building:** on NCAR machines you build with `qcmd -- ./case.build`. On UHPC you run `./case.build` on the login node, in the OnDemand Shell inside tmux. The cluster allows builds there with up to 4 parallel jobs, so set `./xmlchange GMAKE_J=4` first (the UHPC default is 8). Other heavy computing and Jupyter are not allowed on the login node. Don't build in Jupyter, which has a 4-hour limit.
 - **Partitions:** `hpcc` (nodes hpcc01-04) and `gpu` (hpcc03 and hpcc04). CESM runs on CPUs, so set `JOB_QUEUE=hpcc`.
-- **GPU nodes:** CPU jobs must use `--exclude=hpcc03,hpcc04`, for example `./case.submit -a "--exclude=hpcc03,hpcc04"`. CESM doesn't add this for you, so always pass it, or your job may land on a node reserved for GPU work.
+- **GPU nodes:** CPU jobs must use `--exclude=hpcc03,hpcc04`, for example `./case.submit -a="--exclude=hpcc03,hpcc04"`. CESM doesn't add this for you, so always pass it, or your job may land on a node reserved for GPU work.
 - **Limits:** maximum job length 3 days (Cheyenne's regular queue was 12 hours) and about 2 GB of memory per CPU by default.
 - **Accounts:** There is no CESM `PROJECT` setting on UHPC, so ignore `--project`, `PROJECT=` and the tutorial project numbers (`UESM0011`, `UESM0012`, `P93300642`). Your jobs use your default Slurm account, `general`, which works for CESM on `hpcc`, so you don't set an account anywhere.
 - **Queue names:** wherever the NCAR text has `JOB_QUEUE=regular`, use `JOB_QUEUE=hpcc`. The daily tutorial reservations do not exist on UHPC.

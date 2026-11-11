@@ -32,7 +32,7 @@ You are already inside tmux (there is a green bar at the bottom of the window), 
 
 ### The file editor does not open, or **Save** fails
 
-First check the path at the top of the editor tab. You can only save files you are allowed to change, such as the files in your home folder and in `/usr/local/research/miyawaki/users/<your-username>`. If the editor still doesn't work, edit the file in the OnDemand Shell tab with `nano`, a text editor that runs inside the Shell. Type `nano` and the file name, for example `nano ~/.bashrc`. Move with the arrow keys, because clicking doesn't move the cursor in `nano`. Paste with **Cmd-V**. Press **Ctrl-O**, then **Enter** to save, and **Ctrl-X** to quit.
+First check the path at the top of the editor tab. You can only save files you are allowed to change, such as the files in your home folder and in `/usr/local/research/miyawaki/users/<your-username>`. If the editor still doesn't work, edit the file in the OnDemand Shell tab with `nano`, a text editor that runs inside the Shell. Type `nano` and the file name, for example `nano ~/.bashrc`. Move with the arrow keys, because clicking doesn't move the cursor in `nano`. Paste with **Cmd-V**. Press **Ctrl-O** (hold the Control key and press O), then **Enter** to save, and **Ctrl-X** to quit.
 
 ## Permissions and setup
 
@@ -50,7 +50,7 @@ The `source` line in `~/.bashrc` almost certainly has a typing mistake in the pa
 
 ### `Disk quota exceeded`
 
-Your home folder (20 GB) is full. Type `du -sh ~/.conda ~/.cache` to see what is using it. The `~/.cache` folder can be emptied with `rm -r ~/.cache/pip`. Keep CESM files in `$MYROOT`, never in your home folder. If you can't tell what's filling it, email me the output of the `du` command.
+Your home folder (20 GB) is full. Type `du -sh ~/.conda ~/.cache` to see what is using it. The `~/.cache` folder can be emptied with `rm -r ~/.cache/pip`. `rm -r` deletes a folder and everything in it, so be careful with it in general, but this folder only holds copies of downloaded install files, so it's safe to delete. Keep CESM files in `$MYROOT`, never in your home folder. If you can't tell what's filling it, email me the output of the `du` command.
 
 ## Creating, setting up and building a case
 
@@ -67,6 +67,10 @@ The case was created without `--output-root $MYROOT/scratch`, so it points at a 
 The build output itself rarely says what went wrong, but it prints the name of a log file next to the error, for example `.../bld/atm.bldlog.<date>`. Open it with `less <path-to-log>` and press **Shift-G** to jump to the end, where the error is. Also check that you ran the `source .../ENV.sh` line in this shell (it is in your `~/.bashrc`). Then run `./case.build` again. If it fails the same way, email me the last 30 lines of that log.
 
 ## Jobs
+
+### `case.submit: error: argument -a/--batch-args: expected one argument`
+
+The `=` after `-a` is missing. Type the command exactly as `./case.submit -a="--exclude=hpcc03,hpcc04"`, with no space between `-a` and `=`.
 
 ### `squeue` shows `PD` for a long time
 
@@ -95,12 +99,12 @@ The job ran out of its time limit (`JOB_WALLCLOCK_TIME`). The tests in this tuto
 
 ```bash
 ./xmlchange JOB_WALLCLOCK_TIME=04:00:00
-./case.submit -a "--exclude=hpcc03,hpcc04"
+./case.submit -a="--exclude=hpcc03,hpcc04"
 ```
 
 ### `case.run success` but `st_archive error`
 
-The model ran fine, and only the step that copies the output afterwards failed, because it couldn't write to the archive folder. Check `./xmlquery DOUT_S_ROOT`. It must be `/usr/local/research/miyawaki/users/<your-username>/archive/f2000.test`. Fix it with `./xmlchange DOUT_S_ROOT=$MYROOT/archive/f2000.test` and run `./case.submit -a "--exclude=hpcc03,hpcc04"` again.
+The model ran fine, and only the step that copies the output afterwards failed, because it couldn't write to the archive folder. Check `./xmlquery DOUT_S_ROOT`. It must be `/usr/local/research/miyawaki/users/<your-username>/archive/f2000.test`. Fix it with `./xmlchange DOUT_S_ROOT=$MYROOT/archive/f2000.test` and run `./case.submit -a="--exclude=hpcc03,hpcc04"` again.
 
 ## Jupyter
 
